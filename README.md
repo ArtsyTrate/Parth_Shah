@@ -16,6 +16,6 @@ The site will be available at:
 ## Customizing the portfolio
 
 - Replace the placeholder project visuals in `index.html` with your renders, images, or video embeds.
-- Replace `YOUR_EMAIL@example.com` with your professional email.
+- Replace `Shahparth1003@gmail.com` with your professional email.
 - Add your resume as `assets/Parth_Shah_Resume.pdf` and link it from the About section.
 - Update project titles, descriptions, software, and dates as your portfolio evolves.
