@@ -9,6 +9,17 @@ const observer = new IntersectionObserver((entries) => {
 }, { threshold: 0.12 });
 reveals.forEach(el => observer.observe(el));
 
+document.querySelectorAll('img[data-b64-src]').forEach(img => {
+  fetch(img.dataset.b64Src)
+    .then(response => response.text())
+    .then(base64 => {
+      img.src = 'data:image/webp;base64,' + base64.replace(/\s/g, '');
+    })
+    .catch(() => {
+      img.style.display = 'none';
+    });
+});
+
 document.querySelectorAll('a[href^="#"]').forEach(link => {
   link.addEventListener('click', e => {
     const target = document.querySelector(link.getAttribute('href'));
