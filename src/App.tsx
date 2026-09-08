@@ -129,22 +129,6 @@ function App() {
           </div>
         </section>
 
-        <section className="section experience-section">
-          <SectionTitle eyebrow="What I have done so far" title="Experience." />
-          <div className="timeline">
-            <div className="timeline-item"><span></span><div><h3>Motion Graphics Designer</h3><p>Nutcracker Digital · Mumbai</p><small>2021 — 2023</small></div></div>
-            <div className="timeline-item"><span></span><div><h3>M.A. 3D Animation</h3><p>DePaul University · Chicago</p><small>2024 — 2026</small></div></div>
-            <div className="timeline-item"><span></span><div><h3>Vice President</h3><p>DePaul ACM SIGGRAPH Student Chapter</p><small>2025 — 2026</small></div></div>
-          </div>
-        </section>
-
-        <section className="section tech-section">
-          <SectionTitle eyebrow="Tools I work with" title="Software." />
-          <div className="tool-orbits">
-            {tools.map(tool => <span key={tool}>{tool}</span>)}
-          </div>
-        </section>
-
         <section className="section" id="work">
           <SectionTitle eyebrow="My work" title="Projects." />
           <p className="intro-copy">A selection of environment, modeling and animation work. Each project focuses on production-ready 3D craft, presentation and storytelling.</p>
@@ -159,6 +143,22 @@ function App() {
               <video src={fightSequence} autoPlay muted loop playsInline preload="metadata" />
               <div><p>Character Animation</p><h3>Fight Sequence</h3><span>View project ↗</span></div>
             </motion.a>
+          </div>
+        </section>
+
+        <section className="section tech-section">
+          <SectionTitle eyebrow="Tools I work with" title="Software." />
+          <div className="tool-orbits">
+            {tools.map(tool => <span key={tool}>{tool}</span>)}
+          </div>
+        </section>
+
+        <section className="section experience-section">
+          <SectionTitle eyebrow="What I have done so far" title="Experience." />
+          <div className="timeline">
+            <div className="timeline-item"><span></span><div><h3>Motion Graphics Designer</h3><p>Nutcracker Digital · Mumbai</p><small>2021 — 2023</small></div></div>
+            <div className="timeline-item"><span></span><div><h3>M.A. 3D Animation</h3><p>DePaul University · Chicago</p><small>2024 — 2026</small></div></div>
+            <div className="timeline-item"><span></span><div><h3>Vice President</h3><p>DePaul ACM SIGGRAPH Student Chapter</p><small>2025 — 2026</small></div></div>
           </div>
         </section>
 
