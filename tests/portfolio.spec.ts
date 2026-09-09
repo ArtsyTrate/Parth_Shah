@@ -81,9 +81,10 @@ test("Ancient Well detail carousel combines turntable and renders", async ({ pag
 
   const video = carousel.locator(".detail-carousel-stage video");
   await expect(video).toHaveCount(1);
-  await expect(video).toHaveAttribute("loop", "");
-  await expect(video).toHaveAttribute("muted", "");
-  await expect.poll(() => video.evaluate((element: HTMLVideoElement) => element.paused)).toBe(false);
+  await video.scrollIntoViewIfNeeded();
+  const playbackFlags = await video.evaluate((element: HTMLVideoElement) => ({ loop: element.loop, muted: element.muted }));
+  expect(playbackFlags).toEqual({ loop: true, muted: true });
+  await expect.poll(() => video.evaluate((element: HTMLVideoElement) => element.paused), { timeout: 5_000 }).toBe(false);
 
   await carousel.locator(".detail-carousel-arrows button").last().click();
   const image = carousel.locator(".detail-carousel-stage img");
