@@ -10,9 +10,8 @@ import ancientWell02 from "../assets/Ancient_Well_02.png";
 import ancientWell03 from "../assets/Ancient_Well_03.png";
 import ancientWell04 from "../assets/Ancient_Well_04.png";
 import fightSequence from "../assets/Shah_Parth_Fight_Sequence.mp4";
+import resumeUrl from "../Parth_Shah_Resume_3D.pdf?url";
 import "./carousel.css";
-
-const resumeUrl = "https://raw.githubusercontent.com/ArtsyTrate/Parth_Shah/react-3d-redesign/Parth_Shah_Resume_3D.pdf";
 
 const services = [
   ["3D Modeling", "Assets, props and production-ready hard-surface work."],
