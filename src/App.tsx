@@ -218,51 +218,97 @@ function ProjectCarousel() {
 }
 
 function ProjectDetailCarousel({ title, images }: { title: string; images: string[] }) {
-  const reduceMotion = useReducedMotion();
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isSwitching, setIsSwitching] = useState(false);
+  const pointerStart = useRef<{ x: number; y: number } | null>(null);
+  const requestId = useRef(0);
   const total = images.length;
 
-  const next = () => setActiveIndex((current) => (current + 1) % total);
-  const previous = () => setActiveIndex((current) => (current - 1 + total) % total);
+  useEffect(() => {
+    const adjacent = [
+      images[(activeIndex + 1) % total],
+      images[(activeIndex - 1 + total) % total],
+    ];
+
+    adjacent.forEach((src) => {
+      const image = new Image();
+      image.decoding = "async";
+      image.src = src;
+      image.decode?.().catch(() => undefined);
+    });
+  }, [activeIndex, total]);
+
+  const showImage = (index: number) => {
+    if (index === activeIndex || isSwitching) return;
+
+    const normalizedIndex = (index + total) % total;
+    const nextRequest = requestId.current + 1;
+    requestId.current = nextRequest;
+    setIsSwitching(true);
+
+    const image = new Image();
+    image.decoding = "async";
+    image.src = images[normalizedIndex];
+
+    const ready = image.decode ? image.decode().catch(() => undefined) : Promise.resolve();
+    ready.finally(() => {
+      if (requestId.current !== nextRequest) return;
+      setActiveIndex(normalizedIndex);
+      setIsSwitching(false);
+    });
+  };
+
+  const next = () => showImage(activeIndex + 1);
+  const previous = () => showImage(activeIndex - 1);
 
   return (
     <div
       className="detail-carousel"
       tabIndex={0}
       aria-label={`${title} image carousel`}
+      aria-busy={isSwitching}
       onKeyDown={(event) => {
         if (event.key === "ArrowLeft") previous();
         if (event.key === "ArrowRight") next();
       }}
     >
-      <div className="detail-carousel-stage">
-        <AnimatePresence mode="wait" initial={false}>
-          <motion.img
-            key={images[activeIndex]}
-            src={images[activeIndex]}
-            alt={`${title} view ${activeIndex + 1}`}
-            loading="lazy"
-            initial={reduceMotion ? false : { opacity: 0, x: 36, scale: 1.01 }}
-            animate={{ opacity: 1, x: 0, scale: 1 }}
-            exit={reduceMotion ? undefined : { opacity: 0, x: -36 }}
-            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-            drag={reduceMotion ? false : "x"}
-            dragConstraints={{ left: 0, right: 0 }}
-            dragElastic={0.12}
-            onDragEnd={(_, info) => {
-              if (info.offset.x < -60) next();
-              if (info.offset.x > 60) previous();
-            }}
-          />
-        </AnimatePresence>
+      <div
+        className={`detail-carousel-stage ${isSwitching ? "is-switching" : ""}`}
+        onPointerDown={(event) => {
+          pointerStart.current = { x: event.clientX, y: event.clientY };
+        }}
+        onPointerUp={(event) => {
+          const start = pointerStart.current;
+          pointerStart.current = null;
+          if (!start || isSwitching) return;
+
+          const deltaX = event.clientX - start.x;
+          const deltaY = event.clientY - start.y;
+          const horizontalSwipe = Math.abs(deltaX) > 60 && Math.abs(deltaX) > Math.abs(deltaY) * 1.2;
+          if (!horizontalSwipe) return;
+
+          if (deltaX < 0) next();
+          if (deltaX > 0) previous();
+        }}
+        onPointerCancel={() => {
+          pointerStart.current = null;
+        }}
+      >
+        <img
+          src={images[activeIndex]}
+          alt={`${title} view ${activeIndex + 1}`}
+          loading="eager"
+          decoding="async"
+          draggable={false}
+        />
 
         <div className="detail-carousel-counter">
           {String(activeIndex + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
         </div>
 
         <div className="detail-carousel-arrows">
-          <button type="button" onClick={previous} aria-label={`Previous ${title} image`}>←</button>
-          <button type="button" onClick={next} aria-label={`Next ${title} image`}>→</button>
+          <button type="button" onClick={previous} disabled={isSwitching} aria-label={`Previous ${title} image`}>←</button>
+          <button type="button" onClick={next} disabled={isSwitching} aria-label={`Next ${title} image`}>→</button>
         </div>
       </div>
 
@@ -272,7 +318,8 @@ function ProjectDetailCarousel({ title, images }: { title: string; images: strin
             key={image}
             type="button"
             className={index === activeIndex ? "active" : ""}
-            onClick={() => setActiveIndex(index)}
+            onClick={() => showImage(index)}
+            disabled={isSwitching}
             aria-label={`Show ${title} image ${index + 1}`}
             aria-current={index === activeIndex ? "true" : undefined}
           />
