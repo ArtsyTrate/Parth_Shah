@@ -43,6 +43,16 @@ const showcaseProjects = [
 
 const tools = ["Maya", "Blender", "ZBrush", "Substance Painter", "Unreal Engine", "Arnold", "Redshift", "After Effects", "Premiere Pro"];
 
+const ancientWellMedia = [
+  { type: "video" as const, src: wellTurntable, alt: "Ancient Well 360 degree turntable", poster: ancientWell },
+  { type: "image" as const, src: ancientWell, alt: "Ancient Well render view 1" },
+  { type: "image" as const, src: ancientWell02, alt: "Ancient Well render view 2" },
+  { type: "image" as const, src: ancientWell03, alt: "Ancient Well render view 3" },
+  { type: "image" as const, src: ancientWell04, alt: "Ancient Well render view 4" },
+];
+
+type DetailMedia = (typeof ancientWellMedia)[number];
+
 function HeroModel() {
   const group = useRef<Group>(null);
 
@@ -218,38 +228,74 @@ function ProjectCarousel() {
   );
 }
 
-function ProjectDetailCarousel({ title, images }: { title: string; images: string[] }) {
+function ProjectDetailCarousel({ title, media }: { title: string; media: DetailMedia[] }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isSwitching, setIsSwitching] = useState(false);
+  const [isInView, setIsInView] = useState(false);
   const pointerStart = useRef<{ x: number; y: number } | null>(null);
   const requestId = useRef(0);
-  const total = images.length;
+  const stageRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const total = media.length;
+  const activeMedia = media[activeIndex];
+
+  useEffect(() => {
+    const stage = stageRef.current;
+    if (!stage) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsInView(entry.isIntersecting && entry.intersectionRatio >= 0.45),
+      { threshold: [0, 0.45, 0.75] },
+    );
+
+    observer.observe(stage);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || activeMedia.type !== "video") return;
+
+    if (isInView) {
+      video.muted = true;
+      void video.play().catch(() => undefined);
+    } else {
+      video.pause();
+    }
+  }, [activeIndex, activeMedia.type, isInView]);
 
   useEffect(() => {
     const adjacent = [
-      images[(activeIndex + 1) % total],
-      images[(activeIndex - 1 + total) % total],
+      media[(activeIndex + 1) % total],
+      media[(activeIndex - 1 + total) % total],
     ];
 
-    adjacent.forEach((src) => {
+    adjacent.forEach((item) => {
+      if (item.type !== "image") return;
       const image = new Image();
       image.decoding = "async";
-      image.src = src;
+      image.src = item.src;
       image.decode?.().catch(() => undefined);
     });
-  }, [activeIndex, images, total]);
+  }, [activeIndex, media, total]);
 
-  const showImage = (index: number) => {
+  const showMedia = (index: number) => {
     if (index === activeIndex || isSwitching) return;
 
     const normalizedIndex = (index + total) % total;
+    const target = media[normalizedIndex];
     const nextRequest = requestId.current + 1;
     requestId.current = nextRequest;
-    setIsSwitching(true);
 
+    if (target.type === "video") {
+      setActiveIndex(normalizedIndex);
+      return;
+    }
+
+    setIsSwitching(true);
     const image = new Image();
     image.decoding = "async";
-    image.src = images[normalizedIndex];
+    image.src = target.src;
 
     const ready = image.decode ? image.decode().catch(() => undefined) : Promise.resolve();
     ready.finally(() => {
@@ -259,14 +305,14 @@ function ProjectDetailCarousel({ title, images }: { title: string; images: strin
     });
   };
 
-  const next = () => showImage(activeIndex + 1);
-  const previous = () => showImage(activeIndex - 1);
+  const next = () => showMedia(activeIndex + 1);
+  const previous = () => showMedia(activeIndex - 1);
 
   return (
     <div
       className="detail-carousel"
       tabIndex={0}
-      aria-label={`${title} image carousel`}
+      aria-label={`${title} media carousel`}
       aria-busy={isSwitching}
       onKeyDown={(event) => {
         if (event.key === "ArrowLeft") previous();
@@ -274,7 +320,8 @@ function ProjectDetailCarousel({ title, images }: { title: string; images: strin
       }}
     >
       <div
-        className={`detail-carousel-stage ${isSwitching ? "is-switching" : ""}`}
+        ref={stageRef}
+        className={`detail-carousel-stage ${isSwitching ? "is-switching" : ""} ${activeMedia.type === "video" ? "has-video" : ""}`}
         onPointerDown={(event) => {
           pointerStart.current = { x: event.clientX, y: event.clientY };
         }}
@@ -295,33 +342,47 @@ function ProjectDetailCarousel({ title, images }: { title: string; images: strin
           pointerStart.current = null;
         }}
       >
-        <img
-          src={images[activeIndex]}
-          alt={`${title} view ${activeIndex + 1}`}
-          loading="eager"
-          decoding="async"
-          draggable={false}
-        />
+        {activeMedia.type === "video" ? (
+          <video
+            ref={videoRef}
+            src={activeMedia.src}
+            poster={activeMedia.poster}
+            muted
+            loop
+            controls
+            playsInline
+            preload="metadata"
+            aria-label={activeMedia.alt}
+          />
+        ) : (
+          <img
+            src={activeMedia.src}
+            alt={activeMedia.alt}
+            loading="eager"
+            decoding="async"
+            draggable={false}
+          />
+        )}
 
         <div className="detail-carousel-counter">
           {String(activeIndex + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
         </div>
 
         <div className="detail-carousel-arrows">
-          <button type="button" onClick={previous} disabled={isSwitching} aria-label={`Previous ${title} image`}>←</button>
-          <button type="button" onClick={next} disabled={isSwitching} aria-label={`Next ${title} image`}>→</button>
+          <button type="button" onClick={previous} disabled={isSwitching} aria-label={`Previous ${title} media`}>←</button>
+          <button type="button" onClick={next} disabled={isSwitching} aria-label={`Next ${title} media`}>→</button>
         </div>
       </div>
 
-      <div className="detail-carousel-dots" aria-label={`Choose ${title} image`}>
-        {images.map((image, index) => (
+      <div className="detail-carousel-dots" aria-label={`Choose ${title} media`}>
+        {media.map((item, index) => (
           <button
-            key={image}
+            key={item.src}
             type="button"
             className={index === activeIndex ? "active" : ""}
-            onClick={() => showImage(index)}
+            onClick={() => showMedia(index)}
             disabled={isSwitching}
-            aria-label={`Show ${title} image ${index + 1}`}
+            aria-label={item.type === "video" ? `Show ${title} turntable` : `Show ${title} render ${index}`}
             aria-current={index === activeIndex ? "true" : undefined}
           />
         ))}
@@ -433,13 +494,7 @@ function App() {
         </section>
 
         <section className="project-detail split-detail" id="ancient-well">
-          <div className="well-showcase">
-            <div className="well-turntable">
-              <div className="well-turntable-heading"><span>Turntable</span><span>360° model presentation</span></div>
-              <video src={wellTurntable} controls playsInline preload="metadata" poster={ancientWell} aria-label="Ancient Well turntable video" />
-            </div>
-            <ProjectDetailCarousel title="Ancient Well" images={[ancientWell, ancientWell02, ancientWell03, ancientWell04]} />
-          </div>
+          <ProjectDetailCarousel title="Ancient Well" media={ancientWellMedia} />
           <div className="detail-copy"><p>3D Modeling</p><h2>Ancient Well</h2><span>A modeling and sculpting study focused on layered wood construction, stonework, rope details and pulley mechanics.</span></div>
         </section>
 
