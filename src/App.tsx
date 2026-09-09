@@ -9,6 +9,7 @@ import ancientWell from "../assets/Ancient_Well.png";
 import ancientWell02 from "../assets/Ancient_Well_02.png";
 import ancientWell03 from "../assets/Ancient_Well_03.png";
 import ancientWell04 from "../assets/Ancient_Well_04.png";
+import wellTurntable from "../assets/Well_Turn Table.mp4";
 import fightSequence from "../assets/Shah_Parth_Fight_Sequence.mp4";
 import resumeUrl from "../Parth_Shah_Resume_3D.pdf?url";
 import "./carousel.css";
@@ -236,7 +237,7 @@ function ProjectDetailCarousel({ title, images }: { title: string; images: strin
       image.src = src;
       image.decode?.().catch(() => undefined);
     });
-  }, [activeIndex, total]);
+  }, [activeIndex, images, total]);
 
   const showImage = (index: number) => {
     if (index === activeIndex || isSwitching) return;
@@ -432,7 +433,13 @@ function App() {
         </section>
 
         <section className="project-detail split-detail" id="ancient-well">
-          <ProjectDetailCarousel title="Ancient Well" images={[ancientWell, ancientWell02, ancientWell03, ancientWell04]} />
+          <div className="well-showcase">
+            <div className="well-turntable">
+              <div className="well-turntable-heading"><span>Turntable</span><span>360° model presentation</span></div>
+              <video src={wellTurntable} controls playsInline preload="metadata" poster={ancientWell} aria-label="Ancient Well turntable video" />
+            </div>
+            <ProjectDetailCarousel title="Ancient Well" images={[ancientWell, ancientWell02, ancientWell03, ancientWell04]} />
+          </div>
           <div className="detail-copy"><p>3D Modeling</p><h2>Ancient Well</h2><span>A modeling and sculpting study focused on layered wood construction, stonework, rope details and pulley mechanics.</span></div>
         </section>
 
