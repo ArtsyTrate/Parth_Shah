@@ -71,23 +71,31 @@ test("project cards navigate to their matching detail sections", async ({ page }
   }
 });
 
-test("Ancient Well detail carousel shows all renders and responds to controls", async ({ page }) => {
+test("Ancient Well detail carousel combines turntable and renders", async ({ page }) => {
   await openPortfolio(page);
   await page.locator("#ancient-well").scrollIntoViewIfNeeded();
 
   const carousel = page.locator("#ancient-well .detail-carousel");
   await expect(carousel).toBeVisible();
+  await expect(carousel.locator(".detail-carousel-counter")).toContainText("01 / 05");
 
-  const image = carousel.locator(".detail-carousel-stage img");
-  await expect(image).toHaveAttribute("alt", "Ancient Well view 1");
-  await expect(carousel.locator(".detail-carousel-counter")).toContainText("01 / 04");
+  const video = carousel.locator(".detail-carousel-stage video");
+  await expect(video).toHaveCount(1);
+  await expect(video).toHaveAttribute("loop", "");
+  await expect(video).toHaveAttribute("muted", "");
+  await expect.poll(() => video.evaluate((element: HTMLVideoElement) => element.paused)).toBe(false);
 
   await carousel.locator(".detail-carousel-arrows button").last().click();
-  await expect(image).toHaveAttribute("alt", "Ancient Well view 2");
-  await expect(carousel.locator(".detail-carousel-counter")).toContainText("02 / 04");
+  const image = carousel.locator(".detail-carousel-stage img");
+  await expect(image).toHaveAttribute("alt", "Ancient Well render view 1");
+  await expect(carousel.locator(".detail-carousel-counter")).toContainText("02 / 05");
+
+  await carousel.press("ArrowRight");
+  await expect(image).toHaveAttribute("alt", "Ancient Well render view 2");
+  await expect(carousel.locator(".detail-carousel-counter")).toContainText("03 / 05");
 
   await carousel.press("ArrowLeft");
-  await expect(image).toHaveAttribute("alt", "Ancient Well view 1");
+  await expect(image).toHaveAttribute("alt", "Ancient Well render view 1");
 });
 
 test("core portfolio semantics remain present", async ({ page }) => {
