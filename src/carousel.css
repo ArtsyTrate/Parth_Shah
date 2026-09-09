@@ -82,3 +82,26 @@
 @media(prefers-reduced-motion:reduce){
   .carousel-media img,.carousel-media video,.carousel-project-link,.carousel-arrow,.carousel-dot::after,.carousel-thumb,.carousel-thumb img,.carousel-thumb video,.detail-carousel-stage img,.detail-carousel-arrows button,.detail-carousel-dots button::after{transition:none!important}
 }
+
+/* Education + Experience split */
+.experience-section .experience-layout{display:block}
+.experience-section .experience-heading{display:none}
+.experience-section .timeline{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:auto repeat(3,auto);column-gap:clamp(42px,6vw,92px);align-items:start;border-top:0}
+.experience-section .timeline::before,.experience-section .timeline::after{font-size:clamp(34px,3.8vw,56px);line-height:.96;letter-spacing:-.035em;font-weight:500;padding:0 0 24px;border-bottom:1px solid var(--border);margin:0;color:var(--white)}
+.experience-section .timeline::before{content:"Education";grid-column:1;grid-row:1}
+.experience-section .timeline::after{content:"Experiences";grid-column:2;grid-row:1}
+.experience-section .timeline-item{grid-template-columns:118px minmax(0,1fr);gap:24px;padding:28px 0 32px}
+.experience-section .timeline-item:nth-child(3){grid-column:1;grid-row:2}
+.experience-section .timeline-item:nth-child(1){grid-column:2;grid-row:2}
+.experience-section .timeline-item:nth-child(2){grid-column:2;grid-row:3}
+.experience-section .timeline-item:nth-child(4){grid-column:2;grid-row:4}
+
+@media(max-width:900px){
+  .experience-section .timeline{grid-template-columns:1fr;grid-template-rows:auto auto auto auto auto auto;column-gap:0}
+  .experience-section .timeline::before{grid-column:1;grid-row:1}
+  .experience-section .timeline-item:nth-child(3){grid-column:1;grid-row:2}
+  .experience-section .timeline::after{grid-column:1;grid-row:3;margin-top:48px}
+  .experience-section .timeline-item:nth-child(1){grid-column:1;grid-row:4}
+  .experience-section .timeline-item:nth-child(2){grid-column:1;grid-row:5}
+  .experience-section .timeline-item:nth-child(4){grid-column:1;grid-row:6}
+}
