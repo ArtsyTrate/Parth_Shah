@@ -1,7 +1,7 @@
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Float, OrbitControls } from "@react-three/drei";
-import { motion, useReducedMotion } from "framer-motion";
-import { useRef } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import type { Group } from "three";
 
 import ancientTemple from "../assets/Ancient Temple.jpg";
@@ -10,6 +10,7 @@ import ancientWell02 from "../assets/Ancient_Well_02.png";
 import ancientWell03 from "../assets/Ancient_Well_03.png";
 import ancientWell04 from "../assets/Ancient_Well_04.png";
 import fightSequence from "../assets/Shah_Parth_Fight_Sequence.mp4";
+import "./carousel.css";
 
 const resumeUrl = "https://artsytrate.github.io/Parth_Shah/Parth_Shah_Resume_3D.pdf";
 
@@ -20,9 +21,31 @@ const services = [
   ["Motion Design", "3D + 2D motion, compositing and visual storytelling."],
 ];
 
-const projects = [
-  { title: "Ancient Temple", category: "Environment Art", image: ancientTemple, href: "#ancient-temple", featured: true },
-  { title: "Ancient Well", category: "3D Modeling", image: ancientWell, href: "#ancient-well", featured: false },
+const showcaseProjects = [
+  {
+    title: "Ancient Temple",
+    category: "Environment Art",
+    href: "#ancient-temple",
+    media: ancientTemple,
+    type: "image" as const,
+    description: "A cinematic environment study focused on architectural modeling, carved surfaces, atmosphere, lighting and reflective water.",
+  },
+  {
+    title: "Ancient Well",
+    category: "3D Modeling",
+    href: "#ancient-well",
+    media: ancientWell,
+    type: "image" as const,
+    description: "A detailed prop study exploring layered wood construction, stonework, rope, shingles and pulley mechanics.",
+  },
+  {
+    title: "Fight Sequence",
+    category: "Character Animation",
+    href: "#fight-sequence",
+    media: fightSequence,
+    type: "video" as const,
+    description: "A body-mechanics performance focused on weight, recovery poses, timing and a fourth-wall comedy beat.",
+  },
 ];
 
 const tools = ["Maya", "Blender", "ZBrush", "Substance Painter", "Unreal Engine", "Arnold", "Redshift", "After Effects", "Premiere Pro"];
@@ -83,6 +106,120 @@ function SectionTitle({ eyebrow, title }: { eyebrow: string; title: string }) {
       <p>{eyebrow}</p>
       <h2>{title}</h2>
     </motion.div>
+  );
+}
+
+function ProjectCarousel() {
+  const reduceMotion = useReducedMotion();
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const total = showcaseProjects.length;
+  const activeProject = showcaseProjects[activeIndex];
+
+  const next = () => setActiveIndex((current) => (current + 1) % total);
+  const previous = () => setActiveIndex((current) => (current - 1 + total) % total);
+
+  useEffect(() => {
+    if (reduceMotion || paused) return;
+    const timer = window.setInterval(next, 6500);
+    return () => window.clearInterval(timer);
+  }, [paused, reduceMotion]);
+
+  return (
+    <div
+      className="project-carousel"
+      tabIndex={0}
+      aria-label="Selected project carousel"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onFocusCapture={() => setPaused(true)}
+      onBlurCapture={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setPaused(false);
+      }}
+      onKeyDown={(event) => {
+        if (event.key === "ArrowLeft") previous();
+        if (event.key === "ArrowRight") next();
+      }}
+    >
+      <div className="carousel-stage" aria-live="polite">
+        <div className="carousel-topline">
+          <span className="carousel-counter">{String(activeIndex + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}</span>
+          <span className="carousel-hint">Drag, swipe, use arrows or ← → keys</span>
+        </div>
+
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.article
+            className="carousel-slide"
+            key={activeProject.title}
+            initial={reduceMotion ? false : { opacity: 0, x: 70 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={reduceMotion ? undefined : { opacity: 0, x: -70 }}
+            transition={{ duration: 0.48, ease: [0.22, 1, 0.36, 1] }}
+            drag={reduceMotion ? false : "x"}
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.14}
+            onDragEnd={(_, info) => {
+              if (info.offset.x < -70) next();
+              if (info.offset.x > 70) previous();
+            }}
+          >
+            <div className="carousel-media">
+              {activeProject.type === "video" ? (
+                <video src={activeProject.media} autoPlay muted loop playsInline preload="metadata" />
+              ) : (
+                <img src={activeProject.media} alt={activeProject.title} />
+              )}
+            </div>
+            <div className="carousel-copy">
+              <p className="carousel-meta">{activeProject.category}</p>
+              <h3>{activeProject.title}</h3>
+              <p className="carousel-description">{activeProject.description}</p>
+              <a className="carousel-project-link" href={activeProject.href}>Explore project ↗</a>
+            </div>
+          </motion.article>
+        </AnimatePresence>
+      </div>
+
+      <div className="carousel-controls">
+        <div className="carousel-arrows">
+          <button className="carousel-arrow" type="button" onClick={previous} aria-label="Previous project">←</button>
+          <button className="carousel-arrow" type="button" onClick={next} aria-label="Next project">→</button>
+        </div>
+        <div className="carousel-dots" aria-label="Choose project">
+          {showcaseProjects.map((project, index) => (
+            <button
+              key={project.title}
+              className={`carousel-dot ${index === activeIndex ? "active" : ""}`}
+              type="button"
+              onClick={() => setActiveIndex(index)}
+              aria-label={`Show ${project.title}`}
+              aria-current={index === activeIndex ? "true" : undefined}
+            />
+          ))}
+        </div>
+      </div>
+
+      <div className="carousel-thumbs" aria-label="Project thumbnails">
+        {showcaseProjects.map((project, index) => (
+          <button
+            key={project.title}
+            type="button"
+            className={`carousel-thumb ${index === activeIndex ? "active" : ""}`}
+            onClick={() => setActiveIndex(index)}
+            aria-label={`Show ${project.title}`}
+          >
+            <div className="carousel-thumb-media">
+              {project.type === "video" ? (
+                <video src={project.media} muted playsInline preload="metadata" />
+              ) : (
+                <img src={project.media} alt="" loading="lazy" />
+              )}
+            </div>
+            <span>{project.title}</span>
+          </button>
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -162,33 +299,7 @@ function App() {
             <SectionTitle eyebrow="Selected work" title="Projects" />
             <p className="intro-copy">Environment art, modeling and animation presented with the artwork doing most of the talking.</p>
           </div>
-          <div className="project-grid editorial-grid">
-            {projects.map((project, index) => (
-              <motion.a
-                key={project.title}
-                href={project.href}
-                className={`project-card ${project.featured ? "featured" : ""}`}
-                initial={reduceMotion ? false : { opacity: 0, y: 24, scale: 0.985 }}
-                whileInView={reduceMotion ? undefined : { opacity: 1, y: 0, scale: 1 }}
-                viewport={{ once: true, amount: 0.15 }}
-                transition={{ delay: index * 0.06, duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
-              >
-                <img src={project.image} alt={project.title} loading="lazy" />
-                <div className="project-caption"><p>{project.category}</p><h3>{project.title}</h3><span>View project ↗</span></div>
-              </motion.a>
-            ))}
-            <motion.a
-              href="#fight-sequence"
-              className="project-card"
-              initial={reduceMotion ? false : { opacity: 0, y: 24, scale: 0.985 }}
-              whileInView={reduceMotion ? undefined : { opacity: 1, y: 0, scale: 1 }}
-              viewport={{ once: true, amount: 0.15 }}
-              transition={{ delay: 0.12, duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <video src={fightSequence} autoPlay muted loop playsInline preload="metadata" />
-              <div className="project-caption"><p>Character Animation</p><h3>Fight Sequence</h3><span>View project ↗</span></div>
-            </motion.a>
-          </div>
+          <ProjectCarousel />
         </section>
 
         <section className="section light-section tech-section">
