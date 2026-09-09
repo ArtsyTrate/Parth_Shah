@@ -56,6 +56,8 @@
   .carousel-dots{grid-column:2;justify-content:flex-end}
   .carousel-thumbs{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:4px}
   .carousel-thumb{min-width:72%;scroll-snap-align:start}
+  .navbar nav a:nth-child(5){display:inline}
+  .navbar nav a:nth-child(6){display:none}
 }
 
 @media(prefers-reduced-motion:reduce){
