@@ -36,18 +36,20 @@
 .carousel-thumb.active span,.carousel-thumb:hover span{color:var(--white)}
 
 .detail-carousel{min-width:0;outline:none}
-.detail-carousel-stage{position:relative;overflow:hidden;width:100%;min-height:0;background:transparent;border:1px solid var(--border);border-radius:5px;isolation:isolate;touch-action:pan-y;line-height:0}
-.detail-carousel-stage img{position:relative;inset:auto;width:100%;height:auto;display:block;object-fit:initial;object-position:center;cursor:grab;user-select:none}
-.detail-carousel-stage img:active{cursor:grabbing}
-.detail-carousel-counter{position:absolute;z-index:3;left:18px;top:18px;padding:9px 12px;background:rgba(10,11,12,.62);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.12);border-radius:4px;font-size:11px;line-height:1;letter-spacing:.04em;font-variant-numeric:tabular-nums;color:#d8dde2}
+.detail-carousel-stage{position:relative;overflow:hidden;width:100%;min-height:0;background:transparent;border:1px solid var(--border);border-radius:5px;isolation:isolate;contain:layout paint;touch-action:pan-y;line-height:0}
+.detail-carousel-stage img{position:relative;inset:auto;width:100%;height:auto;display:block;object-fit:initial;object-position:center;user-select:none;-webkit-user-drag:none;transition:opacity .12s ease}
+.detail-carousel-stage.is-switching img{opacity:.985}
+.detail-carousel-counter{position:absolute;z-index:3;left:18px;top:18px;padding:9px 12px;background:rgba(10,11,12,.82);border:1px solid rgba(255,255,255,.12);border-radius:4px;font-size:11px;line-height:1;letter-spacing:.04em;font-variant-numeric:tabular-nums;color:#d8dde2}
 .detail-carousel-arrows{position:absolute;z-index:3;left:18px;bottom:18px;display:flex;gap:8px}
-.detail-carousel-arrows button{width:44px;height:44px;border:1px solid rgba(255,255,255,.16);background:rgba(10,11,12,.66);backdrop-filter:blur(10px);color:var(--white);border-radius:4px;font:inherit;font-size:17px;line-height:1;cursor:pointer;transition:background .22s ease,border-color .22s ease,transform .22s ease}
-.detail-carousel-arrows button:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.3);transform:translateY(-1px)}
-.detail-carousel-arrows button:active{transform:translateY(1px)}
+.detail-carousel-arrows button{width:44px;height:44px;border:1px solid rgba(255,255,255,.16);background:rgba(10,11,12,.84);color:var(--white);border-radius:4px;font:inherit;font-size:17px;line-height:1;cursor:pointer;transition:background .18s ease,border-color .18s ease,transform .18s ease,opacity .18s ease}
+.detail-carousel-arrows button:hover:not(:disabled){background:rgba(35,37,40,.94);border-color:rgba(255,255,255,.3);transform:translateY(-1px)}
+.detail-carousel-arrows button:active:not(:disabled){transform:translateY(1px)}
+.detail-carousel-arrows button:disabled{opacity:.48;cursor:default}
 .detail-carousel-dots{display:flex;gap:7px;margin-top:14px}
 .detail-carousel-dots button{height:5px;flex:1;border:0;padding:0;background:#282c30;border-radius:999px;cursor:pointer;position:relative;overflow:hidden}
-.detail-carousel-dots button::after{content:"";position:absolute;inset:0;background:var(--white);transform:scaleX(0);transform-origin:left;transition:transform .25s ease}
+.detail-carousel-dots button::after{content:"";position:absolute;inset:0;background:var(--white);transform:scaleX(0);transform-origin:left;transition:transform .2s ease}
 .detail-carousel-dots button.active::after{transform:scaleX(1)}
+.detail-carousel-dots button:disabled{cursor:default}
 
 @media(max-width:980px){
   .carousel-stage{min-height:720px}
@@ -78,5 +80,5 @@
 }
 
 @media(prefers-reduced-motion:reduce){
-  .carousel-media img,.carousel-media video,.carousel-project-link,.carousel-arrow,.carousel-dot::after,.carousel-thumb,.carousel-thumb img,.carousel-thumb video,.detail-carousel-arrows button,.detail-carousel-dots button::after{transition:none!important}
+  .carousel-media img,.carousel-media video,.carousel-project-link,.carousel-arrow,.carousel-dot::after,.carousel-thumb,.carousel-thumb img,.carousel-thumb video,.detail-carousel-stage img,.detail-carousel-arrows button,.detail-carousel-dots button::after{transition:none!important}
 }
