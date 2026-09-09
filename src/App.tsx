@@ -104,20 +104,13 @@ function SectionTitle({ eyebrow, title }: { eyebrow: string; title: string }) {
 function ProjectCarousel() {
   const reduceMotion = useReducedMotion();
   const [activeIndex, setActiveIndex] = useState(0);
-  const [mediaIndex, setMediaIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const total = showcaseProjects.length;
   const activeProject = showcaseProjects[activeIndex];
-  const activeMedia = activeProject.media[mediaIndex] ?? activeProject.media[0];
+  const previewMedia = activeProject.media[0];
 
   const next = () => setActiveIndex((current) => (current + 1) % total);
   const previous = () => setActiveIndex((current) => (current - 1 + total) % total);
-  const nextMedia = () => setMediaIndex((current) => (current + 1) % activeProject.media.length);
-  const previousMedia = () => setMediaIndex((current) => (current - 1 + activeProject.media.length) % activeProject.media.length);
-
-  useEffect(() => {
-    setMediaIndex(0);
-  }, [activeIndex]);
 
   useEffect(() => {
     if (reduceMotion || paused) return;
@@ -164,44 +157,10 @@ function ProjectCarousel() {
             }}
           >
             <div className="carousel-media">
-              <AnimatePresence mode="wait" initial={false}>
-                {activeProject.type === "video" ? (
-                  <motion.video
-                    key={activeMedia}
-                    src={activeMedia}
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    preload="metadata"
-                    initial={reduceMotion ? false : { opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={reduceMotion ? undefined : { opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                  />
-                ) : (
-                  <motion.img
-                    key={activeMedia}
-                    src={activeMedia}
-                    alt={`${activeProject.title}${activeProject.media.length > 1 ? ` view ${mediaIndex + 1}` : ""}`}
-                    initial={reduceMotion ? false : { opacity: 0, scale: 1.015 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={reduceMotion ? undefined : { opacity: 0 }}
-                    transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                  />
-                )}
-              </AnimatePresence>
-
-              {activeProject.media.length > 1 && (
-                <div
-                  className="media-carousel-controls"
-                  aria-label={`${activeProject.title} image carousel`}
-                  onPointerDown={(event) => event.stopPropagation()}
-                >
-                  <button type="button" onClick={previousMedia} aria-label={`Previous ${activeProject.title} image`}>←</button>
-                  <span>{String(mediaIndex + 1).padStart(2, "0")} / {String(activeProject.media.length).padStart(2, "0")}</span>
-                  <button type="button" onClick={nextMedia} aria-label={`Next ${activeProject.title} image`}>→</button>
-                </div>
+              {activeProject.type === "video" ? (
+                <video src={previewMedia} autoPlay muted loop playsInline preload="metadata" />
+              ) : (
+                <img src={previewMedia} alt={activeProject.title} />
               )}
             </div>
 
@@ -234,7 +193,7 @@ function ProjectCarousel() {
         </div>
       </div>
 
-      <div className="carousel-thumbs" aria-label="Project thumbnails">
+      <div className="carousel-thumbs" aria-label="Project links">
         {showcaseProjects.map((project, index) => (
           <a
             key={project.title}
@@ -252,6 +211,71 @@ function ProjectCarousel() {
             </div>
             <span>{project.title}</span>
           </a>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function ProjectDetailCarousel({ title, images }: { title: string; images: string[] }) {
+  const reduceMotion = useReducedMotion();
+  const [activeIndex, setActiveIndex] = useState(0);
+  const total = images.length;
+
+  const next = () => setActiveIndex((current) => (current + 1) % total);
+  const previous = () => setActiveIndex((current) => (current - 1 + total) % total);
+
+  return (
+    <div
+      className="detail-carousel"
+      tabIndex={0}
+      aria-label={`${title} image carousel`}
+      onKeyDown={(event) => {
+        if (event.key === "ArrowLeft") previous();
+        if (event.key === "ArrowRight") next();
+      }}
+    >
+      <div className="detail-carousel-stage">
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.img
+            key={images[activeIndex]}
+            src={images[activeIndex]}
+            alt={`${title} view ${activeIndex + 1}`}
+            loading="lazy"
+            initial={reduceMotion ? false : { opacity: 0, x: 36, scale: 1.01 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            exit={reduceMotion ? undefined : { opacity: 0, x: -36 }}
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            drag={reduceMotion ? false : "x"}
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.12}
+            onDragEnd={(_, info) => {
+              if (info.offset.x < -60) next();
+              if (info.offset.x > 60) previous();
+            }}
+          />
+        </AnimatePresence>
+
+        <div className="detail-carousel-counter">
+          {String(activeIndex + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
+        </div>
+
+        <div className="detail-carousel-arrows">
+          <button type="button" onClick={previous} aria-label={`Previous ${title} image`}>←</button>
+          <button type="button" onClick={next} aria-label={`Next ${title} image`}>→</button>
+        </div>
+      </div>
+
+      <div className="detail-carousel-dots" aria-label={`Choose ${title} image`}>
+        {images.map((image, index) => (
+          <button
+            key={image}
+            type="button"
+            className={index === activeIndex ? "active" : ""}
+            onClick={() => setActiveIndex(index)}
+            aria-label={`Show ${title} image ${index + 1}`}
+            aria-current={index === activeIndex ? "true" : undefined}
+          />
         ))}
       </div>
     </div>
@@ -358,7 +382,7 @@ function App() {
         </section>
 
         <section className="project-detail split-detail" id="ancient-well">
-          <div className="well-grid">{[ancientWell, ancientWell02, ancientWell03, ancientWell04].map((src, i) => <img key={src} src={src} alt={`Ancient Well ${i + 1}`} loading="lazy" />)}</div>
+          <ProjectDetailCarousel title="Ancient Well" images={[ancientWell, ancientWell02, ancientWell03, ancientWell04]} />
           <div className="detail-copy"><p>3D Modeling</p><h2>Ancient Well</h2><span>A modeling and sculpting study focused on layered wood construction, stonework, rope details and pulley mechanics.</span></div>
         </section>
 
