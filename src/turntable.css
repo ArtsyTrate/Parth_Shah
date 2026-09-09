@@ -1,7 +1,7 @@
 .detail-carousel-stage video{position:relative;inset:auto;width:100%;height:auto;display:block;background:var(--deep);object-fit:contain}
-.detail-carousel-stage.has-video .detail-carousel-arrows{left:auto;right:18px;bottom:auto;top:18px}
-.detail-carousel-stage.has-video .detail-carousel-counter{left:18px;right:auto}
+.detail-carousel-stage .detail-carousel-arrows{left:auto;right:18px;bottom:auto;top:18px}
+.detail-carousel-stage .detail-carousel-counter{left:18px;right:auto}
 
 @media(max-width:720px){
-  .detail-carousel-stage.has-video .detail-carousel-arrows{right:14px;top:14px}
+  .detail-carousel-stage .detail-carousel-arrows{right:14px;top:14px}
 }
