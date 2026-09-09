@@ -36,6 +36,23 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Install Chromium for portfolio QA
+        run: npx playwright install --with-deps chromium
+
+      - name: Run portfolio browser QA
+        run: npm run test:e2e
+
+      - name: Upload QA report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: portfolio-qa-report
+          path: |
+            playwright-report
+            test-results
+          if-no-files-found: ignore
+          retention-days: 14
+
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
