@@ -13,13 +13,6 @@ import fightSequence from "../assets/Shah_Parth_Fight_Sequence.mp4";
 import resumeUrl from "../Parth_Shah_Resume_3D.pdf?url";
 import "./carousel.css";
 
-const services = [
-  ["3D Modeling", "Assets, props and production-ready hard-surface work."],
-  ["Environment Art", "World building, set dressing, lighting and presentation."],
-  ["Character Animation", "Body mechanics, performance, timing and polish."],
-  ["Motion Design", "3D + 2D motion, compositing and visual storytelling."],
-];
-
 const showcaseProjects = [
   {
     title: "Ancient Temple",
@@ -275,22 +268,6 @@ function App() {
             <p className="intro-copy">
               I&apos;m a 3D Generalist and Motion Designer with experience across modeling, texturing, environment art, rigging, animation, lighting, rendering and compositing. I enjoy taking ideas from blockout to final presentation and balancing visual quality with production constraints.
             </p>
-          </div>
-          <div className="service-grid">
-            {services.map(([title, text], index) => (
-              <motion.article
-                key={title}
-                className={`service-card service-card-${index + 1}`}
-                initial={reduceMotion ? false : { opacity: 0, y: 18 }}
-                whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.25 }}
-                transition={{ delay: index * 0.05, duration: 0.5 }}
-              >
-                <span>{String(index + 1).padStart(2, "0")}</span>
-                <h3>{title}</h3>
-                <p>{text}</p>
-              </motion.article>
-            ))}
           </div>
         </section>
 
