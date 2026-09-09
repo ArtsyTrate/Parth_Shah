@@ -12,7 +12,7 @@ import ancientWell04 from "../assets/Ancient_Well_04.png";
 import fightSequence from "../assets/Shah_Parth_Fight_Sequence.mp4";
 import "./carousel.css";
 
-const resumeUrl = "https://artsytrate.github.io/Parth_Shah/Parth_Shah_Resume_3D.pdf";
+const resumeUrl = "https://raw.githubusercontent.com/ArtsyTrate/Parth_Shah/react-3d-redesign/Parth_Shah_Resume_3D.pdf";
 
 const services = [
   ["3D Modeling", "Assets, props and production-ready hard-surface work."],
@@ -237,6 +237,7 @@ function App() {
           <a href="#work">Work</a>
           <a href="#experience">Experience</a>
           <a href="#contact">Contact</a>
+          <a href="https://www.linkedin.com/in/parth-shah-3d-animator" target="_blank" rel="noreferrer">LinkedIn ↗</a>
           <a href={resumeUrl} target="_blank" rel="noreferrer">Resume ↗</a>
         </nav>
       </header>
