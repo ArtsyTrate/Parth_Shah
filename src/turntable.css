@@ -1,0 +1,10 @@
+.well-showcase{display:grid;gap:22px;min-width:0}
+.well-turntable{overflow:hidden;background:var(--surface);border:1px solid var(--border);border-radius:5px}
+.well-turntable-heading{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:13px 16px;border-bottom:1px solid var(--border);font-size:11px;line-height:1.2;letter-spacing:.03em;color:var(--muted)}
+.well-turntable-heading span:first-child{color:var(--white);font-weight:500}
+.well-turntable video{width:100%;height:auto;display:block;background:var(--deep);object-fit:contain}
+
+@media(max-width:720px){
+  .well-showcase{gap:16px}
+  .well-turntable-heading{padding:11px 13px;font-size:10px}
+}
