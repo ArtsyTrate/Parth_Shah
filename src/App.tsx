@@ -407,13 +407,16 @@ function App() {
             <div className="experience-heading"><SectionTitle eyebrow="Experience" title="Selected timeline" /></div>
             <div className="timeline">
               <motion.div className="timeline-item" initial={reduceMotion ? false : { opacity: 0, x: 18 }} whileInView={reduceMotion ? undefined : { opacity: 1, x: 0 }} viewport={{ once: true }}>
-                <small>2021 — 2023</small><div><h3>Motion Graphics Designer</h3><p>Nutcracker Digital · Mumbai</p></div>
+                <small>2026</small><div><h3>Student Volunteer</h3><p>SIGGRAPH 2026 · Los Angeles</p></div>
               </motion.div>
               <motion.div className="timeline-item" initial={reduceMotion ? false : { opacity: 0, x: 18 }} whileInView={reduceMotion ? undefined : { opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: 0.06 }}>
-                <small>2024 — 2026</small><div><h3>M.A. 3D Animation</h3><p>DePaul University · Chicago</p></div>
+                <small>2025 — 2026</small><div><h3>Vice President</h3><p>DePaul ACM SIGGRAPH Student Chapter</p></div>
               </motion.div>
               <motion.div className="timeline-item" initial={reduceMotion ? false : { opacity: 0, x: 18 }} whileInView={reduceMotion ? undefined : { opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: 0.12 }}>
-                <small>2025 — 2026</small><div><h3>Vice President</h3><p>DePaul ACM SIGGRAPH Student Chapter</p></div>
+                <small>2024 — 2026</small><div><h3>M.A. 3D Animation</h3><p>DePaul University · Chicago</p></div>
+              </motion.div>
+              <motion.div className="timeline-item" initial={reduceMotion ? false : { opacity: 0, x: 18 }} whileInView={reduceMotion ? undefined : { opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: 0.18 }}>
+                <small>2021 — 2023</small><div><h3>Motion Graphics Designer</h3><p>Nutcracker Digital · Mumbai</p></div>
               </motion.div>
             </div>
           </div>
