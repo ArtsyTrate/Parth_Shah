@@ -1,6 +1,6 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 
-async function openPortfolio(page: Parameters<typeof test>[0] extends never ? never : any) {
+async function openPortfolio(page: Page) {
   await page.goto("./", { waitUntil: "domcontentloaded" });
   await expect(page.locator("main#main-content")).toBeVisible();
 }
@@ -73,7 +73,7 @@ test("project cards navigate to their matching detail sections", async ({ page }
 
 test("Ancient Well detail carousel shows all renders and responds to controls", async ({ page }) => {
   await openPortfolio(page);
-  await page.locator('#ancient-well').scrollIntoViewIfNeeded();
+  await page.locator("#ancient-well").scrollIntoViewIfNeeded();
 
   const carousel = page.locator("#ancient-well .detail-carousel");
   await expect(carousel).toBeVisible();
