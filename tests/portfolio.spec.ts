@@ -99,18 +99,20 @@ test("Ancient Well detail carousel combines turntable and renders", async ({ pag
   await expect(image).toHaveAttribute("alt", "Ancient Well render view 1");
 });
 
-test("Alarm Clock project loads the interactive GLB viewer", async ({ page }) => {
+test("Alarm Clock project loads the interactive textured GLB viewer", async ({ page }) => {
   const pageErrors: string[] = [];
   page.on("pageerror", (error) => pageErrors.push(error.message));
 
   await openPortfolio(page);
   const viewer = page.locator("#alarm-clock .model-viewer");
   const modelResponse = page.waitForResponse((response) => response.url().includes(".glb") && response.ok());
+  const textureResponse = page.waitForResponse((response) => response.url().includes("BaseColor.1001") && response.ok());
 
   await viewer.scrollIntoViewIfNeeded();
   await expect(viewer).toBeVisible();
-  await modelResponse;
+  await Promise.all([modelResponse, textureResponse]);
   await expect(viewer.locator("canvas")).toHaveCount(1);
+  await expect(viewer.getByText("PBR textured", { exact: false })).toBeVisible();
   await expect(viewer.getByRole("button", { name: "Pause rotation" })).toBeVisible();
   await viewer.getByRole("button", { name: "Pause rotation" }).click();
   await expect(viewer.getByRole("button", { name: "Auto rotate" })).toBeVisible();
