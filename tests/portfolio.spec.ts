@@ -59,7 +59,7 @@ test("navigation, Resume, LinkedIn and internal anchors are valid", async ({ pag
 test("project cards navigate to their matching detail sections", async ({ page }) => {
   await openPortfolio(page);
 
-  const projects = ["ancient-temple", "ancient-well", "fight-sequence"];
+  const projects = ["ancient-temple", "ancient-well", "alarm-clock", "fight-sequence"];
 
   for (const id of projects) {
     const projectLink = page.locator(`.carousel-thumb[href="#${id}"]`);
@@ -99,6 +99,26 @@ test("Ancient Well detail carousel combines turntable and renders", async ({ pag
   await expect(image).toHaveAttribute("alt", "Ancient Well render view 1");
 });
 
+test("Alarm Clock project loads the interactive GLB viewer", async ({ page }) => {
+  const pageErrors: string[] = [];
+  page.on("pageerror", (error) => pageErrors.push(error.message));
+
+  await openPortfolio(page);
+  const viewer = page.locator("#alarm-clock .model-viewer");
+  const modelResponse = page.waitForResponse((response) => response.url().includes(".glb") && response.ok());
+
+  await viewer.scrollIntoViewIfNeeded();
+  await expect(viewer).toBeVisible();
+  await modelResponse;
+  await expect(viewer.locator("canvas")).toHaveCount(1);
+  await expect(viewer.getByRole("button", { name: "Pause rotation" })).toBeVisible();
+  await viewer.getByRole("button", { name: "Pause rotation" }).click();
+  await expect(viewer.getByRole("button", { name: "Auto rotate" })).toBeVisible();
+  await page.waitForTimeout(500);
+
+  expect(pageErrors, `3D viewer page errors: ${pageErrors.join(" | ")}`).toEqual([]);
+});
+
 test("core portfolio semantics remain present", async ({ page }) => {
   await openPortfolio(page);
 
@@ -109,5 +129,6 @@ test("core portfolio semantics remain present", async ({ page }) => {
   await expect(page.locator("#about")).toHaveCount(1);
   await expect(page.locator("#work")).toHaveCount(1);
   await expect(page.locator("#experience")).toHaveCount(1);
+  await expect(page.locator("#alarm-clock")).toHaveCount(1);
   await expect(page.locator("#contact")).toHaveCount(1);
 });
