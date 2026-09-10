@@ -34,19 +34,19 @@ jobs:
           mkdir -p "$out"
 
           for tile in 1001 1002 1003 1004; do
-            magick "$src/Alarm_Clock_Sp_BaseColor.$tile.png" -resize '2048x2048>' -strip -quality 88 "$out/BaseColor.$tile.webp"
-            magick "$src/Alarm_Clock_Sp_Roughness.$tile.png" -resize '2048x2048>' -strip -quality 92 "$out/Roughness.$tile.webp"
-            magick "$src/Alarm_Clock_Sp_Metalness.$tile.png" -resize '2048x2048>' -strip -quality 92 "$out/Metalness.$tile.webp"
+            convert "$src/Alarm_Clock_Sp_BaseColor.$tile.png" -resize '2048x2048>' -strip -quality 88 "$out/BaseColor.$tile.webp"
+            convert "$src/Alarm_Clock_Sp_Roughness.$tile.png" -resize '2048x2048>' -strip -quality 92 "$out/Roughness.$tile.webp"
+            convert "$src/Alarm_Clock_Sp_Metalness.$tile.png" -resize '2048x2048>' -strip -quality 92 "$out/Metalness.$tile.webp"
 
             if [ "$tile" = "1001" ]; then
               normal="$src/Alarm_Clock_Sp_Normal.1001.jpg"
             else
               normal="$src/Alarm_Clock_Sp_Normal.$tile.png"
             fi
-            magick "$normal" -resize '2048x2048>' -strip -quality 94 "$out/Normal.$tile.webp"
+            convert "$normal" -resize '2048x2048>' -strip -quality 94 "$out/Normal.$tile.webp"
           done
 
-          magick "$src/Alarm_Clock_Dial BG_U2_V1.png" -resize '2048x2048>' -strip "$out/Dial.png"
+          convert "$src/Alarm_Clock_Dial BG_U2_V1.png" -resize '2048x2048>' -strip "$out/Dial.png"
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
