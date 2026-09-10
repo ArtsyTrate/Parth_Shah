@@ -1,8 +1,5 @@
-import { Canvas, useFrame } from "@react-three/fiber";
-import { Float, OrbitControls } from "@react-three/drei";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import type { Group } from "three";
 
 import ancientTemple from "../assets/Ancient Temple.jpg";
 import ancientWell from "../assets/Ancient_Well.png";
@@ -62,48 +59,6 @@ const ancientWellMedia = [
 ];
 
 type DetailMedia = (typeof ancientWellMedia)[number];
-
-function HeroModel() {
-  const group = useRef<Group>(null);
-
-  useFrame((state, delta) => {
-    if (!group.current) return;
-    group.current.rotation.y += delta * 0.1;
-    group.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.35) * 0.035;
-  });
-
-  return (
-    <Float speed={0.9} rotationIntensity={0.1} floatIntensity={0.3}>
-      <group ref={group}>
-        <mesh rotation={[0.4, 0.4, 0]}>
-          <boxGeometry args={[2.5, 1.5, 2.15]} />
-          <meshStandardMaterial color="#18191b" metalness={0.55} roughness={0.24} />
-        </mesh>
-        <mesh position={[0, 0.98, 0]} rotation={[-0.08, 0, 0]}>
-          <boxGeometry args={[2.18, 1.12, 0.1]} />
-          <meshStandardMaterial color="#f0f1f3" emissive="#28292c" emissiveIntensity={0.32} />
-        </mesh>
-        <mesh position={[0, -1.08, 0]}>
-          <boxGeometry args={[2.85, 0.14, 1.72]} />
-          <meshStandardMaterial color="#242528" metalness={0.45} roughness={0.32} />
-        </mesh>
-      </group>
-    </Float>
-  );
-}
-
-function HeroCanvas() {
-  return (
-    <Canvas camera={{ position: [5.8, 2.7, 6], fov: 28 }} dpr={[1, 1.5]}>
-      <ambientLight intensity={0.38} />
-      <hemisphereLight intensity={0.22} groundColor="#090a0b" />
-      <spotLight position={[-8, 12, 6]} intensity={2.3} angle={0.22} penumbra={1} />
-      <pointLight position={[4, 2, 4]} intensity={0.8} color="#ffffff" />
-      <HeroModel />
-      <OrbitControls enableZoom={false} enablePan={false} maxPolarAngle={Math.PI / 2} minPolarAngle={Math.PI / 2.35} />
-    </Canvas>
-  );
-}
 
 function SectionTitle({ eyebrow, title }: { eyebrow: string; title: string }) {
   const reduceMotion = useReducedMotion();
@@ -444,7 +399,6 @@ function App() {
               <a href={resumeUrl} target="_blank" rel="noreferrer">Resume ↗</a>
             </motion.div>
           </div>
-          <div className="hero-canvas" aria-hidden="true"><HeroCanvas /></div>
           <a className="scroll-label" href="#about">Scroll to explore ↓</a>
         </section>
 
@@ -538,7 +492,6 @@ function App() {
                 <a href={resumeUrl} target="_blank" rel="noreferrer">Resume ↗</a>
               </div>
             </div>
-            <div className="contact-globe" aria-hidden="true"><HeroCanvas /></div>
           </div>
         </section>
       </main>
