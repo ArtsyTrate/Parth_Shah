@@ -1,0 +1,32 @@
+.model-viewer{min-width:0;overflow:hidden;border:1px solid var(--border);border-radius:6px;background:var(--deep)}
+.model-viewer-bar{display:flex;align-items:center;justify-content:space-between;gap:22px;padding:14px 16px;border-bottom:1px solid var(--border);background:var(--surface)}
+.model-viewer-bar>div:first-child{display:flex;align-items:baseline;gap:12px;min-width:0}
+.model-viewer-bar strong{font-size:11px;font-weight:600;letter-spacing:.04em;color:var(--white);white-space:nowrap}
+.model-viewer-bar span{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.model-viewer-actions{display:flex;gap:8px;flex-shrink:0}
+.model-viewer-actions button{border:1px solid var(--border);background:transparent;color:var(--white);font:inherit;font-size:11px;padding:8px 10px;border-radius:4px;cursor:pointer;transition:background .2s ease,border-color .2s ease,transform .2s ease}
+.model-viewer-actions button:hover{background:#23272b;border-color:#454b51;transform:translateY(-1px)}
+.model-viewer-actions button:active{transform:translateY(1px)}
+.model-viewer-stage{position:relative;width:100%;height:clamp(520px,58vw,760px);background:var(--deep);overflow:hidden;touch-action:none}
+.model-viewer-stage canvas{display:block;width:100%!important;height:100%!important}
+.model-viewer-loading{position:absolute;inset:0;display:grid;place-items:center;padding:24px;color:var(--muted);font-size:12px;text-align:center}
+.alarm-clock-detail .detail-copy span{max-width:43ch}
+.carousel-thumbs{grid-template-columns:repeat(4,minmax(0,1fr))}
+
+@media(max-width:900px){
+  .model-viewer-stage{height:clamp(460px,75vw,660px)}
+}
+
+@media(max-width:720px){
+  .model-viewer-bar{align-items:flex-start;padding:12px 13px;gap:12px}
+  .model-viewer-bar>div:first-child{display:block}
+  .model-viewer-bar span{display:block;margin-top:4px;font-size:10px}
+  .model-viewer-actions{gap:6px}
+  .model-viewer-actions button{padding:7px 8px;font-size:10px}
+  .model-viewer-stage{height:430px}
+  .carousel-thumbs{display:flex}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .model-viewer-actions button{transition:none!important}
+}
