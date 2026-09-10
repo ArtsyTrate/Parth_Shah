@@ -12,6 +12,7 @@
 .model-viewer-loading{position:absolute;inset:0;display:grid;place-items:center;padding:24px;color:var(--muted);font-size:12px;text-align:center}
 .alarm-clock-detail .detail-copy span{max-width:43ch}
 .carousel-thumbs{grid-template-columns:repeat(4,minmax(0,1fr))}
+.contact-card{grid-template-columns:1fr}
 
 @media(max-width:900px){
   .model-viewer-stage{height:clamp(460px,75vw,660px)}
