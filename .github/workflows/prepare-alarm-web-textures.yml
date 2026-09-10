@@ -1,0 +1,56 @@
+name: Prepare Alarm Clock web textures
+
+on:
+  push:
+    branches:
+      - react-3d-redesign
+    paths:
+      - ".github/workflows/prepare-alarm-web-textures.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout redesign branch
+        uses: actions/checkout@v4
+        with:
+          ref: react-3d-redesign
+          fetch-depth: 0
+
+      - name: Install ImageMagick
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y imagemagick
+
+      - name: Build optimized web texture set
+        shell: bash
+        run: |
+          set -euo pipefail
+          src="assets/Alarm_Clock"
+          out="$src/web"
+          mkdir -p "$out"
+
+          for tile in 1001 1002 1003 1004; do
+            magick "$src/Alarm_Clock_Sp_BaseColor.$tile.png" -resize '2048x2048>' -strip -quality 88 "$out/BaseColor.$tile.webp"
+            magick "$src/Alarm_Clock_Sp_Roughness.$tile.png" -resize '2048x2048>' -strip -quality 92 "$out/Roughness.$tile.webp"
+            magick "$src/Alarm_Clock_Sp_Metalness.$tile.png" -resize '2048x2048>' -strip -quality 92 "$out/Metalness.$tile.webp"
+
+            if [ "$tile" = "1001" ]; then
+              normal="$src/Alarm_Clock_Sp_Normal.1001.jpg"
+            else
+              normal="$src/Alarm_Clock_Sp_Normal.$tile.png"
+            fi
+            magick "$normal" -resize '2048x2048>' -strip -quality 94 "$out/Normal.$tile.webp"
+          done
+
+          magick "$src/Alarm_Clock_Dial BG_U2_V1.png" -resize '2048x2048>' -strip "$out/Dial.png"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$out"
+          git rm .github/workflows/prepare-alarm-web-textures.yml
+          git commit -m "Add optimized Alarm Clock web textures"
+          git push origin HEAD:react-3d-redesign
