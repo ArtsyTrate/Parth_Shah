@@ -9,9 +9,11 @@ import ancientWell from "../assets/Ancient_Well.png";
 import ancientWell02 from "../assets/Ancient_Well_02.png";
 import ancientWell03 from "../assets/Ancient_Well_03.png";
 import ancientWell04 from "../assets/Ancient_Well_04.png";
+import alarmClockPreview from "../assets/Alarm_Clock/Alarm_Clock_Dial BG_U2_V1.png";
 import wellTurntable from "../assets/Well_Turn Table.mp4";
 import fightSequence from "../assets/Shah_Parth_Fight_Sequence.mp4";
 import resumeUrl from "../Parth_Shah_Resume_3D.pdf?url";
+import AlarmClockViewer from "./AlarmClockViewer";
 import "./carousel.css";
 
 const showcaseProjects = [
@@ -30,6 +32,14 @@ const showcaseProjects = [
     media: [ancientWell, ancientWell02, ancientWell03, ancientWell04],
     type: "image" as const,
     description: "A detailed prop study exploring layered wood construction, stonework, rope, shingles and pulley mechanics.",
+  },
+  {
+    title: "Alarm Clock",
+    category: "Interactive 3D Model",
+    href: "#alarm-clock",
+    media: [alarmClockPreview],
+    type: "image" as const,
+    description: "A textured hard-surface prop presented as an interactive real-time 3D model with orbit and zoom controls.",
   },
   {
     title: "Fight Sequence",
@@ -496,6 +506,15 @@ function App() {
         <section className="project-detail split-detail" id="ancient-well">
           <ProjectDetailCarousel title="Ancient Well" media={ancientWellMedia} />
           <div className="detail-copy"><p>3D Modeling</p><h2>Ancient Well</h2><span>A modeling and sculpting study focused on layered wood construction, stonework, rope details and pulley mechanics.</span></div>
+        </section>
+
+        <section className="project-detail split-detail alarm-clock-detail" id="alarm-clock">
+          <AlarmClockViewer />
+          <div className="detail-copy">
+            <p>Interactive 3D Model</p>
+            <h2>Alarm Clock</h2>
+            <span>A hard-surface modeling and texturing study presented directly in the browser. Drag to inspect the model from any angle, use the mouse wheel or trackpad to zoom, pause the automatic rotation, or reset the camera.</span>
+          </div>
         </section>
 
         <section className="project-detail cinematic-detail" id="fight-sequence">
