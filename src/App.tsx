@@ -15,7 +15,7 @@ import alarmClockDetail3 from "../assets/Alarm_Clock/!_U3_V1.jpg";
 import alarmClockDetail4 from "../assets/Alarm_Clock/!_U4_V1.jpg";
 import alarmClockTextured from "../assets/Alarm_Clock/Textured 2.mp4";
 import alarmClockWireframe from "../assets/Alarm_Clock/Wireframe.mp4";
-import wellTurntable from "../assets/Well Turn Table.mp4";
+import wellTurntable from "../assets/Well_Turn Table.mp4";
 import fightSequence from "../assets/Shah_Parth_Fight_Sequence.mp4";
 import resumeUrl from "../Parth_Shah_Resume_3D.pdf?url";
 import "./carousel.css";
