@@ -10,12 +10,34 @@
 .model-viewer-stage{position:relative;width:100%;height:clamp(520px,58vw,760px);background:var(--deep);overflow:hidden;touch-action:none}
 .model-viewer-stage canvas{display:block;width:100%!important;height:100%!important}
 .model-viewer-loading{position:absolute;inset:0;display:grid;place-items:center;padding:24px;color:var(--muted);font-size:12px;text-align:center}
+
+.alarm-media-gallery{padding:18px;border-top:1px solid var(--border);background:#0b0d0f;outline:none}
+.alarm-media-heading{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:14px}
+.alarm-media-heading>div:first-child{min-width:0}
+.alarm-media-heading strong{display:block;font-size:11px;font-weight:600;letter-spacing:.04em;color:var(--white)}
+.alarm-media-heading span{display:block;margin-top:4px;font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.alarm-media-arrows{display:flex;gap:8px;flex-shrink:0}
+.alarm-media-arrows button{width:38px;height:38px;border:1px solid var(--border);background:var(--surface);color:var(--white);border-radius:4px;font:inherit;font-size:15px;cursor:pointer;transition:background .18s ease,border-color .18s ease,transform .18s ease}
+.alarm-media-arrows button:hover{background:#24282c;border-color:#4b5157;transform:translateY(-1px)}
+.alarm-media-arrows button:active{transform:translateY(1px)}
+.alarm-media-stage{position:relative;aspect-ratio:16/9;overflow:hidden;border:1px solid var(--border);border-radius:5px;background:#08090a}
+.alarm-media-stage img,.alarm-media-stage video{width:100%;height:100%;display:block;object-fit:contain;background:#08090a}
+.alarm-media-stage:not(.has-video) img{object-fit:cover}
+.alarm-media-counter{position:absolute;left:12px;top:12px;padding:7px 9px;border:1px solid rgba(255,255,255,.12);border-radius:4px;background:rgba(8,9,10,.72);backdrop-filter:blur(8px);font-size:10px;line-height:1;letter-spacing:.05em;color:#d8dde2;font-variant-numeric:tabular-nums;pointer-events:none}
+.alarm-media-thumbs{display:flex;gap:8px;overflow-x:auto;overscroll-behavior-inline:contain;scroll-snap-type:x proximity;padding-top:10px;padding-bottom:2px;scrollbar-width:thin}
+.alarm-media-thumbs button{position:relative;flex:0 0 104px;aspect-ratio:4/3;padding:0;border:1px solid transparent;border-radius:4px;overflow:hidden;background:var(--surface);cursor:pointer;scroll-snap-align:start;transition:border-color .18s ease,transform .18s ease,opacity .18s ease;opacity:.62}
+.alarm-media-thumbs button:hover{opacity:.9;transform:translateY(-1px);border-color:#4a5056}
+.alarm-media-thumbs button.active{opacity:1;border-color:#858d95}
+.alarm-media-thumbs button img{width:100%;height:100%;display:block;object-fit:cover}
+.alarm-media-thumbs button span{position:absolute;right:5px;bottom:5px;padding:4px 5px;border-radius:3px;background:rgba(8,9,10,.74);font-size:8px;line-height:1;letter-spacing:.06em;text-transform:uppercase;color:#d8dde2;pointer-events:none}
+
 .alarm-clock-detail .detail-copy span{max-width:43ch}
 .carousel-thumbs{grid-template-columns:repeat(4,minmax(0,1fr))}
 .contact-card{grid-template-columns:1fr}
 
 @media(max-width:900px){
   .model-viewer-stage{height:clamp(460px,75vw,660px)}
+  .alarm-media-stage{aspect-ratio:16/10}
 }
 
 @media(max-width:720px){
@@ -25,9 +47,13 @@
   .model-viewer-actions{gap:6px}
   .model-viewer-actions button{padding:7px 8px;font-size:10px}
   .model-viewer-stage{height:430px}
+  .alarm-media-gallery{padding:13px}
+  .alarm-media-heading{align-items:flex-end}
+  .alarm-media-stage{aspect-ratio:4/3}
+  .alarm-media-thumbs button{flex-basis:86px}
   .carousel-thumbs{display:flex}
 }
 
 @media(prefers-reduced-motion:reduce){
-  .model-viewer-actions button{transition:none!important}
+  .model-viewer-actions button,.alarm-media-arrows button,.alarm-media-thumbs button{transition:none!important}
 }
