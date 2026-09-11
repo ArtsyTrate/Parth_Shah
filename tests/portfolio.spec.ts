@@ -67,7 +67,17 @@ test("project cards navigate to their matching detail sections", async ({ page }
     await projectLink.click();
     await expect(page).toHaveURL(new RegExp(`#${id}$`));
     await expect(page.locator(`#${id}`)).toBeInViewport({ ratio: 0.15 });
-    await page.locator("#work").scrollIntoViewIfNeeded();
+
+    // The portfolio intentionally uses smooth scrolling. Jump back to the project rail
+    // directly so Playwright does not wait for the animated scroll to become "stable".
+    await page.evaluate(() => {
+      const root = document.documentElement;
+      const previousScrollBehavior = root.style.scrollBehavior;
+      root.style.scrollBehavior = "auto";
+      document.getElementById("work")?.scrollIntoView({ block: "start" });
+      root.style.scrollBehavior = previousScrollBehavior;
+    });
+    await expect(page.locator("#work")).toBeInViewport({ ratio: 0.1 });
   }
 });
 
