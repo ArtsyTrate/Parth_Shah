@@ -12,6 +12,15 @@ import {
 } from "three";
 
 import alarmClockUrl from "../assets/Alarm_Clock/Alarm_Clock.glb?url";
+import alarmRender1 from "../assets/Alarm_Clock/1.jpg";
+import alarmRender3 from "../assets/Alarm_Clock/3.jpg";
+import alarmRender5 from "../assets/Alarm_Clock/5.jpg";
+import alarmDetail1 from "../assets/Alarm_Clock/!_U1_V1.jpg";
+import alarmDetail2 from "../assets/Alarm_Clock/!_U2_V1.jpg";
+import alarmDetail3 from "../assets/Alarm_Clock/!_U3_V1.jpg";
+import alarmDetail4 from "../assets/Alarm_Clock/!_U4_V1.jpg";
+import texturedTurntable from "../assets/Alarm_Clock/Textured 2.mp4";
+import wireframeTurntable from "../assets/Alarm_Clock/Wireframe.mp4";
 import base1001 from "../assets/Alarm_Clock/web/BaseColor.1001.webp";
 import base1002 from "../assets/Alarm_Clock/web/BaseColor.1002.webp";
 import base1003 from "../assets/Alarm_Clock/web/BaseColor.1003.webp";
@@ -28,6 +37,9 @@ import dialUrl from "../assets/Alarm_Clock/web/Dial.png";
 import "./model-viewer.css";
 
 type Tile = 1001 | 1002 | 1003;
+type AlarmMedia =
+  | { type: "image"; src: string; label: string }
+  | { type: "video"; src: string; label: string; poster: string };
 
 const tileByObject: Record<string, Tile> = {
   Body: 1001,
@@ -51,6 +63,18 @@ const tileByObject: Record<string, Tile> = {
   Leg_left: 1003,
   Leg_Right: 1003,
 };
+
+const alarmClockMedia: AlarmMedia[] = [
+  { type: "video", src: texturedTurntable, label: "Textured turntable", poster: alarmRender1 },
+  { type: "video", src: wireframeTurntable, label: "Wireframe turntable", poster: alarmRender1 },
+  { type: "image", src: alarmRender1, label: "Final render 01" },
+  { type: "image", src: alarmRender3, label: "Final render 02" },
+  { type: "image", src: alarmRender5, label: "Final render 03" },
+  { type: "image", src: alarmDetail1, label: "Detail view 01" },
+  { type: "image", src: alarmDetail2, label: "Detail view 02" },
+  { type: "image", src: alarmDetail3, label: "Detail view 03" },
+  { type: "image", src: alarmDetail4, label: "Detail view 04" },
+];
 
 function configureTexture(texture: Texture, colorTexture = false) {
   texture.flipY = false;
@@ -169,6 +193,71 @@ function AlarmClockModel() {
   return <primitive object={model} />;
 }
 
+function AlarmClockMediaGallery() {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const activeMedia = alarmClockMedia[activeIndex];
+  const total = alarmClockMedia.length;
+  const previous = () => setActiveIndex((index) => (index - 1 + total) % total);
+  const next = () => setActiveIndex((index) => (index + 1) % total);
+
+  return (
+    <div
+      className="alarm-media-gallery"
+      tabIndex={0}
+      aria-label="Alarm Clock renders and breakdowns"
+      onKeyDown={(event) => {
+        if (event.key === "ArrowLeft") previous();
+        if (event.key === "ArrowRight") next();
+      }}
+    >
+      <div className="alarm-media-heading">
+        <div>
+          <strong>Renders & breakdowns</strong>
+          <span>{activeMedia.label}</span>
+        </div>
+        <div className="alarm-media-arrows">
+          <button type="button" onClick={previous} aria-label="Previous Alarm Clock media">←</button>
+          <button type="button" onClick={next} aria-label="Next Alarm Clock media">→</button>
+        </div>
+      </div>
+
+      <div className={`alarm-media-stage ${activeMedia.type === "video" ? "has-video" : ""}`}>
+        {activeMedia.type === "video" ? (
+          <video
+            key={activeMedia.src}
+            src={activeMedia.src}
+            poster={activeMedia.poster}
+            muted
+            controls
+            playsInline
+            preload="metadata"
+            aria-label={activeMedia.label}
+          />
+        ) : (
+          <img src={activeMedia.src} alt={activeMedia.label} decoding="async" />
+        )}
+        <span className="alarm-media-counter">{String(activeIndex + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}</span>
+      </div>
+
+      <div className="alarm-media-thumbs" aria-label="Choose Alarm Clock media">
+        {alarmClockMedia.map((item, index) => (
+          <button
+            type="button"
+            key={`${item.type}-${item.src}`}
+            className={index === activeIndex ? "active" : ""}
+            onClick={() => setActiveIndex(index)}
+            aria-label={`Show ${item.label}`}
+            aria-current={index === activeIndex ? "true" : undefined}
+          >
+            <img src={item.type === "video" ? item.poster : item.src} alt="" loading="lazy" decoding="async" />
+            <span>{item.type === "video" ? "Video" : "Image"}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function AlarmClockViewer() {
   const rootRef = useRef<HTMLDivElement>(null);
   const [autoRotate, setAutoRotate] = useState(true);
@@ -248,6 +337,8 @@ export default function AlarmClockViewer() {
           <div className="model-viewer-loading">3D model and textures load when this section enters view.</div>
         )}
       </div>
+
+      <AlarmClockMediaGallery />
     </div>
   );
 }
