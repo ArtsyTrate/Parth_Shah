@@ -6,11 +6,18 @@ import ancientWell from "../assets/Ancient_Well.png";
 import ancientWell02 from "../assets/Ancient_Well_02.png";
 import ancientWell03 from "../assets/Ancient_Well_03.png";
 import ancientWell04 from "../assets/Ancient_Well_04.png";
-import alarmClockPreview from "../assets/Alarm_Clock/Alarm_Clock_Dial BG_U2_V1.png";
-import wellTurntable from "../assets/Well_Turn Table.mp4";
+import alarmClockPreview from "../assets/Alarm_Clock/3.jpg";
+import alarmClockRender1 from "../assets/Alarm_Clock/1.jpg";
+import alarmClockRender5 from "../assets/Alarm_Clock/5.jpg";
+import alarmClockDetail1 from "../assets/Alarm_Clock/!_U1_V1.jpg";
+import alarmClockDetail2 from "../assets/Alarm_Clock/!_U2_V1.jpg";
+import alarmClockDetail3 from "../assets/Alarm_Clock/!_U3_V1.jpg";
+import alarmClockDetail4 from "../assets/Alarm_Clock/!_U4_V1.jpg";
+import alarmClockTextured from "../assets/Alarm_Clock/Textured 2.mp4";
+import alarmClockWireframe from "../assets/Alarm_Clock/Wireframe.mp4";
+import wellTurntable from "../assets/Well Turn Table.mp4";
 import fightSequence from "../assets/Shah_Parth_Fight_Sequence.mp4";
 import resumeUrl from "../Parth_Shah_Resume_3D.pdf?url";
-import AlarmClockViewer from "./AlarmClockViewer";
 import "./carousel.css";
 
 const showcaseProjects = [
@@ -32,11 +39,11 @@ const showcaseProjects = [
   },
   {
     title: "Alarm Clock",
-    category: "Interactive 3D Model",
+    category: "3D Modeling",
     href: "#alarm-clock",
     media: [alarmClockPreview],
     type: "image" as const,
-    description: "A textured hard-surface prop presented as an interactive real-time 3D model with orbit and zoom controls.",
+    description: "A hard-surface modeling and texturing study presented through final renders, textured and wireframe turntables, and detail views.",
   },
   {
     title: "Fight Sequence",
@@ -50,15 +57,29 @@ const showcaseProjects = [
 
 const tools = ["Maya", "Blender", "ZBrush", "Substance Painter", "Unreal Engine", "Arnold", "Redshift", "After Effects", "Premiere Pro"];
 
-const ancientWellMedia = [
-  { type: "video" as const, src: wellTurntable, alt: "Ancient Well 360 degree turntable", poster: ancientWell },
-  { type: "image" as const, src: ancientWell, alt: "Ancient Well render view 1" },
-  { type: "image" as const, src: ancientWell02, alt: "Ancient Well render view 2" },
-  { type: "image" as const, src: ancientWell03, alt: "Ancient Well render view 3" },
-  { type: "image" as const, src: ancientWell04, alt: "Ancient Well render view 4" },
+type DetailMedia =
+  | { type: "video"; src: string; alt: string; poster?: string }
+  | { type: "image"; src: string; alt: string };
+
+const ancientWellMedia: DetailMedia[] = [
+  { type: "video", src: wellTurntable, alt: "Ancient Well 360 degree turntable", poster: ancientWell },
+  { type: "image", src: ancientWell, alt: "Ancient Well render view 1" },
+  { type: "image", src: ancientWell02, alt: "Ancient Well render view 2" },
+  { type: "image", src: ancientWell03, alt: "Ancient Well render view 3" },
+  { type: "image", src: ancientWell04, alt: "Ancient Well render view 4" },
 ];
 
-type DetailMedia = (typeof ancientWellMedia)[number];
+const alarmClockMedia: DetailMedia[] = [
+  { type: "video", src: alarmClockTextured, alt: "Alarm Clock textured turntable", poster: alarmClockPreview },
+  { type: "video", src: alarmClockWireframe, alt: "Alarm Clock wireframe turntable", poster: alarmClockPreview },
+  { type: "image", src: alarmClockPreview, alt: "Alarm Clock final render 3" },
+  { type: "image", src: alarmClockRender1, alt: "Alarm Clock final render 1" },
+  { type: "image", src: alarmClockRender5, alt: "Alarm Clock final render 5" },
+  { type: "image", src: alarmClockDetail1, alt: "Alarm Clock detail view 1" },
+  { type: "image", src: alarmClockDetail2, alt: "Alarm Clock detail view 2" },
+  { type: "image", src: alarmClockDetail3, alt: "Alarm Clock detail view 3" },
+  { type: "image", src: alarmClockDetail4, alt: "Alarm Clock detail view 4" },
+];
 
 function SectionTitle({ eyebrow, title }: { eyebrow: string; title: string }) {
   const reduceMotion = useReducedMotion();
@@ -462,12 +483,12 @@ function App() {
           <div className="detail-copy"><p>3D Modeling</p><h2>Ancient Well</h2><span>A modeling and sculpting study focused on layered wood construction, stonework, rope details and pulley mechanics.</span></div>
         </section>
 
-        <section className="project-detail split-detail alarm-clock-detail" id="alarm-clock">
-          <AlarmClockViewer />
+        <section className="project-detail split-detail" id="alarm-clock">
+          <ProjectDetailCarousel title="Alarm Clock" media={alarmClockMedia} />
           <div className="detail-copy">
-            <p>Interactive 3D Model</p>
+            <p>3D Modeling</p>
             <h2>Alarm Clock</h2>
-            <span>A hard-surface modeling and texturing study presented directly in the browser. Drag to inspect the model from any angle, use the mouse wheel or trackpad to zoom, pause the automatic rotation, or reset the camera.</span>
+            <span>A hard-surface modeling and texturing study presented through final renders, textured and wireframe turntables, and close-up detail views.</span>
           </div>
         </section>
 
