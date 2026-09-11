@@ -68,8 +68,6 @@ test("project cards navigate to their matching detail sections", async ({ page }
     await expect(page).toHaveURL(new RegExp(`#${id}$`));
     await expect(page.locator(`#${id}`)).toBeInViewport({ ratio: 0.15 });
 
-    // The portfolio intentionally uses smooth scrolling. Jump back to the project rail
-    // directly so Playwright does not wait for the animated scroll to become "stable".
     await page.evaluate(() => {
       const root = document.documentElement;
       const previousScrollBehavior = root.style.scrollBehavior;
@@ -109,26 +107,23 @@ test("Ancient Well detail carousel combines turntable and renders", async ({ pag
   await expect(image).toHaveAttribute("alt", "Ancient Well render view 1");
 });
 
-test("Alarm Clock project loads the interactive textured GLB viewer", async ({ page }) => {
-  const pageErrors: string[] = [];
-  page.on("pageerror", (error) => pageErrors.push(error.message));
-
+test("Alarm Clock detail matches the Ancient Well carousel pattern", async ({ page }) => {
   await openPortfolio(page);
-  const viewer = page.locator("#alarm-clock .model-viewer");
-  const modelResponse = page.waitForResponse((response) => response.url().includes(".glb") && response.ok());
-  const textureResponse = page.waitForResponse((response) => response.url().includes("BaseColor.1001") && response.ok());
+  await page.locator("#alarm-clock").scrollIntoViewIfNeeded();
 
-  await viewer.scrollIntoViewIfNeeded();
-  await expect(viewer).toBeVisible();
-  await Promise.all([modelResponse, textureResponse]);
-  await expect(viewer.locator("canvas")).toHaveCount(1);
-  await expect(viewer.getByText("PBR textured", { exact: false })).toBeVisible();
-  await expect(viewer.getByRole("button", { name: "Pause rotation" })).toBeVisible();
-  await viewer.getByRole("button", { name: "Pause rotation" }).click();
-  await expect(viewer.getByRole("button", { name: "Auto rotate" })).toBeVisible();
-  await page.waitForTimeout(500);
+  const carousel = page.locator("#alarm-clock .detail-carousel");
+  await expect(carousel).toBeVisible();
+  await expect(carousel.locator(".detail-carousel-counter")).toContainText("01 / 09");
+  await expect(carousel.locator(".detail-carousel-stage video")).toHaveCount(1);
+  await expect(carousel.locator(".detail-carousel-dots button")).toHaveCount(9);
 
-  expect(pageErrors, `3D viewer page errors: ${pageErrors.join(" | ")}`).toEqual([]);
+  await carousel.locator(".detail-carousel-arrows button").last().click();
+  await expect(carousel.locator(".detail-carousel-counter")).toContainText("02 / 09");
+  await expect(carousel.locator(".detail-carousel-stage video")).toHaveAttribute("aria-label", "Alarm Clock wireframe turntable");
+
+  await carousel.locator(".detail-carousel-arrows button").last().click();
+  await expect(carousel.locator(".detail-carousel-counter")).toContainText("03 / 09");
+  await expect(carousel.locator(".detail-carousel-stage img")).toHaveAttribute("alt", "Alarm Clock final render 3");
 });
 
 test("core portfolio semantics remain present", async ({ page }) => {
