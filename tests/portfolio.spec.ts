@@ -67,7 +67,7 @@ test("Experience opens as a dedicated page", async ({ page }) => {
   await expect(page.locator("main.experience-page")).toBeVisible();
   await expect(page.locator(".experience-page-hero h1")).toHaveText("Experience");
   await expect(page.getByRole("heading", { name: "Education", exact: true })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Experience", exact: true })).toBeVisible();
+  await expect(page.locator("#experience-heading")).toBeVisible();
   await expect(page.locator(".experience-page-item")).toHaveCount(4);
   await expect(page.getByText("M.A. 3D Animation", { exact: true })).toBeVisible();
   await expect(page.getByText("Student Volunteer", { exact: true })).toBeVisible();
