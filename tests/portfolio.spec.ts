@@ -56,6 +56,23 @@ test("navigation, Resume, LinkedIn and home anchors are valid", async ({ page })
   }
 });
 
+test("Experience opens as a dedicated page", async ({ page }) => {
+  await openPortfolio(page);
+
+  const experienceLink = page.locator('header.navbar nav a[href="?page=experience"]');
+  await expect(experienceLink).toHaveCount(1);
+  await experienceLink.click();
+
+  await expect(page).toHaveURL(/\?page=experience$/);
+  await expect(page.locator("main.experience-page")).toBeVisible();
+  await expect(page.locator(".experience-page-hero h1")).toHaveText("Experience");
+  await expect(page.getByRole("heading", { name: "Education", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Experience", exact: true })).toBeVisible();
+  await expect(page.locator(".experience-page-item")).toHaveCount(4);
+  await expect(page.getByText("M.A. 3D Animation", { exact: true })).toBeVisible();
+  await expect(page.getByText("Student Volunteer", { exact: true })).toBeVisible();
+});
+
 test("project cards open dedicated project detail pages", async ({ page }) => {
   const projects = [
     ["ancient-temple", "Ancient Temple"],
@@ -117,7 +134,7 @@ test("Alarm Clock detail page uses render 3 as cover and the nine-item carousel"
   await expect(carousel.locator(".detail-carousel-stage img")).toHaveAttribute("alt", "Alarm Clock final render 3");
 });
 
-test("home page no longer renders project detail sections inline", async ({ page }) => {
+test("home page keeps project and experience details off the landing page", async ({ page }) => {
   await openPortfolio(page);
 
   await expect(page.locator("header.navbar")).toBeVisible();
@@ -125,7 +142,7 @@ test("home page no longer renders project detail sections inline", async ({ page
   await expect(page.locator("footer")).toBeVisible();
   await expect(page.locator("#about")).toHaveCount(1);
   await expect(page.locator("#work")).toHaveCount(1);
-  await expect(page.locator("#experience")).toHaveCount(1);
+  await expect(page.locator("#experience")).toHaveCount(0);
   await expect(page.locator("#contact")).toHaveCount(1);
   await expect(page.locator(".project-page")).toHaveCount(0);
   await expect(page.locator('.carousel-thumb[href^="?project="]')).toHaveCount(4);
