@@ -56,6 +56,20 @@ test("navigation, Resume, LinkedIn and home anchors are valid", async ({ page })
   }
 });
 
+test("header shows Projects and project cards link to detail pages", async ({ page }) => {
+  await openPortfolio(page);
+
+  const projectsNav = page.locator('header.navbar nav a[href="#work"]');
+  await expect(projectsNav).toHaveText("Projects");
+
+  const projectLinks = page.locator('.carousel-thumb[href^="?project="]');
+  await expect(projectLinks).toHaveCount(4);
+  await expect(projectLinks.nth(0)).toHaveAttribute("href", "?project=ancient-temple");
+  await expect(projectLinks.nth(1)).toHaveAttribute("href", "?project=ancient-well");
+  await expect(projectLinks.nth(2)).toHaveAttribute("href", "?project=alarm-clock");
+  await expect(projectLinks.nth(3)).toHaveAttribute("href", "?project=fight-sequence");
+});
+
 test("Experience opens as a dedicated page", async ({ page }) => {
   await openPortfolio(page);
 
