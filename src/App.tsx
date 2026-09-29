@@ -20,46 +20,20 @@ import fightSequence from "../assets/Shah_Parth_Fight_Sequence.mp4";
 import resumeUrl from "../Parth_Shah_Resume_3D.pdf?url";
 import "./carousel.css";
 
-const showcaseProjects = [
-  {
-    title: "Ancient Temple",
-    category: "Environment Art",
-    href: "#ancient-temple",
-    media: [ancientTemple],
-    type: "image" as const,
-    description: "A cinematic environment study focused on architectural modeling, carved surfaces, atmosphere, lighting and reflective water.",
-  },
-  {
-    title: "Ancient Well",
-    category: "3D Modeling",
-    href: "#ancient-well",
-    media: [ancientWell, ancientWell02, ancientWell03, ancientWell04],
-    type: "image" as const,
-    description: "A detailed prop study exploring layered wood construction, stonework, rope, shingles and pulley mechanics.",
-  },
-  {
-    title: "Alarm Clock",
-    category: "3D Modeling",
-    href: "#alarm-clock",
-    media: [alarmClockPreview],
-    type: "image" as const,
-    description: "A hard-surface modeling and texturing study presented through final renders, textured and wireframe turntables, and detail views.",
-  },
-  {
-    title: "Fight Sequence",
-    category: "Character Animation",
-    href: "#fight-sequence",
-    media: [fightSequence],
-    type: "video" as const,
-    description: "A body-mechanics performance focused on weight, recovery poses, timing and a fourth-wall comedy beat.",
-  },
-];
-
-const tools = ["Maya", "Blender", "ZBrush", "Substance Painter", "Unreal Engine", "Arnold", "Redshift", "After Effects", "Premiere Pro"];
-
 type DetailMedia =
   | { type: "video"; src: string; alt: string; poster?: string }
   | { type: "image"; src: string; alt: string };
+
+type ShowcaseProject = {
+  slug: string;
+  title: string;
+  category: string;
+  cover: string;
+  coverType: "image" | "video";
+  description: string;
+  detail: string;
+  media: DetailMedia[];
+};
 
 const ancientWellMedia: DetailMedia[] = [
   { type: "video", src: wellTurntable, alt: "Ancient Well 360 degree turntable", poster: ancientWell },
@@ -80,6 +54,55 @@ const alarmClockMedia: DetailMedia[] = [
   { type: "image", src: alarmClockDetail3, alt: "Alarm Clock detail view 3" },
   { type: "image", src: alarmClockDetail4, alt: "Alarm Clock detail view 4" },
 ];
+
+const showcaseProjects: ShowcaseProject[] = [
+  {
+    slug: "ancient-temple",
+    title: "Ancient Temple",
+    category: "Environment Art",
+    cover: ancientTemple,
+    coverType: "image",
+    description: "A cinematic environment study focused on architectural modeling, carved surfaces, atmosphere, lighting and reflective water.",
+    detail: "Architectural modeling, carved details, cinematic lighting and reflective water presentation.",
+    media: [{ type: "image", src: ancientTemple, alt: "Ancient Temple environment artwork" }],
+  },
+  {
+    slug: "ancient-well",
+    title: "Ancient Well",
+    category: "3D Modeling",
+    cover: ancientWell,
+    coverType: "image",
+    description: "A detailed prop study exploring layered wood construction, stonework, rope, shingles and pulley mechanics.",
+    detail: "A modeling and sculpting study focused on layered wood construction, stonework, rope details and pulley mechanics.",
+    media: ancientWellMedia,
+  },
+  {
+    slug: "alarm-clock",
+    title: "Alarm Clock",
+    category: "3D Modeling",
+    cover: alarmClockPreview,
+    coverType: "image",
+    description: "A hard-surface modeling and texturing study presented through final renders, textured and wireframe turntables, and detail views.",
+    detail: "A hard-surface modeling and texturing study presented through final renders, textured and wireframe turntables, and close-up detail views.",
+    media: alarmClockMedia,
+  },
+  {
+    slug: "fight-sequence",
+    title: "Fight Sequence",
+    category: "Character Animation",
+    cover: fightSequence,
+    coverType: "video",
+    description: "A body-mechanics performance focused on weight, recovery poses, timing and a fourth-wall comedy beat.",
+    detail: "Body mechanics, weight, recovery poses and comedic timing with a fourth-wall beat.",
+    media: [{ type: "video", src: fightSequence, alt: "Fight Sequence character animation" }],
+  },
+];
+
+const tools = ["Maya", "Blender", "ZBrush", "Substance Painter", "Unreal Engine", "Arnold", "Redshift", "After Effects", "Premiere Pro"];
+
+function projectHref(slug: string) {
+  return `?project=${slug}`;
+}
 
 function SectionTitle({ eyebrow, title }: { eyebrow: string; title: string }) {
   const reduceMotion = useReducedMotion();
@@ -104,7 +127,6 @@ function ProjectCarousel() {
   const [paused, setPaused] = useState(false);
   const total = showcaseProjects.length;
   const activeProject = showcaseProjects[activeIndex];
-  const previewMedia = activeProject.media[0];
 
   const next = () => setActiveIndex((current) => (current + 1) % total);
   const previous = () => setActiveIndex((current) => (current - 1 + total) % total);
@@ -154,10 +176,10 @@ function ProjectCarousel() {
             }}
           >
             <div className="carousel-media">
-              {activeProject.type === "video" ? (
-                <video src={previewMedia} autoPlay muted loop playsInline preload="metadata" />
+              {activeProject.coverType === "video" ? (
+                <video src={activeProject.cover} autoPlay muted loop playsInline preload="metadata" />
               ) : (
-                <img src={previewMedia} alt={activeProject.title} />
+                <img src={activeProject.cover} alt={activeProject.title} />
               )}
             </div>
 
@@ -165,7 +187,7 @@ function ProjectCarousel() {
               <p className="carousel-meta">{activeProject.category}</p>
               <h3>{activeProject.title}</h3>
               <p className="carousel-description">{activeProject.description}</p>
-              <a className="carousel-project-link" href={activeProject.href}>Explore project ↗</a>
+              <a className="carousel-project-link" href={projectHref(activeProject.slug)}>View project details ↗</a>
             </div>
           </motion.article>
         </AnimatePresence>
@@ -194,16 +216,17 @@ function ProjectCarousel() {
         {showcaseProjects.map((project, index) => (
           <a
             key={project.title}
-            href={project.href}
+            href={projectHref(project.slug)}
             className={`carousel-thumb ${index === activeIndex ? "active" : ""}`}
-            onClick={() => setActiveIndex(index)}
+            onMouseEnter={() => setActiveIndex(index)}
+            onFocus={() => setActiveIndex(index)}
             aria-label={`Open ${project.title} project details`}
           >
             <div className="carousel-thumb-media">
-              {project.type === "video" ? (
-                <video src={project.media[0]} muted playsInline preload="metadata" />
+              {project.coverType === "video" ? (
+                <video src={project.cover} muted playsInline preload="metadata" />
               ) : (
-                <img src={project.media[0]} alt="" loading="lazy" />
+                <img src={project.cover} alt="" loading="lazy" />
               )}
             </div>
             <span>{project.title}</span>
@@ -377,8 +400,99 @@ function ProjectDetailCarousel({ title, media }: { title: string; media: DetailM
   );
 }
 
-function App() {
+function SingleProjectMedia({ project }: { project: ShowcaseProject }) {
+  const media = project.media[0];
+
+  return (
+    <div className={`project-page-frame ${media.type === "video" ? "has-video" : ""}`}>
+      {media.type === "video" ? (
+        <video src={media.src} controls playsInline preload="metadata" aria-label={media.alt} />
+      ) : (
+        <img src={media.src} alt={media.alt} />
+      )}
+    </div>
+  );
+}
+
+function ProjectDetailPage({ project }: { project: ShowcaseProject }) {
+  const projectIndex = showcaseProjects.findIndex((item) => item.slug === project.slug);
+  const previousProject = showcaseProjects[(projectIndex - 1 + showcaseProjects.length) % showcaseProjects.length];
+  const nextProject = showcaseProjects[(projectIndex + 1) % showcaseProjects.length];
+
+  useEffect(() => {
+    document.title = `${project.title} — Parth Shah`;
+    window.scrollTo(0, 0);
+    return () => {
+      document.title = "Parth Shah — 3D Generalist & Motion Designer";
+    };
+  }, [project.title]);
+
+  return (
+    <div className="app-shell project-page-shell">
+      <a className="skip-link" href="#main-content">Skip to content</a>
+
+      <header className="navbar project-page-navbar">
+        <a className="brand" href="./" aria-label="Parth Shah portfolio home">PARTH SHAH</a>
+        <nav aria-label="Project navigation">
+          <a href="./#work">← All projects</a>
+          <a href="https://www.linkedin.com/in/parth-shah-3d-animator" target="_blank" rel="noreferrer">LinkedIn ↗</a>
+          <a href={resumeUrl} target="_blank" rel="noreferrer">Resume ↗</a>
+        </nav>
+      </header>
+
+      <main id="main-content" className="project-page">
+        <section className="project-page-hero">
+          <div className="project-page-heading">
+            <p className="project-page-eyebrow">
+              Project {String(projectIndex + 1).padStart(2, "0")} / {String(showcaseProjects.length).padStart(2, "0")} · {project.category}
+            </p>
+            <h1>{project.title}</h1>
+          </div>
+          <div className="project-page-intro">
+            <p>{project.description}</p>
+            <a href="./#work">← Back to selected work</a>
+          </div>
+        </section>
+
+        <section className="project-page-media" aria-label={`${project.title} project media`}>
+          {project.media.length > 1 ? (
+            <ProjectDetailCarousel title={project.title} media={project.media} />
+          ) : (
+            <SingleProjectMedia project={project} />
+          )}
+        </section>
+
+        <section className="project-page-details">
+          <p className="project-page-detail-label">Project details</p>
+          <div>
+            <h2>{project.title}</h2>
+            <p>{project.detail}</p>
+          </div>
+        </section>
+
+        <nav className="project-page-pager" aria-label="Browse projects">
+          <a href={projectHref(previousProject.slug)}>
+            <span>Previous project</span>
+            <strong>← {previousProject.title}</strong>
+          </a>
+          <a href={projectHref(nextProject.slug)}>
+            <span>Next project</span>
+            <strong>{nextProject.title} →</strong>
+          </a>
+        </nav>
+      </main>
+
+      <footer><span>© 2026 Parth Shah</span><span>3D Generalist · Motion Designer</span></footer>
+    </div>
+  );
+}
+
+function HomePage() {
   const reduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    document.title = "Parth Shah — 3D Generalist & Motion Designer";
+  }, []);
 
   return (
     <div className="app-shell">
@@ -469,38 +583,6 @@ function App() {
           </div>
         </section>
 
-        <section className="project-detail cinematic-detail" id="ancient-temple">
-          <img src={ancientTemple} alt="Ancient Temple environment" loading="lazy" />
-          <div className="detail-overlay">
-            <p>Environment Art</p>
-            <h2>Ancient Temple</h2>
-            <span>Architectural modeling, carved details, cinematic lighting and reflective water presentation.</span>
-          </div>
-        </section>
-
-        <section className="project-detail split-detail" id="ancient-well">
-          <ProjectDetailCarousel title="Ancient Well" media={ancientWellMedia} />
-          <div className="detail-copy"><p>3D Modeling</p><h2>Ancient Well</h2><span>A modeling and sculpting study focused on layered wood construction, stonework, rope details and pulley mechanics.</span></div>
-        </section>
-
-        <section className="project-detail split-detail" id="alarm-clock">
-          <ProjectDetailCarousel title="Alarm Clock" media={alarmClockMedia} />
-          <div className="detail-copy">
-            <p>3D Modeling</p>
-            <h2>Alarm Clock</h2>
-            <span>A hard-surface modeling and texturing study presented through final renders, textured and wireframe turntables, and close-up detail views.</span>
-          </div>
-        </section>
-
-        <section className="project-detail cinematic-detail" id="fight-sequence">
-          <video src={fightSequence} controls playsInline preload="metadata" />
-          <div className="detail-overlay">
-            <p>Character Animation</p>
-            <h2>Fight Sequence</h2>
-            <span>Body mechanics, weight, recovery poses and comedic timing with a fourth-wall beat.</span>
-          </div>
-        </section>
-
         <section className="section dark-section contact-section" id="contact">
           <div className="contact-card">
             <div>
@@ -520,6 +602,14 @@ function App() {
       <footer><span>© 2026 Parth Shah</span><span>3D Generalist · Motion Designer</span></footer>
     </div>
   );
+}
+
+function App() {
+  const requestedProject = new URLSearchParams(window.location.search).get("project");
+  const project = showcaseProjects.find((item) => item.slug === requestedProject);
+
+  if (project) return <ProjectDetailPage project={project} />;
+  return <HomePage />;
 }
 
 export default App;
