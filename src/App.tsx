@@ -539,7 +539,7 @@ function ExperiencePage() {
       <header className="navbar experience-page-navbar">
         <a className="brand" href="./" aria-label="Parth Shah portfolio home">PARTH SHAH</a>
         <nav aria-label="Experience page navigation">
-          <a href="./#work">Work</a>
+          <a href="./#work">Projects</a>
           <a href="./#contact">Contact</a>
           <a href="https://www.linkedin.com/in/parth-shah-3d-animator" target="_blank" rel="noreferrer">LinkedIn ↗</a>
           <a href={resumeUrl} target="_blank" rel="noreferrer">Resume ↗</a>
@@ -638,7 +638,7 @@ function HomePage() {
         <a className="brand" href="#home" aria-label="Parth Shah portfolio home">PARTH SHAH</a>
         <nav aria-label="Primary navigation">
           <a href="#about">About</a>
-          <a href="#work">Work</a>
+          <a href="#work">Projects</a>
           <a href="?page=experience">Experience</a>
           <a href="#contact">Contact</a>
           <a href="https://www.linkedin.com/in/parth-shah-3d-animator" target="_blank" rel="noreferrer">LinkedIn ↗</a>
