@@ -487,6 +487,142 @@ function ProjectDetailPage({ project }: { project: ShowcaseProject }) {
   );
 }
 
+function ExperiencePage() {
+  const reduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    document.title = "Experience — Parth Shah";
+    window.scrollTo(0, 0);
+    return () => {
+      document.title = "Parth Shah — 3D Generalist & Motion Designer";
+    };
+  }, []);
+
+  const education = [
+    {
+      period: "2024 — 2026",
+      title: "M.A. 3D Animation",
+      organization: "DePaul University",
+      location: "Chicago",
+      description: "Graduate study focused on 3D animation, modeling, environment art and production workflows.",
+    },
+  ];
+
+  const experience = [
+    {
+      period: "2026",
+      title: "Student Volunteer",
+      organization: "SIGGRAPH 2026",
+      location: "Los Angeles",
+      description: "Supported conference operations while connecting with artists, studios and the wider computer graphics community.",
+    },
+    {
+      period: "2025 — 2026",
+      title: "Vice President",
+      organization: "DePaul ACM SIGGRAPH Student Chapter",
+      location: "Chicago",
+      description: "Helped support student chapter activities and the local 3D, animation and computer graphics community.",
+    },
+    {
+      period: "2021 — 2023",
+      title: "Motion Graphics Designer",
+      organization: "Nutcracker Digital",
+      location: "Mumbai",
+      description: "Created motion graphics and 3D visual work across digital media projects.",
+    },
+  ];
+
+  return (
+    <div className="app-shell experience-page-shell">
+      <a className="skip-link" href="#main-content">Skip to content</a>
+
+      <header className="navbar experience-page-navbar">
+        <a className="brand" href="./" aria-label="Parth Shah portfolio home">PARTH SHAH</a>
+        <nav aria-label="Experience page navigation">
+          <a href="./#work">Work</a>
+          <a href="./#contact">Contact</a>
+          <a href="https://www.linkedin.com/in/parth-shah-3d-animator" target="_blank" rel="noreferrer">LinkedIn ↗</a>
+          <a href={resumeUrl} target="_blank" rel="noreferrer">Resume ↗</a>
+        </nav>
+      </header>
+
+      <main id="main-content" className="experience-page">
+        <section className="experience-page-hero">
+          <p className="experience-page-eyebrow">Background · Education · Experience</p>
+          <motion.h1
+            initial={reduceMotion ? false : { opacity: 0, y: 24 }}
+            animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          >
+            Experience
+          </motion.h1>
+          <p className="experience-page-lead">
+            A focused timeline of my education, creative work and involvement in the 3D and computer graphics community.
+          </p>
+        </section>
+
+        <section className="experience-page-section" aria-labelledby="education-heading">
+          <div className="experience-page-section-heading">
+            <p>01</p>
+            <h2 id="education-heading">Education</h2>
+          </div>
+          <div className="experience-page-list">
+            {education.map((item) => (
+              <motion.article
+                className="experience-page-item"
+                key={item.title}
+                initial={reduceMotion ? false : { opacity: 0, y: 18 }}
+                whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.45 }}
+              >
+                <small>{item.period}</small>
+                <div>
+                  <h3>{item.title}</h3>
+                  <p className="experience-page-organization">{item.organization} · {item.location}</p>
+                  <p className="experience-page-description">{item.description}</p>
+                </div>
+              </motion.article>
+            ))}
+          </div>
+        </section>
+
+        <section className="experience-page-section" aria-labelledby="experience-heading">
+          <div className="experience-page-section-heading">
+            <p>02</p>
+            <h2 id="experience-heading">Experience</h2>
+          </div>
+          <div className="experience-page-list">
+            {experience.map((item, index) => (
+              <motion.article
+                className="experience-page-item"
+                key={item.title}
+                initial={reduceMotion ? false : { opacity: 0, y: 18 }}
+                whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.35 }}
+                transition={{ delay: index * 0.05 }}
+              >
+                <small>{item.period}</small>
+                <div>
+                  <h3>{item.title}</h3>
+                  <p className="experience-page-organization">{item.organization} · {item.location}</p>
+                  <p className="experience-page-description">{item.description}</p>
+                </div>
+              </motion.article>
+            ))}
+          </div>
+        </section>
+
+        <section className="experience-page-cta">
+          <p>Selected work</p>
+          <a href="./#work">View projects →</a>
+        </section>
+      </main>
+
+      <footer><span>© 2026 Parth Shah</span><span>3D Generalist · Motion Designer</span></footer>
+    </div>
+  );
+}
+
 function HomePage() {
   const reduceMotion = useReducedMotion();
 
@@ -503,7 +639,7 @@ function HomePage() {
         <nav aria-label="Primary navigation">
           <a href="#about">About</a>
           <a href="#work">Work</a>
-          <a href="#experience">Experience</a>
+          <a href="?page=experience">Experience</a>
           <a href="#contact">Contact</a>
           <a href="https://www.linkedin.com/in/parth-shah-3d-animator" target="_blank" rel="noreferrer">LinkedIn ↗</a>
           <a href={resumeUrl} target="_blank" rel="noreferrer">Resume ↗</a>
@@ -563,26 +699,6 @@ function HomePage() {
           </div>
         </section>
 
-        <section className="section dark-section experience-section" id="experience">
-          <div className="experience-layout">
-            <div className="experience-heading"><SectionTitle eyebrow="Experience" title="Selected timeline" /></div>
-            <div className="timeline">
-              <motion.div className="timeline-item" initial={reduceMotion ? false : { opacity: 0, x: 18 }} whileInView={reduceMotion ? undefined : { opacity: 1, x: 0 }} viewport={{ once: true }}>
-                <small>2026</small><div><h3>Student Volunteer</h3><p>SIGGRAPH 2026 · Los Angeles</p></div>
-              </motion.div>
-              <motion.div className="timeline-item" initial={reduceMotion ? false : { opacity: 0, x: 18 }} whileInView={reduceMotion ? undefined : { opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: 0.06 }}>
-                <small>2025 — 2026</small><div><h3>Vice President</h3><p>DePaul ACM SIGGRAPH Student Chapter</p></div>
-              </motion.div>
-              <motion.div className="timeline-item" initial={reduceMotion ? false : { opacity: 0, x: 18 }} whileInView={reduceMotion ? undefined : { opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: 0.12 }}>
-                <small>2024 — 2026</small><div><h3>M.A. 3D Animation</h3><p>DePaul University · Chicago</p></div>
-              </motion.div>
-              <motion.div className="timeline-item" initial={reduceMotion ? false : { opacity: 0, x: 18 }} whileInView={reduceMotion ? undefined : { opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: 0.18 }}>
-                <small>2021 — 2023</small><div><h3>Motion Graphics Designer</h3><p>Nutcracker Digital · Mumbai</p></div>
-              </motion.div>
-            </div>
-          </div>
-        </section>
-
         <section className="section dark-section contact-section" id="contact">
           <div className="contact-card">
             <div>
@@ -605,10 +721,13 @@ function HomePage() {
 }
 
 function App() {
-  const requestedProject = new URLSearchParams(window.location.search).get("project");
+  const params = new URLSearchParams(window.location.search);
+  const requestedProject = params.get("project");
+  const requestedPage = params.get("page");
   const project = showcaseProjects.find((item) => item.slug === requestedProject);
 
   if (project) return <ProjectDetailPage project={project} />;
+  if (requestedPage === "experience") return <ExperiencePage />;
   return <HomePage />;
 }
 
