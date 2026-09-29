@@ -4,7 +4,7 @@
 .carousel-thumb{--card-category:"Project";position:relative;display:block;flex:0 1 clamp(82px,7.5vw,116px);min-width:0;height:100%;overflow:hidden;isolation:isolate;border:1px solid var(--border);border-radius:7px;background:var(--deep);color:var(--white);text-decoration:none;cursor:pointer;counter-increment:project-card;transition:flex-basis .72s cubic-bezier(.22,1,.36,1),flex-grow .72s cubic-bezier(.22,1,.36,1),border-color .3s ease,transform .3s ease}
 .carousel-thumb:nth-child(1){--card-category:"Environment Art"}
 .carousel-thumb:nth-child(2){--card-category:"3D Modeling"}
-.carousel-thumb:nth-child(3){--card-category:"Interactive 3D"}
+.carousel-thumb:nth-child(3){--card-category:"3D Modeling"}
 .carousel-thumb:nth-child(4){--card-category:"Character Animation"}
 .carousel-thumb.active{flex:1 1 min(820px,68vw);border-color:#5b6269}
 .carousel-thumbs:hover .carousel-thumb.active{flex:0 1 clamp(82px,7.5vw,116px)}
