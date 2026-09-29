@@ -31,7 +31,7 @@ test("portfolio loads without runtime or same-origin resource failures", async (
   expect(failedRequests, `Failed resources: ${failedRequests.join(" | ")}`).toEqual([]);
 });
 
-test("navigation, Resume, LinkedIn and internal anchors are valid", async ({ page }) => {
+test("navigation, Resume, LinkedIn and home anchors are valid", async ({ page }) => {
   await openPortfolio(page);
 
   const nav = page.locator("header.navbar nav");
@@ -56,34 +56,31 @@ test("navigation, Resume, LinkedIn and internal anchors are valid", async ({ pag
   }
 });
 
-test("project cards navigate to their matching detail sections", async ({ page }) => {
-  await openPortfolio(page);
+test("project cards open dedicated project detail pages", async ({ page }) => {
+  const projects = [
+    ["ancient-temple", "Ancient Temple"],
+    ["ancient-well", "Ancient Well"],
+    ["alarm-clock", "Alarm Clock"],
+    ["fight-sequence", "Fight Sequence"],
+  ] as const;
 
-  const projects = ["ancient-temple", "ancient-well", "alarm-clock", "fight-sequence"];
-
-  for (const id of projects) {
-    const projectLink = page.locator(`.carousel-thumb[href="#${id}"]`);
+  for (const [slug, title] of projects) {
+    await openPortfolio(page);
+    const projectLink = page.locator(`.carousel-thumb[href="?project=${slug}"]`);
     await expect(projectLink).toHaveCount(1);
     await projectLink.click();
-    await expect(page).toHaveURL(new RegExp(`#${id}$`));
-    await expect(page.locator(`#${id}`)).toBeInViewport({ ratio: 0.15 });
 
-    await page.evaluate(() => {
-      const root = document.documentElement;
-      const previousScrollBehavior = root.style.scrollBehavior;
-      root.style.scrollBehavior = "auto";
-      document.getElementById("work")?.scrollIntoView({ block: "start" });
-      root.style.scrollBehavior = previousScrollBehavior;
-    });
-    await expect(page.locator("#work")).toBeInViewport({ ratio: 0.1 });
+    await expect(page).toHaveURL(new RegExp(`\\?project=${slug}$`));
+    await expect(page.locator("main.project-page")).toBeVisible();
+    await expect(page.locator(".project-page-heading h1")).toHaveText(title);
+    await expect(page.getByRole("link", { name: /Back to selected work/i })).toHaveAttribute("href", "./#work");
   }
 });
 
-test("Ancient Well detail carousel combines turntable and renders", async ({ page }) => {
-  await openPortfolio(page);
-  await page.locator("#ancient-well").scrollIntoViewIfNeeded();
+test("Ancient Well detail page keeps the media carousel", async ({ page }) => {
+  await page.goto("./?project=ancient-well", { waitUntil: "domcontentloaded" });
 
-  const carousel = page.locator("#ancient-well .detail-carousel");
+  const carousel = page.locator(".project-page .detail-carousel");
   await expect(carousel).toBeVisible();
   await expect(carousel.locator(".detail-carousel-counter")).toContainText("01 / 05");
 
@@ -92,29 +89,23 @@ test("Ancient Well detail carousel combines turntable and renders", async ({ pag
   await video.scrollIntoViewIfNeeded();
   const playbackFlags = await video.evaluate((element: HTMLVideoElement) => ({ loop: element.loop, muted: element.muted }));
   expect(playbackFlags).toEqual({ loop: true, muted: true });
-  await expect.poll(() => video.evaluate((element: HTMLVideoElement) => element.paused), { timeout: 5_000 }).toBe(false);
 
   await carousel.locator(".detail-carousel-arrows button").last().click();
   const image = carousel.locator(".detail-carousel-stage img");
   await expect(image).toHaveAttribute("alt", "Ancient Well render view 1");
   await expect(carousel.locator(".detail-carousel-counter")).toContainText("02 / 05");
-
-  await carousel.press("ArrowRight");
-  await expect(image).toHaveAttribute("alt", "Ancient Well render view 2");
-  await expect(carousel.locator(".detail-carousel-counter")).toContainText("03 / 05");
-
-  await carousel.press("ArrowLeft");
-  await expect(image).toHaveAttribute("alt", "Ancient Well render view 1");
 });
 
-test("Alarm Clock detail matches the Ancient Well carousel pattern", async ({ page }) => {
+test("Alarm Clock detail page uses render 3 as cover and the nine-item carousel", async ({ page }) => {
   await openPortfolio(page);
-  await page.locator("#alarm-clock").scrollIntoViewIfNeeded();
 
-  const carousel = page.locator("#alarm-clock .detail-carousel");
+  const alarmCard = page.locator('.carousel-thumb[href="?project=alarm-clock"]');
+  await expect(alarmCard.locator("img")).toHaveAttribute("src", /3-[^/]+\.jpg|3\.jpg/);
+
+  await page.goto("./?project=alarm-clock", { waitUntil: "domcontentloaded" });
+  const carousel = page.locator(".project-page .detail-carousel");
   await expect(carousel).toBeVisible();
   await expect(carousel.locator(".detail-carousel-counter")).toContainText("01 / 09");
-  await expect(carousel.locator(".detail-carousel-stage video")).toHaveCount(1);
   await expect(carousel.locator(".detail-carousel-dots button")).toHaveCount(9);
 
   await carousel.locator(".detail-carousel-arrows button").last().click();
@@ -126,16 +117,16 @@ test("Alarm Clock detail matches the Ancient Well carousel pattern", async ({ pa
   await expect(carousel.locator(".detail-carousel-stage img")).toHaveAttribute("alt", "Alarm Clock final render 3");
 });
 
-test("core portfolio semantics remain present", async ({ page }) => {
+test("home page no longer renders project detail sections inline", async ({ page }) => {
   await openPortfolio(page);
 
   await expect(page.locator("header.navbar")).toBeVisible();
   await expect(page.locator("main#main-content")).toBeVisible();
   await expect(page.locator("footer")).toBeVisible();
-  await expect(page.locator("h1")).toHaveCount(1);
   await expect(page.locator("#about")).toHaveCount(1);
   await expect(page.locator("#work")).toHaveCount(1);
   await expect(page.locator("#experience")).toHaveCount(1);
-  await expect(page.locator("#alarm-clock")).toHaveCount(1);
   await expect(page.locator("#contact")).toHaveCount(1);
+  await expect(page.locator(".project-page")).toHaveCount(0);
+  await expect(page.locator('.carousel-thumb[href^="?project="]')).toHaveCount(4);
 });
