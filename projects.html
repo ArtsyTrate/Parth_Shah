@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Projects | Parth Shah</title>
+  <meta name="description" content="3D projects by Parth Shah: environment art, modeling and character animation.">
+  <meta name="theme-color" content="#485696">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,600&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <script>document.documentElement.classList.add("js");</script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="index.html" data-site="name">Parth Shah</a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+      <nav class="site-nav" id="site-nav" aria-label="Main">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="projects.html" aria-current="page">Projects</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="wrap page-head">
+      <h1>Projects</h1>
+      <p class="lead">Environment art, modeling and character animation. Select a piece to see more of it.</p>
+    </div>
+
+    <section class="wrap" style="padding-bottom: clamp(56px, 8vw, 104px)" aria-label="Project list">
+      <div class="filters" data-filters role="group" aria-label="Filter projects by discipline"></div>
+      <p class="result-count" data-count aria-live="polite"></p>
+      <ul class="grid" data-projects></ul>
+      <p class="empty" data-empty hidden>No projects have been added yet.</p>
+      <noscript><p class="empty">The project list needs JavaScript to display.</p></noscript>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <p>&copy; <span data-year>2026</span> <span data-site="name">Parth Shah</span></p>
+      <ul>
+        <li><a data-link="github" href="#">GitHub</a></li>
+        <li><a data-link="linkedin" href="#">LinkedIn</a></li>
+        <li><a data-link="artstation" href="#">ArtStation</a></li>
+        <li><a data-email href="#">Email</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <script defer src="js/site-config.js"></script>
+  <script defer src="js/projects-data.js"></script>
+  <script defer src="js/main.js"></script>
+</body>
+</html>
