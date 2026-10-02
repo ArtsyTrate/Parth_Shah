@@ -1,206 +1,209 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Parth Shah — 3D Generalist and Motion Designer portfolio.">
-  <title>Parth Shah — 3D Generalist & Motion Designer</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Parth Shah | 3D Generalist and Motion Designer</title>
+<meta name="description" content="Portfolio of Parth Shah, a 3D generalist and motion designer working in modeling, environments, animation, lighting and rendering.">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d1226;--surface:#151c3a;--line:#2a3566;--brand:#485696;--pastel:#a9bdf0;--text:#e8ecfa;--muted:#8f9ac4;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:root:not([data-theme="dark"]){}
+*{box-sizing:border-box;margin:0}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{background:var(--bg);color:var(--text);font:400 16px/1.65 Manrope,system-ui,sans-serif;min-height:100%}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;font-weight:300;line-height:1.1}
+h1{font-size:clamp(2.6rem,7vw,5.2rem)}h2{font-size:clamp(2rem,4vw,3rem);margin-bottom:1.5rem}
+a{color:var(--pastel)}
+:focus-visible{outline:2px solid var(--pastel);outline-offset:3px}
+nav{position:fixed;top:0;left:0;right:0;z-index:10;display:flex;justify-content:space-between;align-items:center;
+padding:calc(16px + env(safe-area-inset-top,0px)) 5vw 16px;background:linear-gradient(var(--bg),transparent)}
+.logo{font-family:Fraunces,serif;font-size:1.3rem;text-decoration:none;color:var(--text)}
+nav ul{display:flex;gap:1.6rem;list-style:none;padding:0}
+nav ul a{text-decoration:none;color:var(--muted);font-weight:500;padding-bottom:4px;border-bottom:2px solid transparent}
+nav ul a:hover,nav ul a.on{color:var(--text);border-color:var(--pastel)}
+.page{display:none;min-height:100vh;padding:120px 5vw 80px;max-width:1200px;margin:auto}
+.page.on{display:block}
+#home{display:none;max-width:none;padding:0}
+#home.on{display:grid;grid-template-columns:1fr 1fr;align-items:center;min-height:100vh;padding:100px 5vw 40px;gap:2rem}
+.hero-text p{color:var(--muted);max-width:42ch;margin:1.5rem 0 2rem}
+.btns{display:flex;gap:1rem;flex-wrap:wrap}
+.btn{display:inline-block;padding:.8rem 1.6rem;border-radius:999px;background:var(--brand);color:#fff;text-decoration:none;font-weight:700;border:1px solid var(--brand);font-family:inherit;font-size:1rem;cursor:pointer}
+.btn.ghost{background:none;border-color:var(--line);color:var(--text)}
+.btn:hover{background:var(--pastel);color:var(--bg);border-color:var(--pastel)}
+#stage{position:relative;height:min(70vh,560px);border:1px solid var(--line);border-radius:4px;cursor:grab;
+background:radial-gradient(circle at 50% 40%,#1c2758,var(--bg) 70%)}
+#stage:active{cursor:grabbing}
+#stage canvas{width:100%;height:100%;display:block}
+.hint{position:absolute;left:14px;bottom:10px;font-size:.8rem;color:var(--muted);pointer-events:none}
+.filters{display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:2rem}
+.filters button{background:none;border:1px solid var(--line);color:var(--muted);padding:.4rem 1.1rem;border-radius:999px;font:inherit;cursor:pointer}
+.filters button.on,.filters button:hover{background:var(--brand);color:#fff;border-color:var(--brand)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem}
+.card{display:block;width:100%;padding:0;text-align:left;font:inherit;color:inherit;cursor:pointer;background:var(--surface);border:1px solid var(--line);border-radius:4px;overflow:hidden;transition:transform .25s,border-color .25s}
+.card:hover{transform:translateY(-4px);border-color:var(--pastel)}
+.thumb{aspect-ratio:4/3;background:linear-gradient(135deg,var(--brand),var(--bg));display:grid;place-items:center;color:var(--pastel);font-family:Fraunces,serif;font-size:1.1rem;overflow:hidden}
+.thumb img,.thumb video{width:100%;height:100%;object-fit:cover;display:block}
+.card .info{display:block;padding:1rem 1.2rem 1.3rem}
+.card h3{font-size:1.4rem;font-weight:500}.card p{color:var(--muted);font-size:.92rem}
+.about{display:grid;grid-template-columns:1.3fr 1fr;gap:3rem}
+.about p{margin-bottom:1rem;color:var(--muted);max-width:60ch}
+.skills{list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:.5rem}
+.skills li{border:1px solid var(--line);padding:.3rem .9rem;border-radius:999px;font-size:.9rem}
+form{display:grid;gap:1rem;max-width:560px}
+label{display:grid;gap:.4rem;color:var(--muted);font-size:.9rem}
+input,textarea{background:var(--surface);border:1px solid var(--line);border-radius:4px;color:var(--text);padding:.8rem;font:inherit}
+textarea{min-height:140px}
+.links{margin-top:2rem;display:flex;gap:1.5rem;flex-wrap:wrap}
+dialog{width:min(960px,94vw);max-height:90vh;overflow:auto;padding:0;background:var(--surface);color:var(--text);border:1px solid var(--line);border-radius:6px}
+dialog::backdrop{background:rgba(5,8,22,.82)}
+.dmedia{display:grid;gap:2px;background:var(--bg)}
+.dmedia img,.dmedia video{width:100%;display:block;background:var(--bg)}
+.dinfo{padding:1.6rem 1.8rem 2rem}
+.dinfo h3{font-size:2rem;font-weight:500;margin-bottom:.3rem}
+.dinfo .role{color:var(--pastel);margin-bottom:1rem}
+.dinfo p{color:var(--muted);max-width:62ch}
+.dclose{position:sticky;top:10px;float:right;margin:10px 10px 0 0;z-index:2;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--bg);color:var(--text);font-size:1.4rem;line-height:1;cursor:pointer}
+.dclose:hover{background:var(--pastel);color:var(--bg)}
+@media(max-width:800px){#home.on,.about{grid-template-columns:1fr}nav ul{gap:1rem;font-size:.9rem}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
 </head>
 <body>
-  <div class="noise"></div>
-  <header class="site-header">
-    <a class="brand" href="#top">PARTH<br><span>SHAH</span></a>
-    <nav>
-      <a href="#work">Work</a>
-      <a href="#projects">Projects</a>
-      <a href="#about">About</a>
-      <a href="Parth_Shah_Resume_3D.pdf" target="_blank" rel="noreferrer">Resume</a>
-      <a href="#contact">Contact</a>
-    </nav>
-    <a class="header-link" href="https://www.linkedin.com/in/parth-shah-3d-animator" target="_blank" rel="noreferrer">LinkedIn ↗</a>
-  </header>
+<nav><a class="logo" href="#home">Parth Shah</a>
+<ul><li><a href="#home">Home</a></li><li><a href="#projects">Projects</a></li><li><a href="#about">About</a></li><li><a href="#contact">Contact</a></li></ul></nav>
 
-  <main id="top">
-    <section class="hero">
-      <div class="eyebrow">3D GENERALIST · MOTION DESIGNER</div>
-      <h1>BUILDING<br><em>WORLDS</em><br>IN 3D.</h1>
-      <div class="hero-bottom">
-        <p>3D artist focused on modeling, environments, animation, lighting, rendering and motion — turning ideas into visual experiences.</p>
-        <a class="circle-arrow" href="#work" aria-label="Scroll to work">↓</a>
-      </div>
-    </section>
+<main>
+<section class="page" id="home">
+  <div class="hero-text">
+    <h1>Building worlds, one polygon at a time.</h1>
+    <p>3D generalist and motion designer covering modeling, environments, animation, lighting and rendering. Open to roles in games, animation and motion design.</p>
+    <div class="btns"><a class="btn" href="#projects">View projects</a><a class="btn ghost" href="#contact">Get in touch</a></div>
+  </div>
+  <div id="stage" aria-label="Interactive 3D model. Drag to rotate."><span class="hint">Drag to rotate</span></div>
+</section>
 
-    <section class="work section" id="work">
-      <div class="section-head">
-        <div><span class="index">01</span><h2>Selected Work</h2></div>
-        <span class="mono">2024 — 2026</span>
-      </div>
-      <div class="project-grid">
-        <article class="project project-large reveal">
-          <a href="#ancient-temple" class="project-visual image-visual">
-            <img src="assets/Ancient%20Temple.jpg" alt="Ancient Temple 3D environment by Parth Shah">
-            <span>01 · ANCIENT TEMPLE</span>
-          </a>
-          <div class="project-meta"><h3>Ancient Temple</h3><span>Environment · Modeling · Lighting</span></div>
-        </article>
+<section class="page" id="projects">
+  <h2>Projects</h2>
+  <div class="filters" role="group" aria-label="Filter projects">
+    <button class="on" data-f="all">All</button><button data-f="model">Modeling</button><button data-f="env">Environment</button><button data-f="anim">Animation</button>
+  </div>
+  <div class="grid" id="grid"></div>
+</section>
 
-        <article class="project reveal">
-          <a href="#ancient-well" class="project-visual image-visual">
-            <img src="assets/Ancient_Well.png" alt="Ancient Well 3D model by Parth Shah">
-            <span>02 · ANCIENT WELL</span>
-          </a>
-          <div class="project-meta"><h3>Ancient Well</h3><span>Modeling · Sculpting · Prop Design</span></div>
-        </article>
+<section class="page" id="about">
+  <h2>About</h2>
+  <div class="about">
+    <div>
+      <p>I'm Parth, a 3D generalist and motion designer creating digital worlds through a mix of technical craft and visual storytelling.</p>
+      <p>My work spans 3D modeling, environment art, animation, texturing, lighting, rendering and compositing. I enjoy moving between the details of an asset and the bigger picture of a complete visual sequence.</p>
+      <p>I'm completing my Master's in 3D Animation at DePaul University, and I'm looking for opportunities across games, animation, motion design and creative technology.</p>
+      <a class="btn ghost" href="Parth_Shah_Resume_3D.pdf" target="_blank" rel="noopener">Download résumé</a>
+    </div>
+    <div>
+      <h3 style="margin-bottom:1rem">Tools</h3>
+      <ul class="skills"><li>Maya</li><li>Blender</li><li>ZBrush</li><li>Substance Painter</li><li>Unreal Engine</li><li>Arnold</li><li>Redshift</li><li>After Effects</li><li>Premiere Pro</li></ul>
+    </div>
+  </div>
+</section>
 
-        <article class="project reveal">
-          <a href="#fight-sequence" class="project-visual video-visual">
-            <video autoplay muted loop playsinline preload="metadata" aria-label="Character animation fight sequence preview">
-              <source src="assets/Shah_Parth_Fight_Sequence.mp4" type="video/mp4">
-            </video>
-            <span>03 · CHARACTER ANIMATION</span>
-          </a>
-          <div class="project-meta"><h3>Fight Sequence</h3><span>Character Animation · Acting · Body Mechanics</span></div>
-        </article>
+<section class="page" id="contact">
+  <h2>Let's talk</h2>
+  <p style="color:var(--muted);margin-bottom:2rem;max-width:50ch">Hiring or have a project in mind? Send a message and I'll reply within two days.</p>
+  <form id="f"><label>Name<input required name="n" autocomplete="name"></label><label>Email<input type="email" required name="e" autocomplete="email"></label><label>Message<textarea required name="m"></textarea></label>
+  <button class="btn" type="submit">Send message</button><p id="ok" style="color:var(--pastel)" role="status"></p></form>
+  <div class="links"><a href="mailto:shahparth1003@gmail.com">Email</a><a href="https://parth__shah.artstation.com/projects" target="_blank" rel="noopener">ArtStation</a><a href="https://www.linkedin.com/in/parth-shah-3d-animator" target="_blank" rel="noopener">LinkedIn</a><a href="https://github.com/ArtsyTrate/Parth_Shah" target="_blank" rel="noopener">GitHub</a></div>
+</section>
+</main>
 
-        <article class="project project-wide reveal">
-          <a href="#projects" class="project-visual visual-four"><span>EXPLORE BY DISCIPLINE</span></a>
-          <div class="project-meta"><h3>More Projects</h3><span>Modeling · Animation · Motion Graphics</span></div>
-        </article>
-      </div>
-    </section>
+<dialog id="dlg" aria-labelledby="dt">
+  <button class="dclose" id="dx" type="button" aria-label="Close project">&times;</button>
+  <div class="dmedia" id="dm"></div>
+  <div class="dinfo"><h3 id="dt"></h3><p class="role" id="dr"></p><p id="dd"></p></div>
+</dialog>
 
-    <section class="project-feature section reveal" id="ancient-temple">
-      <div class="feature-image-wrap feature-landscape">
-        <img src="assets/Ancient%20Temple.jpg" alt="Ancient Temple environment render">
-      </div>
-      <div class="feature-copy">
-        <div class="eyebrow">01 · 3D ENVIRONMENT</div>
-        <h2>Ancient<br><em>Temple</em></h2>
-        <p>A detailed temple environment focused on architectural modeling, carved surface detail, atmospheric lighting, composition and reflective water to create a cinematic interior space.</p>
-        <div class="feature-tags"><span>Environment Art</span><span>Modeling</span><span>Lighting</span><span>Rendering</span></div>
-      </div>
-    </section>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const EMAIL='shahparth1003@gmail.com';
 
-    <section class="project-feature section reveal" id="ancient-well">
-      <div class="well-gallery">
-        <img src="assets/Ancient_Well.png" alt="Ancient Well front view">
-        <img src="assets/Ancient_Well_02.png" alt="Ancient Well three-quarter view">
-        <img src="assets/Ancient_Well_03.png" alt="Ancient Well rear view">
-        <img src="assets/Ancient_Well_04.png" alt="Ancient Well pulley detail">
-      </div>
-      <div class="feature-copy">
-        <div class="eyebrow">02 · 3D MODELING</div>
-        <h2>Ancient<br><em>Well</em></h2>
-        <p>A stylized medieval-inspired well created as a modeling and sculpting study. The project focuses on layered wood construction, stonework, rope detailing, roof shingles, pulley mechanics and presentation from multiple angles.</p>
-        <div class="feature-tags"><span>Modeling</span><span>Sculpting</span><span>Prop Design</span><span>Lighting</span></div>
-      </div>
-    </section>
+// Projects use the images and videos in the assets/ folder of this repository.
+const projects=[
+ {t:"Ancient Temple",c:"env",d:"Environment art, modeling, lighting",
+  long:"A detailed temple environment focused on architectural modeling, carved surface detail, atmospheric lighting, composition and reflective water to create a cinematic interior space.",
+  media:[{type:"image",src:"assets/Ancient%20Temple.jpg",alt:"Ancient Temple environment render"}]},
+ {t:"Ancient Well",c:"model",d:"Modeling, sculpting, prop design",
+  long:"A stylized medieval-inspired well created as a modeling and sculpting study. The project focuses on layered wood construction, stonework, rope detailing, roof shingles, pulley mechanics and presentation from multiple angles.",
+  media:[
+   {type:"image",src:"assets/Ancient_Well.png",alt:"Ancient Well, front view"},
+   {type:"image",src:"assets/Ancient_Well_02.png",alt:"Ancient Well, three-quarter view"},
+   {type:"image",src:"assets/Ancient_Well_03.png",alt:"Ancient Well, rear view"},
+   {type:"image",src:"assets/Ancient_Well_04.png",alt:"Ancient Well, pulley detail"},
+   {type:"video",src:"assets/Well_Turn%20Table.mp4",alt:"Ancient Well turntable"}]},
+ {t:"Fight Sequence",c:"anim",d:"Character animation, acting, body mechanics",
+  long:"A character animation sequence centered on recovering after a heavy punch, with an added fourth-wall moment for personality and comedic timing. The shot focuses on body mechanics, weight, posing, acting choices and readable character performance.",
+  media:[{type:"video",src:"assets/Shah_Parth_Fight_Sequence.mp4",alt:"Character animation fight sequence"}]}];
 
-    <section class="project-feature section reveal" id="fight-sequence">
-      <div class="feature-video-wrap">
-        <video controls playsinline preload="metadata">
-          <source src="assets/Shah_Parth_Fight_Sequence.mp4" type="video/mp4">
-          Your browser does not support the video tag.
-        </video>
-      </div>
-      <div class="feature-copy">
-        <div class="eyebrow">03 · CHARACTER ANIMATION</div>
-        <h2>Fight<br><em>Sequence</em></h2>
-        <p>A character animation sequence centered on recovering after a heavy punch, with an added fourth-wall moment for personality and comedic timing. The shot focuses on body mechanics, weight, posing, acting choices and readable character performance.</p>
-        <div class="feature-tags"><span>Character Animation</span><span>Body Mechanics</span><span>Acting</span><span>Timing</span></div>
-      </div>
-    </section>
+const grid=document.getElementById('grid');
+function esc(s){return s.replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]))}
+function thumb(p){const m=p.media[0];
+ if(m.type==='video')return `<video src="${m.src}#t=1" muted playsinline preload="metadata" aria-hidden="true"></video>`;
+ return `<img src="${m.src}" alt="" loading="lazy">`}
+function render(f){const list=projects.filter(p=>f==='all'||p.c===f);
+ grid.innerHTML=list.map(p=>
+ `<button class="card" type="button" data-i="${projects.indexOf(p)}" aria-haspopup="dialog"><span class="thumb">${thumb(p)}</span><span class="info"><h3>${esc(p.t)}</h3><p>${esc(p.d)}</p></span></button>`).join('')}
+render('all');
+document.querySelectorAll('.filters button').forEach(b=>b.onclick=()=>{
+ document.querySelectorAll('.filters button').forEach(x=>x.classList.remove('on'));b.classList.add('on');render(b.dataset.f)});
 
-    <section class="projects-directory section" id="projects">
-      <div class="section-head">
-        <div><span class="index">02</span><h2>Projects</h2></div>
-        <span class="mono">Browse by discipline</span>
-      </div>
+// Project dialog
+const dlg=document.getElementById('dlg'),dm=document.getElementById('dm');
+grid.addEventListener('click',e=>{const card=e.target.closest('.card');if(!card)return;
+ const p=projects[+card.dataset.i];
+ dm.innerHTML=p.media.map(m=>m.type==='video'
+  ?`<video src="${m.src}" controls playsinline preload="metadata" aria-label="${esc(m.alt)}"></video>`
+  :`<img src="${m.src}" alt="${esc(m.alt)}">`).join('');
+ document.getElementById('dt').textContent=p.t;
+ document.getElementById('dr').textContent=p.d;
+ document.getElementById('dd').textContent=p.long;
+ dlg.showModal();dlg.scrollTop=0});
+document.getElementById('dx').onclick=()=>dlg.close();
+dlg.addEventListener('click',e=>{if(e.target===dlg)dlg.close()});
+dlg.addEventListener('close',()=>{dm.innerHTML=''});
 
-      <div class="project-category reveal" id="modelling">
-        <div class="category-title"><span>01</span><h3>Modelling</h3></div>
-        <a class="category-project" href="#ancient-well">
-          <img src="assets/Ancient_Well.png" alt="Ancient Well modeling project">
-          <div><strong>Ancient Well</strong><span>Prop Modeling · Sculpting · Presentation</span></div>
-          <b>↗</b>
-        </a>
-      </div>
+// Hash routing
+function route(){const id=(location.hash||'#home').slice(1);
+ document.querySelectorAll('.page').forEach(s=>s.classList.toggle('on',s.id===id));
+ document.querySelectorAll('nav ul a').forEach(a=>a.classList.toggle('on',a.hash==='#'+id));window.scrollTo(0,0)}
+addEventListener('hashchange',route);route();
 
-      <div class="project-category reveal" id="environment-modelling">
-        <div class="category-title"><span>02</span><h3>Environment Modelling</h3></div>
-        <a class="category-project" href="#ancient-temple">
-          <img src="assets/Ancient%20Temple.jpg" alt="Ancient Temple environment modeling project">
-          <div><strong>Ancient Temple</strong><span>Architecture · Environment Art · Lighting</span></div>
-          <b>↗</b>
-        </a>
-      </div>
+// Contact form opens the visitor's email app with the message filled in
+document.getElementById('f').onsubmit=e=>{e.preventDefault();
+ const d=new FormData(e.target),n=d.get('n'),em=d.get('e'),m=d.get('m');
+ document.getElementById('ok').textContent='Opening your email app with the message filled in.';
+ location.href='mailto:'+EMAIL+'?subject='+encodeURIComponent('Portfolio inquiry from '+n)+'&body='+encodeURIComponent(m+'\n\n'+n+'\n'+em)};
 
-      <div class="project-category reveal" id="animation">
-        <div class="category-title"><span>03</span><h3>Animation</h3></div>
-        <a class="category-project category-video" href="#fight-sequence">
-          <video autoplay muted loop playsinline preload="metadata">
-            <source src="assets/Shah_Parth_Fight_Sequence.mp4" type="video/mp4">
-          </video>
-          <div><strong>Fight Sequence</strong><span>Body Mechanics · Acting · Timing</span></div>
-          <b>↗</b>
-        </a>
-      </div>
-
-      <div class="project-category reveal" id="character-animation">
-        <div class="category-title"><span>04</span><h3>Character Animation</h3></div>
-        <a class="category-project category-video" href="#fight-sequence">
-          <video autoplay muted loop playsinline preload="metadata">
-            <source src="assets/Shah_Parth_Fight_Sequence.mp4" type="video/mp4">
-          </video>
-          <div><strong>Fight Sequence</strong><span>Character Performance · Posing · Acting</span></div>
-          <b>↗</b>
-        </a>
-      </div>
-
-      <div class="project-category reveal" id="motion-graphics">
-        <div class="category-title"><span>05</span><h3>Motion Graphics</h3></div>
-        <a class="category-project category-placeholder" href="https://parth__shah.artstation.com/projects" target="_blank" rel="noreferrer">
-          <div class="placeholder-mark">MG</div>
-          <div><strong>Motion Graphics Archive</strong><span>Design · Animation · Compositing</span></div>
-          <b>↗</b>
-        </a>
-      </div>
-    </section>
-
-    <section class="about section" id="about">
-      <div class="section-head"><div><span class="index">03</span><h2>About</h2></div></div>
-      <div class="about-grid">
-        <p class="about-lead">I’m Parth Shah, a 3D Generalist and Motion Designer creating digital worlds through a mix of technical craft and visual storytelling.</p>
-        <div class="about-copy">
-          <p>My work spans 3D modeling, environment art, animation, texturing, lighting, rendering and compositing. I enjoy moving between the details of an asset and the bigger picture of a complete visual sequence.</p>
-          <p>Currently completing my Master’s in 3D Animation at DePaul University, I’m looking for opportunities across games, animation, motion design and creative technology.</p>
-          <p><a class="header-link" href="Parth_Shah_Resume_3D.pdf" target="_blank" rel="noreferrer">View Resume ↗</a></p>
-        </div>
-      </div>
-      <div class="skills">
-        <span>Maya</span><span>Blender</span><span>ZBrush</span><span>Substance Painter</span><span>Unreal Engine</span><span>Arnold</span><span>Redshift</span><span>After Effects</span><span>Premiere Pro</span>
-      </div>
-    </section>
-
-    <section class="contact section" id="contact">
-      <div class="section-head"><div><span class="index">04</span><h2>Let’s Work</h2></div></div>
-      <div class="contact-content">
-        <p>Have a project, role, or collaboration in mind?</p>
-        <a class="email-link" href="mailto:shahparth1003@gmail.com">shahparth1003@gmail.com ↗</a>
-        <div class="socials">
-          <a href="https://parth__shah.artstation.com/projects" target="_blank" rel="noreferrer">ArtStation ↗</a>
-          <a href="https://www.linkedin.com/in/parth-shah-3d-animator" target="_blank" rel="noreferrer">LinkedIn ↗</a>
-          <a href="Parth_Shah_Resume_3D.pdf" target="_blank" rel="noreferrer">Resume ↗</a>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer><span>© 2026 PARTH SHAH</span><span>3D GENERALIST · MOTION DESIGNER</span></footer>
-  <script src="script.js"></script>
+// Hero 3D piece: wireframe over solid, drag to rotate
+try{
+ const el=document.getElementById('stage');
+ const r=new THREE.WebGLRenderer({antialias:true,alpha:true});r.setPixelRatio(Math.min(devicePixelRatio,2));el.appendChild(r.domElement);
+ const s=new THREE.Scene(),cam=new THREE.PerspectiveCamera(40,1,.1,100);cam.position.z=5;
+ const g=new THREE.TorusKnotGeometry(1,.34,160,24);
+ const solid=new THREE.Mesh(g,new THREE.MeshStandardMaterial({color:0x485696,metalness:.6,roughness:.3}));
+ const wire=new THREE.Mesh(g,new THREE.MeshBasicMaterial({color:0xa9bdf0,wireframe:true,transparent:true,opacity:.18}));
+ wire.scale.setScalar(1.015);const grp=new THREE.Group();grp.add(solid,wire);s.add(grp);
+ s.add(new THREE.AmbientLight(0x8899cc,.6));const L=new THREE.DirectionalLight(0xffffff,1.2);L.position.set(3,4,5);s.add(L);
+ let down=false,px=0,py=0,vx=.004,vy=.006;
+ el.onpointerdown=e=>{down=true;px=e.clientX;py=e.clientY};
+ addEventListener('pointerup',()=>down=false);
+ addEventListener('pointermove',e=>{if(!down)return;vy=(e.clientX-px)*.01;vx=(e.clientY-py)*.01;px=e.clientX;py=e.clientY});
+ function size(){const w=el.clientWidth,h=el.clientHeight;if(!w||!h)return;r.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix()}
+ addEventListener('resize',size);
+ const calm=matchMedia('(prefers-reduced-motion:reduce)').matches;
+ (function loop(){requestAnimationFrame(loop);size();
+  grp.rotation.y+=vy;grp.rotation.x+=vx;if(!down){vx*=.95;vy=vy*.95+(calm?0:.0004)}
+  r.render(s,cam)})();
+}catch(e){document.getElementById('stage').textContent='3D preview needs WebGL.'}
+</script>
 </body>
 </html>
