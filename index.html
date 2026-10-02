@@ -56,7 +56,7 @@ label{display:grid;gap:.4rem;color:var(--muted);font-size:.9rem}
 input,textarea{background:var(--surface);border:1px solid var(--line);border-radius:4px;color:var(--text);padding:.8rem;font:inherit}
 textarea{min-height:140px}
 .links{margin-top:2rem;display:flex;gap:1.5rem;flex-wrap:wrap}
-dialog{width:min(960px,94vw);max-height:90vh;overflow:auto;padding:0;background:var(--surface);color:var(--text);border:1px solid var(--line);border-radius:6px}
+dialog{margin:auto;width:min(960px,94vw);max-height:90vh;overflow:auto;padding:0;background:var(--surface);color:var(--text);border:1px solid var(--line);border-radius:6px}
 dialog::backdrop{background:rgba(5,8,22,.82)}
 .dmedia{display:grid;gap:2px;background:var(--bg)}
 .dmedia img,.dmedia video{width:100%;display:block;background:var(--bg)}
@@ -81,7 +81,7 @@ dialog::backdrop{background:rgba(5,8,22,.82)}
     <p>3D generalist and motion designer covering modeling, environments, animation, lighting and rendering. Open to roles in games, animation and motion design.</p>
     <div class="btns"><a class="btn" href="#projects">View projects</a><a class="btn ghost" href="#contact">Get in touch</a></div>
   </div>
-  <div id="stage" aria-label="Interactive 3D model. Drag to rotate."><span class="hint">Drag to rotate</span></div>
+  <div id="stage" aria-label="Interactive 3D alarm clock. Drag to rotate it."><span class="hint">Drag to rotate</span></div>
 </section>
 
 <section class="page" id="projects">
@@ -123,12 +123,24 @@ dialog::backdrop{background:rgba(5,8,22,.82)}
   <div class="dinfo"><h3 id="dt"></h3><p class="role" id="dr"></p><p id="dd"></p></div>
 </dialog>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 const EMAIL='shahparth1003@gmail.com';
 
 // Projects use the images and videos in the assets/ folder of this repository.
 const projects=[
+ {t:"Alarm Clock",c:"model",d:"Modeling, UVs, PBR texturing",
+  thumb:"assets/Alarm_Clock/card.jpg",
+  long:"A textured alarm clock prop with a full PBR set (base color, roughness, metalness and normal maps) across multiple UV tiles. The gallery shows final renders, detail views, and textured and wireframe turntables. The same model is the interactive piece on the home page.",
+  media:[
+   {type:"video",src:"assets/Alarm_Clock/Textured%202.mp4",poster:"assets/Alarm_Clock/card.jpg",alt:"Alarm Clock textured turntable"},
+   {type:"video",src:"assets/Alarm_Clock/Wireframe.mp4",poster:"assets/Alarm_Clock/card.jpg",alt:"Alarm Clock wireframe turntable"},
+   {type:"image",src:"assets/Alarm_Clock/1.jpg",alt:"Alarm Clock final render 1"},
+   {type:"image",src:"assets/Alarm_Clock/3.jpg",alt:"Alarm Clock final render 2"},
+   {type:"image",src:"assets/Alarm_Clock/5.jpg",alt:"Alarm Clock final render 3"},
+   {type:"image",src:"assets/Alarm_Clock/!_U1_V1.jpg",alt:"Alarm Clock detail view 1"},
+   {type:"image",src:"assets/Alarm_Clock/!_U2_V1.jpg",alt:"Alarm Clock detail view 2"},
+   {type:"image",src:"assets/Alarm_Clock/!_U3_V1.jpg",alt:"Alarm Clock detail view 3"},
+   {type:"image",src:"assets/Alarm_Clock/!_U4_V1.jpg",alt:"Alarm Clock detail view 4"}]},
  {t:"Ancient Temple",c:"env",d:"Environment art, modeling, lighting",
   long:"A detailed temple environment focused on architectural modeling, carved surface detail, atmospheric lighting, composition and reflective water to create a cinematic interior space.",
   media:[{type:"image",src:"assets/Ancient%20Temple.jpg",alt:"Ancient Temple environment render"}]},
@@ -147,6 +159,7 @@ const projects=[
 const grid=document.getElementById('grid');
 function esc(s){return s.replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]))}
 function thumb(p){const m=p.media[0];
+ if(p.thumb)return `<img src="${p.thumb}" alt="" loading="lazy">`;
  if(m.type==='video')return `<video src="${m.src}#t=1" muted playsinline preload="metadata" aria-hidden="true"></video>`;
  return `<img src="${m.src}" alt="" loading="lazy">`}
 function render(f){const list=projects.filter(p=>f==='all'||p.c===f);
@@ -161,8 +174,8 @@ const dlg=document.getElementById('dlg'),dm=document.getElementById('dm');
 grid.addEventListener('click',e=>{const card=e.target.closest('.card');if(!card)return;
  const p=projects[+card.dataset.i];
  dm.innerHTML=p.media.map(m=>m.type==='video'
-  ?`<video src="${m.src}" controls playsinline preload="metadata" aria-label="${esc(m.alt)}"></video>`
-  :`<img src="${m.src}" alt="${esc(m.alt)}">`).join('');
+  ?`<video src="${m.src}"${m.poster?` poster="${m.poster}"`:''} controls playsinline preload="none" aria-label="${esc(m.alt)}"></video>`
+  :`<img src="${m.src}" alt="${esc(m.alt)}" loading="lazy" decoding="async">`).join('');
  document.getElementById('dt').textContent=p.t;
  document.getElementById('dr').textContent=p.d;
  document.getElementById('dd').textContent=p.long;
@@ -182,28 +195,83 @@ document.getElementById('f').onsubmit=e=>{e.preventDefault();
  const d=new FormData(e.target),n=d.get('n'),em=d.get('e'),m=d.get('m');
  document.getElementById('ok').textContent='Opening your email app with the message filled in.';
  location.href='mailto:'+EMAIL+'?subject='+encodeURIComponent('Portfolio inquiry from '+n)+'&body='+encodeURIComponent(m+'\n\n'+n+'\n'+em)};
+</script>
+<script type="importmap">
+{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.160.0/examples/jsm/"}}
+</script>
+<script type="module" onerror="document.getElementById('stage').textContent='3D preview could not load.'">
+import * as THREE from 'three';
+import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
 
-// Hero 3D piece: wireframe over solid, drag to rotate
+const el=document.getElementById('stage');
+const calm=matchMedia('(prefers-reduced-motion:reduce)').matches;
+const A='assets/Alarm_Clock/';
+
+// Which texture tile (UDIM 1001-1003) each part of the alarm clock uses
+const tileByPart={Body:1001,Hand_Bolt:1002,Hours:1002,Minute:1002,Seconds:1002,Ring_Support:1002,
+ Back_Knob:1003,Back_Panel:1003,bell:1003,Bell_Support:1003,polySurface1:1003,polySurface2:1003,polySurface3:1003,
+ polySurface4:1003,polySurface5:1003,polySurface6:1003,polySurface9:1003,Hammer:1003,Leg_left:1003,Leg_Right:1003};
+// Mesh names in the GLB look like "BodyShape" or "BodyShape_1"; reduce them to the part name
+const partName=n=>n.replace(/Shape/g,'').replace(/_\d+$/,'').replace(/\.\d+$/,'');
+
+async function loadClock(){
+ const tl=new THREE.TextureLoader();
+ const tex=(file,color)=>tl.loadAsync(A+'web/'+file).then(t=>{
+  t.flipY=false;t.wrapS=t.wrapT=THREE.RepeatWrapping;t.anisotropy=4;if(color)t.colorSpace=THREE.SRGBColorSpace;return t});
+ const tiles=[1001,1002,1003];
+ const [gltf,dial,...maps]=await Promise.all([
+  new GLTFLoader().loadAsync(A+'Alarm_Clock.glb'),tex('Dial.png',true),
+  ...tiles.flatMap(n=>[tex(`BaseColor.${n}.webp`,true),tex(`Roughness.${n}.webp`),tex(`Metalness.${n}.webp`),tex(`Normal.${n}.webp`)])]);
+ const tileMat={};
+ tiles.forEach((n,i)=>{const [map,roughnessMap,metalnessMap,normalMap]=maps.slice(i*4,i*4+4);
+  tileMat[n]=new THREE.MeshStandardMaterial({map,roughnessMap,metalnessMap,normalMap,roughness:1,metalness:1,side:THREE.DoubleSide,envMapIntensity:.6})});
+ const dialMat=new THREE.MeshStandardMaterial({map:dial,roughness:.5,metalness:0,side:THREE.DoubleSide});
+ const glassMat=new THREE.MeshPhysicalMaterial({color:'#f3f6f8',roughness:.07,metalness:0,transmission:1,ior:1.45,thickness:.04,transparent:true,opacity:.38,side:THREE.DoubleSide});
+ const model=gltf.scene;let matched=0;
+ model.traverse(o=>{if(!o.isMesh)return;const part=partName(o.name);
+  if(tileByPart[part]){o.material=tileMat[tileByPart[part]];matched++}
+  else if(part==='Time_Space'){o.material=dialMat;matched++}
+  else if(part==='Glass1'){o.material=glassMat;matched++}});
+ console.info('Alarm clock parts textured:',matched);
+ const box=new THREE.Box3().setFromObject(model),size=box.getSize(new THREE.Vector3()),c=box.getCenter(new THREE.Vector3());
+ const k=3.2/Math.max(size.x,size.y,size.z);model.scale.setScalar(k);model.position.sub(c.multiplyScalar(k));
+ return model}
+
+function knot(){
+ const g=new THREE.TorusKnotGeometry(.8,.28,160,24),grp=new THREE.Group();
+ grp.add(new THREE.Mesh(g,new THREE.MeshStandardMaterial({color:0x485696,metalness:.6,roughness:.3})),
+  new THREE.Mesh(g,new THREE.MeshBasicMaterial({color:0xa9bdf0,wireframe:true,transparent:true,opacity:.18})));
+ return grp}
+
 try{
- const el=document.getElementById('stage');
- const r=new THREE.WebGLRenderer({antialias:true,alpha:true});r.setPixelRatio(Math.min(devicePixelRatio,2));el.appendChild(r.domElement);
- const s=new THREE.Scene(),cam=new THREE.PerspectiveCamera(40,1,.1,100);cam.position.z=5;
- const g=new THREE.TorusKnotGeometry(1,.34,160,24);
- const solid=new THREE.Mesh(g,new THREE.MeshStandardMaterial({color:0x485696,metalness:.6,roughness:.3}));
- const wire=new THREE.Mesh(g,new THREE.MeshBasicMaterial({color:0xa9bdf0,wireframe:true,transparent:true,opacity:.18}));
- wire.scale.setScalar(1.015);const grp=new THREE.Group();grp.add(solid,wire);s.add(grp);
- s.add(new THREE.AmbientLight(0x8899cc,.6));const L=new THREE.DirectionalLight(0xffffff,1.2);L.position.set(3,4,5);s.add(L);
- let down=false,px=0,py=0,vx=.004,vy=.006;
- el.onpointerdown=e=>{down=true;px=e.clientX;py=e.clientY};
- addEventListener('pointerup',()=>down=false);
- addEventListener('pointermove',e=>{if(!down)return;vy=(e.clientX-px)*.01;vx=(e.clientY-py)*.01;px=e.clientX;py=e.clientY});
- function size(){const w=el.clientWidth,h=el.clientHeight;if(!w||!h)return;r.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix()}
- addEventListener('resize',size);
- const calm=matchMedia('(prefers-reduced-motion:reduce)').matches;
- (function loop(){requestAnimationFrame(loop);size();
-  grp.rotation.y+=vy;grp.rotation.x+=vx;if(!down){vx*=.95;vy=vy*.95+(calm?0:.0004)}
-  r.render(s,cam)})();
-}catch(e){document.getElementById('stage').textContent='3D preview needs WebGL.'}
+ const r=new THREE.WebGLRenderer({antialias:true,alpha:true});
+ r.setPixelRatio(Math.min(devicePixelRatio,1.5));r.outputColorSpace=THREE.SRGBColorSpace;
+ r.domElement.style.touchAction='pan-y';el.appendChild(r.domElement);
+ const scene=new THREE.Scene(),cam=new THREE.PerspectiveCamera(35,1,.1,100);
+ cam.position.set(4.5,2.8,5.5);
+ scene.environment=new THREE.PMREMGenerator(r).fromScene(new RoomEnvironment(),.04).texture;
+ scene.add(new THREE.HemisphereLight(0xdfe6ff,0x0d1226,.75));
+ const key=new THREE.DirectionalLight(0xffffff,2.2);key.position.set(5,7,5);scene.add(key);
+ const rim=new THREE.DirectionalLight(0xa9bdf0,1.4);rim.position.set(-4,3,-3);scene.add(rim);
+
+ let model;
+ try{model=await loadClock()}catch(err){console.warn('Alarm clock model failed to load; showing a placeholder shape.',err);model=knot()}
+ scene.add(model);
+
+ const controls=new OrbitControls(cam,r.domElement);
+ r.domElement.style.touchAction='pan-y';
+ controls.enablePan=false;controls.enableZoom=false;controls.enableDamping=true;controls.dampingFactor=.06;
+ controls.autoRotate=!calm;controls.autoRotateSpeed=.75;controls.minPolarAngle=.2;controls.maxPolarAngle=Math.PI/1.72;
+
+ function size(){const w=el.clientWidth,h=el.clientHeight;if(!w||!h)return;
+  const cv=r.domElement;if(cv.width!==Math.round(w*r.getPixelRatio())||cv.height!==Math.round(h*r.getPixelRatio())){
+   r.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix()}}
+ (function loop(){requestAnimationFrame(loop);
+  if(!el.offsetParent||document.hidden)return;   // home page is not showing
+  size();controls.update();r.render(scene,cam)})();
+}catch(e){console.warn(e);el.textContent='3D preview needs WebGL.'}
 </script>
 </body>
 </html>
