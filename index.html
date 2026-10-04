@@ -34,6 +34,8 @@ nav ul a:hover,nav ul a.on{color:var(--text);border-color:var(--pastel)}
 .btn:hover{background:var(--pastel);color:var(--bg);border-color:var(--pastel)}
 #stage{position:relative;height:min(70vh,560px);border:1px solid var(--line);border-radius:4px;overflow:hidden;
 background:radial-gradient(circle at 50% 40%,#1c2758,var(--bg) 70%)}
+#stage canvas{position:absolute;inset:0;width:100%;height:100%;display:none;cursor:grab;touch-action:pan-y}
+#stage.is3d canvas{display:block}#stage.is3d video{visibility:hidden}
 #stage video{width:100%;height:100%;object-fit:cover;object-position:48% 50%;display:block}
 .modes{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);display:flex;gap:4px;padding:4px;border:1px solid rgba(255,255,255,.22);border-radius:999px;background:rgba(13,18,38,.62);backdrop-filter:blur(6px)}
 .modes button{border:0;background:none;color:var(--text);font:500 .9rem Manrope,system-ui,sans-serif;padding:.4rem 1rem;border-radius:999px;cursor:pointer}
@@ -85,9 +87,11 @@ dialog::backdrop{background:rgba(5,8,22,.82)}
   </div>
   <div id="stage" role="group" aria-label="Alarm Clock turntable">
     <video id="hv" muted loop playsinline autoplay preload="metadata" poster="assets/Alarm_Clock/hero-poster.jpg" src="assets/Alarm_Clock/hero-textured.mp4" aria-label="Alarm Clock textured turntable"></video>
+    <canvas id="gl" aria-label="Interactive 3D Alarm Clock. Drag to rotate, scroll to zoom."></canvas>
     <div class="modes" role="group" aria-label="Turntable view">
       <button type="button" data-v="textured" aria-pressed="true">Textured</button>
       <button type="button" data-v="wire" aria-pressed="false">Wireframe</button>
+      <button type="button" data-v="3d" aria-pressed="false">Interactive 3D</button>
     </div>
   </div>
 </section>
@@ -197,6 +201,8 @@ const hv=document.getElementById('hv'),calm=matchMedia('(prefers-reduced-motion:
 const heroSrc={textured:['assets/Alarm_Clock/hero-textured.mp4','Alarm Clock textured turntable'],wire:['assets/Alarm_Clock/hero-wireframe.mp4','Alarm Clock wireframe turntable']};
 if(calm){hv.removeAttribute('autoplay');hv.controls=true}
 document.querySelectorAll('.modes button').forEach(b=>b.onclick=()=>{
+ if(b.dataset.v==='3d'){document.querySelectorAll('.modes button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));hv.pause();document.getElementById('stage').classList.add('is3d');window.open3d&&window.open3d();return}
+ document.getElementById('stage').classList.remove('is3d');window.close3d&&window.close3d();
  const [src,label]=heroSrc[b.dataset.v],t=hv.currentTime,wasPlaying=!hv.paused;
  document.querySelectorAll('.modes button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
  hv.setAttribute('aria-label',label);hv.src=src;
@@ -214,6 +220,35 @@ document.getElementById('f').onsubmit=e=>{e.preventDefault();
  const d=new FormData(e.target),n=d.get('n'),em=d.get('e'),m=d.get('m');
  document.getElementById('ok').textContent='Opening your email app with the message filled in.';
  location.href='mailto:'+EMAIL+'?subject='+encodeURIComponent('Portfolio inquiry from '+n)+'&body='+encodeURIComponent(m+'\n\n'+n+'\n'+em)};
+</script>
+<script type="module">
+import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
+import {GLTFLoader} from 'https://unpkg.com/three@0.160.0/examples/jsm/loaders/GLTFLoader.js';
+import {OrbitControls} from 'https://unpkg.com/three@0.160.0/examples/jsm/controls/OrbitControls.js';
+import {RoomEnvironment} from 'https://unpkg.com/three@0.160.0/examples/jsm/environments/RoomEnvironment.js';
+let ready=false,running=false,r,sc,cam,ctl;
+const cv=document.getElementById('gl'),stage=document.getElementById('stage');
+function size(){const w=stage.clientWidth,h=stage.clientHeight;r.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix()}
+function loop(){if(!running)return;ctl.update();r.render(sc,cam);requestAnimationFrame(loop)}
+async function init(){
+ try{
+ r=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:true});r.setPixelRatio(Math.min(devicePixelRatio,2));
+ r.outputColorSpace=THREE.SRGBColorSpace;r.toneMapping=THREE.ACESFilmicToneMapping;
+ sc=new THREE.Scene();cam=new THREE.PerspectiveCamera(35,1,.01,100);
+ sc.environment=new THREE.PMREMGenerator(r).fromScene(new RoomEnvironment(),.04).texture;
+ const k=new THREE.DirectionalLight(0xffffff,1.6);k.position.set(2,3,4);sc.add(k);
+ const g=await new GLTFLoader().loadAsync('assets/Alarm_Clock/Alarm_Clock_UV.glb');
+ const m=g.scene;const b=new THREE.Box3().setFromObject(m),c=b.getCenter(new THREE.Vector3()),d=b.getSize(new THREE.Vector3()).length();
+ m.position.sub(c);sc.add(m);
+ cam.position.set(0,d*.1,d*1.25);cam.near=d/100;cam.far=d*20;
+ ctl=new OrbitControls(cam,cv);ctl.enableDamping=true;ctl.autoRotate=!matchMedia('(prefers-reduced-motion:reduce)').matches;ctl.autoRotateSpeed=1.5;ctl.enablePan=false;ctl.minDistance=d*.5;ctl.maxDistance=d*2.5;
+ addEventListener('resize',size);size();ready=true;return true;
+ }catch(e){console.error(e);return false}
+}
+window.open3d=async()=>{
+ if(!ready&&!(await init())){stage.classList.remove('is3d');document.querySelector('.modes [data-v=textured]').click();return}
+ size();if(!running){running=true;loop()}};
+window.close3d=()=>{running=false};
 </script>
 </body>
 </html>
