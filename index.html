@@ -6,6 +6,7 @@
 <title>Parth Shah | 3D Generalist and Motion Designer</title>
 <meta name="description" content="Portfolio of Parth Shah, a 3D generalist and motion designer working in modeling, environments, animation, lighting and rendering.">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+<script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.160.0/examples/jsm/"}}</script>
 <style>
 :root{--bg:#0d1226;--surface:#151c3a;--line:#2a3566;--brand:#485696;--pastel:#a9bdf0;--text:#e8ecfa;--muted:#8f9ac4;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -34,8 +35,10 @@ nav ul a:hover,nav ul a.on{color:var(--text);border-color:var(--pastel)}
 .btn:hover{background:var(--pastel);color:var(--bg);border-color:var(--pastel)}
 #stage{position:relative;height:min(70vh,560px);border:1px solid var(--line);border-radius:4px;overflow:hidden;
 background:radial-gradient(circle at 50% 40%,#1c2758,var(--bg) 70%)}
-#stage canvas{position:absolute;inset:0;width:100%;height:100%;display:none;cursor:grab;touch-action:pan-y}
-#stage.is3d canvas{display:block}#stage.is3d video{visibility:hidden}
+#stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:48% 50%}
+#gl-note{position:absolute;left:0;right:0;bottom:14px;text-align:center;color:var(--pastel);font:500 .9rem Manrope,system-ui,sans-serif;margin:0}
+#stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;transition:opacity .5s;cursor:grab;touch-action:pan-y}
+#stage.ready canvas{opacity:1}#stage.ready img,#stage.ready #gl-note{display:none}
 #stage video{width:100%;height:100%;object-fit:cover;object-position:48% 50%;display:block}
 .modes{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);display:flex;gap:4px;padding:4px;border:1px solid rgba(255,255,255,.22);border-radius:999px;background:rgba(13,18,38,.62);backdrop-filter:blur(6px)}
 .modes button{border:0;background:none;color:var(--text);font:500 .9rem Manrope,system-ui,sans-serif;padding:.4rem 1rem;border-radius:999px;cursor:pointer}
@@ -86,13 +89,9 @@ dialog::backdrop{background:rgba(5,8,22,.82)}
     <div class="btns"><a class="btn" href="#projects">View projects</a><a class="btn ghost" href="#contact">Get in touch</a></div>
   </div>
   <div id="stage" role="group" aria-label="Alarm Clock turntable">
-    <video id="hv" muted loop playsinline autoplay preload="metadata" poster="assets/Alarm_Clock/hero-poster.jpg" src="assets/Alarm_Clock/hero-textured.mp4" aria-label="Alarm Clock textured turntable"></video>
+    <img id="hp" src="assets/Alarm_Clock/hero-poster.jpg" alt="Alarm Clock render">
     <canvas id="gl" aria-label="Interactive 3D Alarm Clock. Drag to rotate, scroll to zoom."></canvas>
-    <div class="modes" role="group" aria-label="Turntable view">
-      <button type="button" data-v="textured" aria-pressed="true">Textured</button>
-      <button type="button" data-v="wire" aria-pressed="false">Wireframe</button>
-      <button type="button" data-v="3d" aria-pressed="false">Interactive 3D</button>
-    </div>
+    <p id="gl-note" aria-live="polite">Loading 3D model…</p>
   </div>
 </section>
 
@@ -197,21 +196,12 @@ dlg.addEventListener('click',e=>{if(e.target===dlg)dlg.close()});
 dlg.addEventListener('close',()=>{dm.innerHTML=''});
 
 // Hero turntable: switch between the textured and wireframe videos at the same point in the loop
-const hv=document.getElementById('hv'),calm=matchMedia('(prefers-reduced-motion:reduce)').matches;
-const heroSrc={textured:['assets/Alarm_Clock/hero-textured.mp4','Alarm Clock textured turntable'],wire:['assets/Alarm_Clock/hero-wireframe.mp4','Alarm Clock wireframe turntable']};
-if(calm){hv.removeAttribute('autoplay');hv.controls=true}
-document.querySelectorAll('.modes button').forEach(b=>b.onclick=()=>{
- if(b.dataset.v==='3d'){document.querySelectorAll('.modes button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));hv.pause();document.getElementById('stage').classList.add('is3d');window.open3d&&window.open3d();return}
- document.getElementById('stage').classList.remove('is3d');window.close3d&&window.close3d();
- const [src,label]=heroSrc[b.dataset.v],t=hv.currentTime,wasPlaying=!hv.paused;
- document.querySelectorAll('.modes button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
- hv.setAttribute('aria-label',label);hv.src=src;
- hv.addEventListener('loadedmetadata',()=>{hv.currentTime=Math.min(t,hv.duration||t);if(wasPlaying||!calm)hv.play().catch(()=>{})},{once:true})});
+const calm=matchMedia('(prefers-reduced-motion:reduce)').matches;
 
 // Hash routing
 function route(){const id=(location.hash||'#home').slice(1);
  document.querySelectorAll('.page').forEach(s=>s.classList.toggle('on',s.id===id));
- if(id==='home'){if(!calm)hv.play().catch(()=>{})}else hv.pause();
+ window.gl3d&&window.gl3d(id==='home');
  document.querySelectorAll('nav ul a').forEach(a=>a.classList.toggle('on',a.hash==='#'+id));window.scrollTo(0,0)}
 addEventListener('hashchange',route);route();
 
@@ -245,10 +235,12 @@ async function init(){
  addEventListener('resize',size);size();ready=true;return true;
  }catch(e){console.error(e);return false}
 }
-window.open3d=async()=>{
- if(!ready&&!(await init())){stage.classList.remove('is3d');document.querySelector('.modes [data-v=textured]').click();return}
- size();if(!running){running=true;loop()}};
-window.close3d=()=>{running=false};
+let want=true;
+async function start(){
+ if(!ready&&!(await init())){document.getElementById('gl-note').textContent='3D view unavailable in this browser';return}
+ stage.classList.add('ready');size();if(want&&!running){running=true;loop()}}
+window.gl3d=on=>{want=on;if(!on)running=false;else if(ready&&!running){running=true;loop()}};
+start();
 </script>
 </body>
 </html>
