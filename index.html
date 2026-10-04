@@ -32,11 +32,13 @@ nav ul a:hover,nav ul a.on{color:var(--text);border-color:var(--pastel)}
 .btn{display:inline-block;padding:.8rem 1.6rem;border-radius:999px;background:var(--brand);color:#fff;text-decoration:none;font-weight:700;border:1px solid var(--brand);font-family:inherit;font-size:1rem;cursor:pointer}
 .btn.ghost{background:none;border-color:var(--line);color:var(--text)}
 .btn:hover{background:var(--pastel);color:var(--bg);border-color:var(--pastel)}
-#stage{position:relative;height:min(70vh,560px);border:1px solid var(--line);border-radius:4px;cursor:grab;
+#stage{position:relative;height:min(70vh,560px);border:1px solid var(--line);border-radius:4px;overflow:hidden;
 background:radial-gradient(circle at 50% 40%,#1c2758,var(--bg) 70%)}
-#stage:active{cursor:grabbing}
-#stage canvas{width:100%;height:100%;display:block}
-.hint{position:absolute;left:14px;bottom:10px;font-size:.8rem;color:var(--muted);pointer-events:none}
+#stage video{width:100%;height:100%;object-fit:cover;object-position:48% 50%;display:block}
+.modes{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);display:flex;gap:4px;padding:4px;border:1px solid rgba(255,255,255,.22);border-radius:999px;background:rgba(13,18,38,.62);backdrop-filter:blur(6px)}
+.modes button{border:0;background:none;color:var(--text);font:500 .9rem Manrope,system-ui,sans-serif;padding:.4rem 1rem;border-radius:999px;cursor:pointer}
+.modes button:hover{background:rgba(255,255,255,.14)}
+.modes button[aria-pressed="true"]{background:var(--pastel);color:var(--bg)}
 .filters{display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:2rem}
 .filters button{background:none;border:1px solid var(--line);color:var(--muted);padding:.4rem 1.1rem;border-radius:999px;font:inherit;cursor:pointer}
 .filters button.on,.filters button:hover{background:var(--brand);color:#fff;border-color:var(--brand)}
@@ -77,11 +79,17 @@ dialog::backdrop{background:rgba(5,8,22,.82)}
 <main>
 <section class="page" id="home">
   <div class="hero-text">
-    <h1>From how i wonder to Nice Render</h1>
-    <p>3D generalist and motion designer covering modeling, environments, animation, lighting and rendering. Open to roles in games, animation and motion design.</p>
+    <h1>From How I Wonder to Nice Render</h1>
+    <p>I'm a 3D generalist and motion designer working across modeling, environments, animation, lighting and rendering. I'm open to roles in games, animation and motion design.</p>
     <div class="btns"><a class="btn" href="#projects">View projects</a><a class="btn ghost" href="#contact">Get in touch</a></div>
   </div>
-  <div id="stage" aria-label="Interactive 3D alarm clock. Drag to rotate it."><span class="hint">Drag to rotate</span></div>
+  <div id="stage" role="group" aria-label="Alarm Clock turntable">
+    <video id="hv" muted loop playsinline autoplay preload="metadata" poster="assets/Alarm_Clock/hero-poster.jpg" src="assets/Alarm_Clock/hero-textured.mp4" aria-label="Alarm Clock textured turntable"></video>
+    <div class="modes" role="group" aria-label="Turntable view">
+      <button type="button" data-v="textured" aria-pressed="true">Textured</button>
+      <button type="button" data-v="wire" aria-pressed="false">Wireframe</button>
+    </div>
+  </div>
 </section>
 
 <section class="page" id="projects">
@@ -130,7 +138,7 @@ const EMAIL='shahparth1003@gmail.com';
 const projects=[
  {t:"Alarm Clock",c:"model",d:"Modeling, UVs, PBR texturing",
   thumb:"assets/Alarm_Clock/card.jpg",
-  long:"A textured alarm clock prop with a full PBR set (base color, roughness, metalness and normal maps) across multiple UV tiles. The gallery shows final renders, detail views, and textured and wireframe turntables. The same model is the interactive piece on the home page.",
+  long:"A textured alarm clock prop with a full PBR set (base color, roughness, metalness and normal maps) across multiple UV tiles. The gallery shows final renders, detail views, and textured and wireframe turntables. Both turntables also play on the home page.",
   media:[
    {type:"video",src:"assets/Alarm_Clock/Textured%202.mp4",poster:"assets/Alarm_Clock/card.jpg",alt:"Alarm Clock textured turntable"},
    {type:"video",src:"assets/Alarm_Clock/Wireframe.mp4",poster:"assets/Alarm_Clock/card.jpg",alt:"Alarm Clock wireframe turntable"},
@@ -184,9 +192,20 @@ document.getElementById('dx').onclick=()=>dlg.close();
 dlg.addEventListener('click',e=>{if(e.target===dlg)dlg.close()});
 dlg.addEventListener('close',()=>{dm.innerHTML=''});
 
+// Hero turntable: switch between the textured and wireframe videos at the same point in the loop
+const hv=document.getElementById('hv'),calm=matchMedia('(prefers-reduced-motion:reduce)').matches;
+const heroSrc={textured:['assets/Alarm_Clock/hero-textured.mp4','Alarm Clock textured turntable'],wire:['assets/Alarm_Clock/hero-wireframe.mp4','Alarm Clock wireframe turntable']};
+if(calm){hv.removeAttribute('autoplay');hv.controls=true}
+document.querySelectorAll('.modes button').forEach(b=>b.onclick=()=>{
+ const [src,label]=heroSrc[b.dataset.v],t=hv.currentTime,wasPlaying=!hv.paused;
+ document.querySelectorAll('.modes button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
+ hv.setAttribute('aria-label',label);hv.src=src;
+ hv.addEventListener('loadedmetadata',()=>{hv.currentTime=Math.min(t,hv.duration||t);if(wasPlaying||!calm)hv.play().catch(()=>{})},{once:true})});
+
 // Hash routing
 function route(){const id=(location.hash||'#home').slice(1);
  document.querySelectorAll('.page').forEach(s=>s.classList.toggle('on',s.id===id));
+ if(id==='home'){if(!calm)hv.play().catch(()=>{})}else hv.pause();
  document.querySelectorAll('nav ul a').forEach(a=>a.classList.toggle('on',a.hash==='#'+id));window.scrollTo(0,0)}
 addEventListener('hashchange',route);route();
 
@@ -195,83 +214,6 @@ document.getElementById('f').onsubmit=e=>{e.preventDefault();
  const d=new FormData(e.target),n=d.get('n'),em=d.get('e'),m=d.get('m');
  document.getElementById('ok').textContent='Opening your email app with the message filled in.';
  location.href='mailto:'+EMAIL+'?subject='+encodeURIComponent('Portfolio inquiry from '+n)+'&body='+encodeURIComponent(m+'\n\n'+n+'\n'+em)};
-</script>
-<script type="importmap">
-{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.160.0/examples/jsm/"}}
-</script>
-<script type="module" onerror="document.getElementById('stage').textContent='3D preview could not load.'">
-import * as THREE from 'three';
-import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
-import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
-import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
-
-const el=document.getElementById('stage');
-const calm=matchMedia('(prefers-reduced-motion:reduce)').matches;
-const A='assets/Alarm_Clock/';
-
-// Which texture tile (UDIM 1001-1003) each part of the alarm clock uses
-const tileByPart={Body:1001,Hand_Bolt:1002,Hours:1002,Minute:1002,Seconds:1002,Ring_Support:1002,
- Back_Knob:1003,Back_Panel:1003,bell:1003,Bell_Support:1003,polySurface1:1003,polySurface2:1003,polySurface3:1003,
- polySurface4:1003,polySurface5:1003,polySurface6:1003,polySurface9:1003,Hammer:1003,Leg_left:1003,Leg_Right:1003};
-// Mesh names in the GLB look like "BodyShape" or "BodyShape_1"; reduce them to the part name
-const partName=n=>n.replace(/Shape/g,'').replace(/_\d+$/,'').replace(/\.\d+$/,'');
-
-async function loadClock(){
- const tl=new THREE.TextureLoader();
- const tex=(file,color)=>tl.loadAsync(A+'web/'+file).then(t=>{
-  t.flipY=false;t.wrapS=t.wrapT=THREE.RepeatWrapping;t.anisotropy=4;if(color)t.colorSpace=THREE.SRGBColorSpace;return t});
- const tiles=[1001,1002,1003];
- const [gltf,dial,...maps]=await Promise.all([
-  new GLTFLoader().loadAsync(A+'Alarm_Clock.glb'),tex('Dial.png',true),
-  ...tiles.flatMap(n=>[tex(`BaseColor.${n}.webp`,true),tex(`Roughness.${n}.webp`),tex(`Metalness.${n}.webp`),tex(`Normal.${n}.webp`)])]);
- const tileMat={};
- tiles.forEach((n,i)=>{const [map,roughnessMap,metalnessMap,normalMap]=maps.slice(i*4,i*4+4);
-  tileMat[n]=new THREE.MeshStandardMaterial({map,roughnessMap,metalnessMap,normalMap,roughness:1,metalness:1,side:THREE.DoubleSide,envMapIntensity:.6})});
- const dialMat=new THREE.MeshStandardMaterial({map:dial,roughness:.5,metalness:0,side:THREE.DoubleSide});
- const glassMat=new THREE.MeshPhysicalMaterial({color:'#f3f6f8',roughness:.07,metalness:0,transmission:1,ior:1.45,thickness:.04,transparent:true,opacity:.38,side:THREE.DoubleSide});
- const model=gltf.scene;let matched=0;
- model.traverse(o=>{if(!o.isMesh)return;const part=partName(o.name);
-  if(tileByPart[part]){o.material=tileMat[tileByPart[part]];matched++}
-  else if(part==='Time_Space'){o.material=dialMat;matched++}
-  else if(part==='Glass1'){o.material=glassMat;matched++}});
- console.info('Alarm clock parts textured:',matched);
- const box=new THREE.Box3().setFromObject(model),size=box.getSize(new THREE.Vector3()),c=box.getCenter(new THREE.Vector3());
- const k=3.2/Math.max(size.x,size.y,size.z);model.scale.setScalar(k);model.position.sub(c.multiplyScalar(k));
- return model}
-
-function knot(){
- const g=new THREE.TorusKnotGeometry(.8,.28,160,24),grp=new THREE.Group();
- grp.add(new THREE.Mesh(g,new THREE.MeshStandardMaterial({color:0x485696,metalness:.6,roughness:.3})),
-  new THREE.Mesh(g,new THREE.MeshBasicMaterial({color:0xa9bdf0,wireframe:true,transparent:true,opacity:.18})));
- return grp}
-
-try{
- const r=new THREE.WebGLRenderer({antialias:true,alpha:true});
- r.setPixelRatio(Math.min(devicePixelRatio,1.5));r.outputColorSpace=THREE.SRGBColorSpace;
- r.domElement.style.touchAction='pan-y';el.appendChild(r.domElement);
- const scene=new THREE.Scene(),cam=new THREE.PerspectiveCamera(35,1,.1,100);
- cam.position.set(4.5,2.8,5.5);
- scene.environment=new THREE.PMREMGenerator(r).fromScene(new RoomEnvironment(),.04).texture;
- scene.add(new THREE.HemisphereLight(0xdfe6ff,0x0d1226,.75));
- const key=new THREE.DirectionalLight(0xffffff,2.2);key.position.set(5,7,5);scene.add(key);
- const rim=new THREE.DirectionalLight(0xa9bdf0,1.4);rim.position.set(-4,3,-3);scene.add(rim);
-
- let model;
- try{model=await loadClock()}catch(err){console.warn('Alarm clock model failed to load; showing a placeholder shape.',err);model=knot()}
- scene.add(model);
-
- const controls=new OrbitControls(cam,r.domElement);
- r.domElement.style.touchAction='pan-y';
- controls.enablePan=false;controls.enableZoom=false;controls.enableDamping=true;controls.dampingFactor=.06;
- controls.autoRotate=!calm;controls.autoRotateSpeed=.75;controls.minPolarAngle=.2;controls.maxPolarAngle=Math.PI/1.72;
-
- function size(){const w=el.clientWidth,h=el.clientHeight;if(!w||!h)return;
-  const cv=r.domElement;if(cv.width!==Math.round(w*r.getPixelRatio())||cv.height!==Math.round(h*r.getPixelRatio())){
-   r.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix()}}
- (function loop(){requestAnimationFrame(loop);
-  if(!el.offsetParent||document.hidden)return;   // home page is not showing
-  size();controls.update();r.render(scene,cam)})();
-}catch(e){console.warn(e);el.textContent='3D preview needs WebGL.'}
 </script>
 </body>
 </html>
