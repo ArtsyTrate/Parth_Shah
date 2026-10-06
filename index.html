@@ -230,7 +230,7 @@ async function init(){
  sc=new THREE.Scene();cam=new THREE.PerspectiveCamera(35,1,.01,100);
  sc.environment=new THREE.PMREMGenerator(r).fromScene(new RoomEnvironment(),.04).texture;
  const k=new THREE.DirectionalLight(0xffffff,1.8);k.position.set(2,3,4);sc.add(k);const k2=new THREE.DirectionalLight(0xbfd0ff,1.2);k2.position.set(-3,1,-4);sc.add(k2);sc.add(new THREE.HemisphereLight(0xdfe8ff,0x6a5a48,1.1));sc.environmentIntensity=1;
- const g=await new GLTFLoader().loadAsync('assets/Alarm_Clock/Alarm_Clock_UV.glb?v=3');
+ const g=await new GLTFLoader().loadAsync('assets/Alarm_Clock/Alarm_Clock_UV.glb?v=4');
  const m=g.scene;const b=new THREE.Box3().setFromObject(m),c=b.getCenter(new THREE.Vector3()),d=b.getSize(new THREE.Vector3()).length();
  m.position.sub(c);sc.add(m);
  cam.position.set(0,d*.1,d*1.25);cam.near=d/100;cam.far=d*20;
