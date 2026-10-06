@@ -6,6 +6,7 @@
 <title>Parth Shah | 3D Generalist and Motion Designer</title>
 <meta name="description" content="Portfolio of Parth Shah, a 3D generalist and motion designer working in modeling, environments, animation, lighting and rendering.">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+<script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.160.0/examples/jsm/"}}</script>
 <style>
 :root{--bg:#0d1226;--surface:#151c3a;--line:#2a3566;--brand:#485696;--pastel:#a9bdf0;--text:#e8ecfa;--muted:#8f9ac4;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -18,22 +19,29 @@ h1{font-size:clamp(2.6rem,7vw,5.2rem)}h2{font-size:clamp(2rem,4vw,3rem);margin-b
 a{color:var(--pastel)}
 :focus-visible{outline:2px solid var(--pastel);outline-offset:3px}
 nav{position:fixed;top:0;left:0;right:0;z-index:10;display:flex;justify-content:space-between;align-items:center;
-padding:calc(16px + env(safe-area-inset-top,0px)) 5vw 16px;background:linear-gradient(var(--bg),transparent)}
+padding:calc(16px + env(safe-area-inset-top,0px)) 4vw 16px;background:linear-gradient(var(--bg),transparent)}
 .logo{font-family:Fraunces,serif;font-size:1.3rem;text-decoration:none;color:var(--text)}
 nav ul{display:flex;gap:1.6rem;list-style:none;padding:0}
 nav ul a{text-decoration:none;color:var(--muted);font-weight:500;padding-bottom:4px;border-bottom:2px solid transparent}
 nav ul a:hover,nav ul a.on{color:var(--text);border-color:var(--pastel)}
-.page{display:none;min-height:100vh;padding:120px 5vw 80px;max-width:1200px;margin:auto}
+.page{display:none;min-height:100vh;padding:96px 4vw 56px;max-width:1680px;margin:auto}
 .page.on{display:block}
 #home{display:none;max-width:none;padding:0}
-#home.on{display:grid;grid-template-columns:1fr 1fr;align-items:center;min-height:100vh;padding:100px 5vw 40px;gap:2rem}
+#home.on{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);align-items:center;min-height:100vh;max-width:1680px;margin:auto;padding:84px 4vw 28px;gap:clamp(1.5rem,3vw,3.5rem)}
+.hero-text h1{font-size:clamp(2.6rem,5.6vw,6rem);line-height:1.02}
+.hero-text p{font-size:clamp(1.05rem,1.3vw,1.3rem);max-width:46ch}
+.hero-text .btn{padding:.95rem 1.9rem;font-size:1.05rem}
 .hero-text p{color:var(--muted);max-width:42ch;margin:1.5rem 0 2rem}
 .btns{display:flex;gap:1rem;flex-wrap:wrap}
 .btn{display:inline-block;padding:.8rem 1.6rem;border-radius:999px;background:var(--brand);color:#fff;text-decoration:none;font-weight:700;border:1px solid var(--brand);font-family:inherit;font-size:1rem;cursor:pointer}
 .btn.ghost{background:none;border-color:var(--line);color:var(--text)}
 .btn:hover{background:var(--pastel);color:var(--bg);border-color:var(--pastel)}
-#stage{position:relative;height:min(70vh,560px);border:1px solid var(--line);border-radius:4px;overflow:hidden;
+#stage{position:relative;width:100%;width:min(100%,calc(100vh - 118px));max-width:none;aspect-ratio:1/1;justify-self:end;border:1px solid var(--line);border-radius:18px;box-shadow:0 30px 80px -30px rgba(0,0,0,.6);overflow:hidden;
 background:radial-gradient(circle at 50% 40%,#1c2758,var(--bg) 70%)}
+#stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:48% 50%}
+#gl-note{position:absolute;left:0;right:0;bottom:14px;text-align:center;color:var(--pastel);font:500 .9rem Manrope,system-ui,sans-serif;margin:0}
+#stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;transition:opacity .5s;cursor:grab;touch-action:pan-y}
+#stage.ready canvas{opacity:1}#stage.ready img{display:none}#stage.ready #gl-note{color:var(--muted);font-size:.8rem;letter-spacing:.08em;text-transform:uppercase}
 #stage video{width:100%;height:100%;object-fit:cover;object-position:48% 50%;display:block}
 .modes{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);display:flex;gap:4px;padding:4px;border:1px solid rgba(255,255,255,.22);border-radius:999px;background:rgba(13,18,38,.62);backdrop-filter:blur(6px)}
 .modes button{border:0;background:none;color:var(--text);font:500 .9rem Manrope,system-ui,sans-serif;padding:.4rem 1rem;border-radius:999px;cursor:pointer}
@@ -42,7 +50,7 @@ background:radial-gradient(circle at 50% 40%,#1c2758,var(--bg) 70%)}
 .filters{display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:2rem}
 .filters button{background:none;border:1px solid var(--line);color:var(--muted);padding:.4rem 1.1rem;border-radius:999px;font:inherit;cursor:pointer}
 .filters button.on,.filters button:hover{background:var(--brand);color:#fff;border-color:var(--brand)}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.5rem}
 .card{display:block;width:100%;padding:0;text-align:left;font:inherit;color:inherit;cursor:pointer;background:var(--surface);border:1px solid var(--line);border-radius:4px;overflow:hidden;transition:transform .25s,border-color .25s}
 .card:hover{transform:translateY(-4px);border-color:var(--pastel)}
 .thumb{aspect-ratio:4/3;background:linear-gradient(135deg,var(--brand),var(--bg));display:grid;place-items:center;color:var(--pastel);font-family:Fraunces,serif;font-size:1.1rem;overflow:hidden}
@@ -50,10 +58,10 @@ background:radial-gradient(circle at 50% 40%,#1c2758,var(--bg) 70%)}
 .card .info{display:block;padding:1rem 1.2rem 1.3rem}
 .card h3{font-size:1.4rem;font-weight:500}.card p{color:var(--muted);font-size:.92rem}
 .about{display:grid;grid-template-columns:1.3fr 1fr;gap:3rem}
-.about p{margin-bottom:1rem;color:var(--muted);max-width:60ch}
+.about p{margin-bottom:1rem;color:var(--muted);max-width:68ch;font-size:1.08rem}
 .skills{list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:.5rem}
 .skills li{border:1px solid var(--line);padding:.3rem .9rem;border-radius:999px;font-size:.9rem}
-form{display:grid;gap:1rem;max-width:560px}
+form{display:grid;gap:1rem;max-width:680px}
 label{display:grid;gap:.4rem;color:var(--muted);font-size:.9rem}
 input,textarea{background:var(--surface);border:1px solid var(--line);border-radius:4px;color:var(--text);padding:.8rem;font:inherit}
 textarea{min-height:140px}
@@ -68,7 +76,7 @@ dialog::backdrop{background:rgba(5,8,22,.82)}
 .dinfo p{color:var(--muted);max-width:62ch}
 .dclose{position:sticky;top:10px;float:right;margin:10px 10px 0 0;z-index:2;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--bg);color:var(--text);font-size:1.4rem;line-height:1;cursor:pointer}
 .dclose:hover{background:var(--pastel);color:var(--bg)}
-@media(max-width:800px){#home.on,.about{grid-template-columns:1fr}nav ul{gap:1rem;font-size:.9rem}}
+@media(max-width:800px){#home.on,.about{grid-template-columns:1fr}#stage{justify-self:center;width:100%}#home.on{padding-top:84px}nav ul{gap:1rem;font-size:.9rem}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
@@ -84,11 +92,9 @@ dialog::backdrop{background:rgba(5,8,22,.82)}
     <div class="btns"><a class="btn" href="#projects">View projects</a><a class="btn ghost" href="#contact">Get in touch</a></div>
   </div>
   <div id="stage" role="group" aria-label="Alarm Clock turntable">
-    <video id="hv" muted loop playsinline autoplay preload="metadata" poster="assets/Alarm_Clock/hero-poster.jpg" src="assets/Alarm_Clock/hero-textured.mp4" aria-label="Alarm Clock textured turntable"></video>
-    <div class="modes" role="group" aria-label="Turntable view">
-      <button type="button" data-v="textured" aria-pressed="true">Textured</button>
-      <button type="button" data-v="wire" aria-pressed="false">Wireframe</button>
-    </div>
+    <img id="hp" src="assets/Alarm_Clock/hero-poster.jpg" alt="Alarm Clock render">
+    <canvas id="gl" aria-label="Interactive 3D Alarm Clock. Drag to rotate, scroll to zoom."></canvas>
+    <p id="gl-note" aria-live="polite">Loading 3D model…</p>
   </div>
 </section>
 
@@ -193,19 +199,12 @@ dlg.addEventListener('click',e=>{if(e.target===dlg)dlg.close()});
 dlg.addEventListener('close',()=>{dm.innerHTML=''});
 
 // Hero turntable: switch between the textured and wireframe videos at the same point in the loop
-const hv=document.getElementById('hv'),calm=matchMedia('(prefers-reduced-motion:reduce)').matches;
-const heroSrc={textured:['assets/Alarm_Clock/hero-textured.mp4','Alarm Clock textured turntable'],wire:['assets/Alarm_Clock/hero-wireframe.mp4','Alarm Clock wireframe turntable']};
-if(calm){hv.removeAttribute('autoplay');hv.controls=true}
-document.querySelectorAll('.modes button').forEach(b=>b.onclick=()=>{
- const [src,label]=heroSrc[b.dataset.v],t=hv.currentTime,wasPlaying=!hv.paused;
- document.querySelectorAll('.modes button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
- hv.setAttribute('aria-label',label);hv.src=src;
- hv.addEventListener('loadedmetadata',()=>{hv.currentTime=Math.min(t,hv.duration||t);if(wasPlaying||!calm)hv.play().catch(()=>{})},{once:true})});
+const calm=matchMedia('(prefers-reduced-motion:reduce)').matches;
 
 // Hash routing
 function route(){const id=(location.hash||'#home').slice(1);
  document.querySelectorAll('.page').forEach(s=>s.classList.toggle('on',s.id===id));
- if(id==='home'){if(!calm)hv.play().catch(()=>{})}else hv.pause();
+ window.gl3d&&window.gl3d(id==='home');
  document.querySelectorAll('nav ul a').forEach(a=>a.classList.toggle('on',a.hash==='#'+id));window.scrollTo(0,0)}
 addEventListener('hashchange',route);route();
 
@@ -214,6 +213,37 @@ document.getElementById('f').onsubmit=e=>{e.preventDefault();
  const d=new FormData(e.target),n=d.get('n'),em=d.get('e'),m=d.get('m');
  document.getElementById('ok').textContent='Opening your email app with the message filled in.';
  location.href='mailto:'+EMAIL+'?subject='+encodeURIComponent('Portfolio inquiry from '+n)+'&body='+encodeURIComponent(m+'\n\n'+n+'\n'+em)};
+</script>
+<script type="module">
+import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
+import {GLTFLoader} from 'https://unpkg.com/three@0.160.0/examples/jsm/loaders/GLTFLoader.js';
+import {OrbitControls} from 'https://unpkg.com/three@0.160.0/examples/jsm/controls/OrbitControls.js';
+import {RoomEnvironment} from 'https://unpkg.com/three@0.160.0/examples/jsm/environments/RoomEnvironment.js';
+let ready=false,running=false,r,sc,cam,ctl;
+const cv=document.getElementById('gl'),stage=document.getElementById('stage');
+function size(){const w=stage.clientWidth,h=stage.clientHeight;r.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix()}
+function loop(){if(!running)return;ctl.update();r.render(sc,cam);requestAnimationFrame(loop)}
+async function init(){
+ try{
+ r=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:true});r.setPixelRatio(Math.min(devicePixelRatio,2));
+ r.outputColorSpace=THREE.SRGBColorSpace;r.toneMapping=THREE.ACESFilmicToneMapping;r.toneMappingExposure=1.25;
+ sc=new THREE.Scene();cam=new THREE.PerspectiveCamera(35,1,.01,100);
+ sc.environment=new THREE.PMREMGenerator(r).fromScene(new RoomEnvironment(),.04).texture;
+ const k=new THREE.DirectionalLight(0xffffff,1.8);k.position.set(2,3,4);sc.add(k);const k2=new THREE.DirectionalLight(0xbfd0ff,1.2);k2.position.set(-3,1,-4);sc.add(k2);sc.add(new THREE.HemisphereLight(0xdfe8ff,0x6a5a48,1.1));sc.environmentIntensity=1;
+ const g=await new GLTFLoader().loadAsync('assets/Alarm_Clock/Alarm_Clock_UV.glb?v=3');
+ const m=g.scene;const b=new THREE.Box3().setFromObject(m),c=b.getCenter(new THREE.Vector3()),d=b.getSize(new THREE.Vector3()).length();
+ m.position.sub(c);sc.add(m);
+ cam.position.set(0,d*.1,d*1.25);cam.near=d/100;cam.far=d*20;
+ ctl=new OrbitControls(cam,cv);ctl.enableDamping=true;ctl.autoRotate=!matchMedia('(prefers-reduced-motion:reduce)').matches;ctl.autoRotateSpeed=1.5;ctl.enablePan=false;ctl.minDistance=d*.5;ctl.maxDistance=d*2.5;
+ addEventListener('resize',size);size();ready=true;return true;
+ }catch(e){console.error(e);return false}
+}
+let want=true;
+async function start(){
+ if(!ready&&!(await init())){document.getElementById('gl-note').textContent='3D view unavailable in this browser';return}
+ stage.classList.add('ready');document.getElementById('gl-note').textContent='Alarm Clock · drag to rotate · scroll to zoom';size();if(want&&!running){running=true;loop()}}
+window.gl3d=on=>{want=on;if(!on)running=false;else if(ready&&!running){running=true;loop()}};
+start();
 </script>
 </body>
 </html>
