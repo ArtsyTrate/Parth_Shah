@@ -9,6 +9,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="clock-viewer.css">
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
 </head>
 <body>
   <div class="noise"></div>
@@ -28,6 +30,34 @@
     <section class="hero">
       <div class="eyebrow">3D GENERALIST · MOTION DESIGNER</div>
       <h1>BUILDING<br><em>WORLDS</em><br>IN 3D.</h1>
+
+      <div class="clock-card" aria-label="Interactive 3D alarm clock. Drag to rotate.">
+        <model-viewer
+          src="assets/Projects/Alarm_Clock/Alarm_Clock.glb"
+          poster="assets/Projects/Alarm_Clock/hero-poster.jpg"
+          alt="Vintage alarm clock 3D model by Parth Shah"
+          camera-controls
+          touch-action="pan-y"
+          auto-rotate
+          auto-rotate-delay="2500"
+          rotation-per-second="18deg"
+          interaction-prompt="auto"
+          disable-zoom
+          shadow-intensity="1"
+          shadow-softness="1"
+          exposure="1.1"
+          environment-image="neutral"
+          camera-orbit="-20deg 80deg auto"
+          min-camera-orbit="auto 20deg auto"
+          max-camera-orbit="auto 110deg auto"
+          reveal="auto"
+          loading="eager">
+          <div slot="progress-bar"></div>
+        </model-viewer>
+        <img class="clock-fallback" src="assets/Projects/Alarm_Clock/hero-poster.jpg" alt="Vintage alarm clock 3D render by Parth Shah">
+        <div class="clock-hint"><span class="loading-text">Loading 3D model…</span><span class="drag-text">Drag to rotate</span><span>Alarm Clock</span></div>
+      </div>
+
       <div class="hero-bottom">
         <p>3D artist focused on modeling, environments, animation, lighting, rendering and motion — turning ideas into visual experiences.</p>
         <a class="circle-arrow" href="#work" aria-label="Scroll to work">↓</a>
@@ -202,5 +232,6 @@
 
   <footer><span>© 2026 PARTH SHAH</span><span>3D GENERALIST · MOTION DESIGNER</span></footer>
   <script src="script.js"></script>
+  <script src="clock-viewer.js"></script>
 </body>
 </html>
