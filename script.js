@@ -1,5 +1,8 @@
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 document.documentElement.classList.add('js');
+if (reducedMotion) {
+  document.querySelectorAll('model-viewer[auto-rotate]').forEach(model => model.removeAttribute('auto-rotate'));
+}
 
 const menu = document.querySelector('.menu-panel');
 if (menu) {

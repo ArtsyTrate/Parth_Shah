@@ -5,7 +5,6 @@
 /* Hallmark · waive 28b · all affected videos are below the fold and not the LCP · the repository has no stills for Fight Sequence, Marble Music, or Well Turntable */
 @import url("./tokens.css");
 @import url("./base.css");
-
 :root { --gutter: clamp(24px, 5vw, 80px); --container: 1600px; --gap-columns: clamp(20px, 2.5vw, 36px); }
 
 html { scroll-behavior: smooth; }
@@ -68,6 +67,8 @@ a:focus-visible, summary:focus-visible { outline: 2px solid var(--color-focus); 
 .project-meta p { color: var(--color-muted); font-size: var(--text-xs); text-align: right; }
 
 .project-story { display: grid; grid-template-columns: minmax(0, .72fr) minmax(0, 1.28fr); align-items: center; gap: var(--gap-columns); }
+.project-story, .project-detail { position: relative; }
+.anchor-alias { position: absolute; top: calc(-1 * var(--space-3xl)); left: 0; }
 .story-copy { max-width: 440px; }
 .story-copy h2 { margin: 0 0 var(--space-lg); font-size: clamp(52px, 7vw, 96px); line-height: .96; letter-spacing: -.05em; font-weight: 300; font-stretch: var(--display-stretch); }
 .story-copy > p:not(.eyebrow) { max-width: 55ch; color: var(--color-ink-2); font-size: var(--text-md); line-height: 1.65; }
@@ -114,9 +115,9 @@ a:focus-visible, summary:focus-visible { outline: 2px solid var(--color-focus); 
 .detail-media-grid figcaption { padding: var(--space-sm); color: var(--color-muted); font-size: var(--text-xs); }
 .asset-link { min-height: 56px; padding: var(--space-sm) 0; display: flex; align-items: center; justify-content: space-between; gap: var(--space-md); border-bottom: 1px solid var(--color-rule); color: var(--color-ink-2); font-size: var(--text-sm); }
 .asset-link span { color: var(--color-accent); }
-.model-stage { min-height: 360px; padding: var(--space-xl); display: grid; align-content: center; justify-items: center; gap: var(--space-sm); background: var(--color-paper-2); }
-.model-stage > span { color: var(--color-ink); font-size: clamp(100px, 24vw, 260px); line-height: .8; font-weight: 300; letter-spacing: -.08em; }
-.model-stage p { color: var(--color-muted); font-size: var(--text-sm); }
+.model-stage { position: relative; min-width: 0; min-height: 360px; overflow: hidden; background: var(--color-paper-2); }
+.model-stage model-viewer { display: block; width: 100%; height: 360px; background: transparent; --poster-color: transparent; --progress-bar-color: var(--color-accent); --progress-bar-height: 2px; }
+.model-stage p { position: absolute; bottom: var(--space-md); left: var(--space-md); padding: var(--space-xs); background: var(--color-paper); color: var(--color-muted); font-size: var(--text-xs); }
 .wide-video { background: var(--color-paper-2); }
 .wide-video video { width: 100%; max-height: 780px; aspect-ratio: 16 / 9; object-fit: contain; }
 
@@ -195,6 +196,7 @@ a:focus-visible, summary:focus-visible { outline: 2px solid var(--color-focus); 
   .detail-media-grid figure img, .detail-media-grid figure video { aspect-ratio: 1.2 / 1; }
   .asset-link { min-height: 52px; }
   .model-stage { min-height: 240px; }
+  .model-stage model-viewer { height: 240px; }
   .about-grid, .contact { grid-template-columns: minmax(0, 1fr); gap: var(--space-lg); }
   .about-lead { font-size: clamp(30px, 8vw, 40px); }
   .skills { margin-top: var(--space-xl); gap: var(--space-sm) var(--space-md); }
