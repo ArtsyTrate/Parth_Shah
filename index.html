@@ -2,236 +2,187 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Parth Shah — 3D Generalist and Motion Designer portfolio.">
-  <title>Parth Shah — 3D Generalist & Motion Designer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#090a0b">
+  <meta name="description" content="Parth Shah is a 3D artist and motion designer working across environment art, modeling, animation, and visual storytelling.">
+  <title>Parth Shah — 3D Artist & Motion Designer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="clock-viewer.css">
   <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
 </head>
 <body>
-  <div class="noise"></div>
+  <div class="grain" aria-hidden="true"></div>
   <header class="site-header">
-    <a class="brand" href="#top">PARTH<br><span>SHAH</span></a>
-    <nav>
-      <a href="#work">Work</a>
-      <a href="#projects">Projects</a>
+    <a class="wordmark" href="#top" aria-label="Parth Shah home">PS<span>.</span></a>
+    <nav class="main-nav" aria-label="Main navigation">
+      <a href="#work">Selected work</a>
       <a href="#about">About</a>
-      <a href="Parth_Shah_Resume_3D.pdf" target="_blank" rel="noreferrer">Resume</a>
       <a href="#contact">Contact</a>
     </nav>
-    <a class="header-link" href="https://www.linkedin.com/in/parth-shah-3d-animator" target="_blank" rel="noreferrer">LinkedIn ↗</a>
+    <a class="availability" href="mailto:shahparth1003@gmail.com">Available for opportunities <i></i></a>
+    <button class="menu-toggle" aria-label="Open navigation" aria-expanded="false"><span></span><span></span></button>
   </header>
 
   <main id="top">
     <section class="hero">
-      <div class="eyebrow">3D GENERALIST · MOTION DESIGNER</div>
-      <h1>BUILDING<br><em>WORLDS</em><br>IN 3D.</h1>
-
-      <div class="clock-card" aria-label="Interactive 3D alarm clock. Drag to rotate.">
-        <model-viewer
-          src="assets/Projects/Alarm_Clock/Alarm_Clock.glb"
-          poster="assets/Projects/Alarm_Clock/hero-poster.jpg"
-          alt="Vintage alarm clock 3D model by Parth Shah"
-          camera-controls
-          touch-action="pan-y"
-          auto-rotate
-          auto-rotate-delay="2500"
-          rotation-per-second="18deg"
-          interaction-prompt="auto"
-          disable-zoom
-          shadow-intensity="1"
-          shadow-softness="1"
-          exposure="1.1"
-          environment-image="neutral"
-          camera-orbit="-20deg 80deg auto"
-          min-camera-orbit="auto 20deg auto"
-          max-camera-orbit="auto 110deg auto"
-          reveal="auto"
-          loading="eager">
-          <div slot="progress-bar"></div>
-        </model-viewer>
-        <img class="clock-fallback" src="assets/Projects/Alarm_Clock/hero-poster.jpg" alt="Vintage alarm clock 3D render by Parth Shah">
-        <div class="clock-hint"><span class="loading-text">Loading 3D model…</span><span class="drag-text">Drag to rotate</span><span>Alarm Clock</span></div>
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="eyebrow-line"></span> 3D ARTIST &nbsp;·&nbsp; MOTION DESIGNER</p>
+        <h1>Creating<br>worlds <em>with</em><br>purpose<span class="period">.</span></h1>
+        <div class="hero-foot">
+          <p>From the first blockout to the final frame — I build visual experiences through 3D, atmosphere and motion.</p>
+          <a class="round-link" href="#work" aria-label="Explore selected work"><span>↓</span></a>
+        </div>
       </div>
-
-      <div class="hero-bottom">
-        <p>3D artist focused on modeling, environments, animation, lighting, rendering and motion — turning ideas into visual experiences.</p>
-        <a class="circle-arrow" href="#work" aria-label="Scroll to work">↓</a>
+      <div class="hero-art">
+        <div class="hero-art-frame">
+          <video class="hero-reel" autoplay muted loop playsinline preload="metadata" poster="assets/Projects/Alarm_Clock/hero-poster.jpg">
+            <source src="assets/Projects/Alarm_Clock/hero-textured.mp4" type="video/mp4">
+          </video>
+          <div class="hero-art-shade"></div>
+          <div class="art-label"><span>01 / OBJECT STUDY</span><span>ALARM CLOCK · 3D</span></div>
+          <div class="hero-art-caption">Time, texture<br>&amp; detail.</div>
+        </div>
+        <span class="vertical-note">SELECTED FRAMES — 2024 / 2026</span>
       </div>
+      <div class="hero-index"><span>PORTFOLIO</span><span>SCROLL TO EXPLORE ↓</span><span>BASED IN THE UNITED STATES</span></div>
     </section>
 
-    <section class="work section" id="work">
-      <div class="section-head">
-        <div><span class="index">01</span><h2>Selected Work</h2></div>
-        <span class="mono">2024 — 2026</span>
+    <section class="intro-band">
+      <p class="eyebrow">A LITTLE ABOUT THE PRACTICE</p>
+      <p class="intro-statement">I’m Parth — a <em>3D generalist</em> drawn to rich environments, expressive characters and the small details that make a world feel real.</p>
+      <a class="text-link" href="#about">MORE ABOUT ME <span>↗</span></a>
+    </section>
+
+    <section class="work-section section-shell" id="work">
+      <div class="section-heading">
+        <div><p class="eyebrow">01 / THE PORTFOLIO</p><h2>Selected <em>work</em></h2></div>
+        <p class="heading-note">A selection of worlds, objects<br>and moments made in 3D.</p>
       </div>
-      <div class="project-grid">
-        <article class="project project-large reveal">
-          <a href="#ancient-temple" class="project-visual image-visual">
-            <img src="assets/Ancient%20Temple.jpg" alt="Ancient Temple 3D environment by Parth Shah">
-            <span>01 · ANCIENT TEMPLE</span>
+
+      <div class="work-grid">
+        <article class="work-card work-card-feature reveal">
+          <a class="work-image temple-image" href="#temple" aria-label="View Ancient Temple project">
+            <img src="assets/Projects/Ancient_Temple/Ancient%20Temple.jpg" alt="Cinematic Ancient Temple 3D environment render" loading="lazy">
+            <span class="image-index">01 — ENVIRONMENT ART</span><span class="image-arrow">↗</span>
           </a>
-          <div class="project-meta"><h3>Ancient Temple</h3><span>Environment · Modeling · Lighting</span></div>
+          <div class="work-meta"><div><h3>Ancient Temple</h3><p>Environment art / Lighting / Rendering</p></div><span>2026</span></div>
         </article>
 
-        <article class="project reveal">
-          <a href="#ancient-well" class="project-visual image-visual">
-            <img src="assets/Ancient_Well.png" alt="Ancient Well 3D model by Parth Shah">
-            <span>02 · ANCIENT WELL</span>
+        <article class="work-card work-card-clock reveal">
+          <a class="work-image clock-image" href="#clock" aria-label="View Alarm Clock project">
+            <img src="assets/Projects/Alarm_Clock/card.jpg" alt="Vintage alarm clock 3D model" loading="lazy">
+            <span class="image-index">02 — HARD SURFACE / PROP</span><span class="image-arrow">↗</span>
           </a>
-          <div class="project-meta"><h3>Ancient Well</h3><span>Modeling · Sculpting · Prop Design</span></div>
+          <div class="work-meta"><div><h3>Alarm Clock</h3><p>Modeling / Texturing / Look development</p></div><span>2026</span></div>
         </article>
 
-        <article class="project reveal">
-          <a href="#fight-sequence" class="project-visual video-visual">
-            <video autoplay muted loop playsinline preload="metadata" aria-label="Character animation fight sequence preview">
-              <source src="assets/Shah_Parth_Fight_Sequence.mp4" type="video/mp4">
+        <article class="work-card work-card-well reveal">
+          <a class="work-image well-image" href="#well" aria-label="View Ancient Well project">
+            <img src="assets/Projects/Vintage_Well/Ancient_Well.png" alt="Stylized Ancient Well 3D prop" loading="lazy">
+            <span class="image-index">03 — PROP MODELING</span><span class="image-arrow">↗</span>
+          </a>
+          <div class="work-meta"><div><h3>Ancient Well</h3><p>Modeling / Sculpting / Prop design</p></div><span>2025</span></div>
+        </article>
+
+        <article class="work-card work-card-fight reveal">
+          <a class="work-image fight-image" href="#fight" aria-label="View character animation project">
+            <video autoplay muted loop playsinline preload="metadata" aria-label="Character animation sequence preview">
+              <source src="assets/Projects/Aang/Shah_Parth_Fight_Sequence.mp4" type="video/mp4">
             </video>
-            <span>03 · CHARACTER ANIMATION</span>
+            <span class="image-index">04 — CHARACTER ANIMATION</span><span class="image-arrow">↗</span>
           </a>
-          <div class="project-meta"><h3>Fight Sequence</h3><span>Character Animation · Acting · Body Mechanics</span></div>
+          <div class="work-meta"><div><h3>Fight Sequence</h3><p>Body mechanics / Acting / Timing</p></div><span>2025</span></div>
         </article>
 
-        <article class="project project-wide reveal">
-          <a href="#projects" class="project-visual visual-four"><span>EXPLORE BY DISCIPLINE</span></a>
-          <div class="project-meta"><h3>More Projects</h3><span>Modeling · Animation · Motion Graphics</span></div>
+        <article class="work-card work-card-f1 reveal">
+          <a class="work-image f1-image" href="#f1" aria-label="View F1 car project">
+            <model-viewer src="assets/Projects/F1%20Car/F1_Car.glb" alt="Formula racing car 3D model by Parth Shah" camera-controls auto-rotate rotation-per-second="12deg" interaction-prompt="none" shadow-intensity="1" exposure="1.1" environment-image="neutral"></model-viewer>
+            <span class="image-index">05 — VEHICLE / WIP</span><span class="image-arrow">↗</span>
+            <span class="model-hint">DRAG TO ROTATE</span>
+          </a>
+          <div class="work-meta"><div><h3>Formula 1 Car</h3><p>Vehicle modeling / Rigging / Look development</p></div><span>IN PROGRESS</span></div>
+        </article>
+
+        <article class="work-card work-card-turntable reveal">
+          <a class="work-image turntable-image" href="#well" aria-label="Watch Ancient Well turntable">
+            <video autoplay muted loop playsinline preload="metadata" poster="assets/Projects/Vintage_Well/Ancient_Well.png">
+              <source src="assets/Projects/Vintage_Well/Well_Turn%20Table.mp4" type="video/mp4">
+            </video>
+            <span class="image-index">06 — ASSET PRESENTATION</span><span class="image-arrow">↗</span>
+          </a>
+          <div class="work-meta"><div><h3>Well — Turntable</h3><p>Asset presentation / 3D modeling</p></div><span>2025</span></div>
         </article>
       </div>
     </section>
 
-    <section class="project-feature section reveal" id="ancient-temple">
-      <div class="feature-image-wrap feature-landscape">
-        <img src="assets/Ancient%20Temple.jpg" alt="Ancient Temple environment render">
-      </div>
-      <div class="feature-copy">
-        <div class="eyebrow">01 · 3D ENVIRONMENT</div>
-        <h2>Ancient<br><em>Temple</em></h2>
-        <p>A detailed temple environment focused on architectural modeling, carved surface detail, atmospheric lighting, composition and reflective water to create a cinematic interior space.</p>
-        <div class="feature-tags"><span>Environment Art</span><span>Modeling</span><span>Lighting</span><span>Rendering</span></div>
-      </div>
+    <section class="project-detail temple-detail section-shell reveal" id="temple">
+      <div class="detail-media"><img src="assets/Projects/Ancient_Temple/Ancient%20Temple.jpg" alt="Ancient Temple environment — final render" loading="lazy"></div>
+      <div class="detail-copy"><p class="eyebrow">01 / ENVIRONMENT ART</p><h2>Ancient<br><em>Temple</em></h2><p>A cinematic environment study built around monumental architecture, intricate surface detail and atmospheric lighting. The scene explores composition, material response and the relationship between architecture and reflective water.</p><div class="tag-list"><span>Environment Art</span><span>Modeling</span><span>Lighting</span><span>Rendering</span></div></div>
     </section>
 
-    <section class="project-feature section reveal" id="ancient-well">
-      <div class="well-gallery">
-        <img src="assets/Ancient_Well.png" alt="Ancient Well front view">
-        <img src="assets/Ancient_Well_02.png" alt="Ancient Well three-quarter view">
-        <img src="assets/Ancient_Well_03.png" alt="Ancient Well rear view">
-        <img src="assets/Ancient_Well_04.png" alt="Ancient Well pulley detail">
+    <section class="project-detail clock-detail section-shell reveal" id="clock">
+      <div class="detail-media clock-detail-media">
+        <video controls playsinline preload="metadata" poster="assets/Projects/Alarm_Clock/hero-poster.jpg"><source src="assets/Projects/Alarm_Clock/hero-textured.mp4" type="video/mp4"></video>
       </div>
-      <div class="feature-copy">
-        <div class="eyebrow">02 · 3D MODELING</div>
-        <h2>Ancient<br><em>Well</em></h2>
-        <p>A stylized medieval-inspired well created as a modeling and sculpting study. The project focuses on layered wood construction, stonework, rope detailing, roof shingles, pulley mechanics and presentation from multiple angles.</p>
-        <div class="feature-tags"><span>Modeling</span><span>Sculpting</span><span>Prop Design</span><span>Lighting</span></div>
-      </div>
+      <div class="detail-copy"><p class="eyebrow">02 / HARD SURFACE & PROP</p><h2>Alarm<br><em>Clock</em></h2><p>A vintage-inspired object study focused on clean modeling, tactile materials and a considered final look. The project brings together form, surface treatment and product-style presentation.</p><div class="tag-list"><span>Modeling</span><span>Texturing</span><span>Look Development</span><span>Rendering</span></div></div>
     </section>
 
-    <section class="project-feature section reveal" id="fight-sequence">
-      <div class="feature-video-wrap">
-        <video controls playsinline preload="metadata">
-          <source src="assets/Shah_Parth_Fight_Sequence.mp4" type="video/mp4">
-          Your browser does not support the video tag.
-        </video>
+    <section class="project-detail well-detail section-shell reveal" id="well">
+      <div class="detail-media well-detail-media">
+        <img src="assets/Projects/Vintage_Well/Ancient_Well_02.png" alt="Ancient Well three-quarter view" loading="lazy">
+        <img src="assets/Projects/Vintage_Well/Ancient_Well_03.png" alt="Ancient Well rear view" loading="lazy">
+        <img src="assets/Projects/Vintage_Well/Ancient_Well_04.png" alt="Ancient Well pulley detail" loading="lazy">
+        <img src="assets/Projects/Vintage_Well/Ancient_Well.png" alt="Ancient Well front view" loading="lazy">
       </div>
-      <div class="feature-copy">
-        <div class="eyebrow">03 · CHARACTER ANIMATION</div>
-        <h2>Fight<br><em>Sequence</em></h2>
-        <p>A character animation sequence centered on recovering after a heavy punch, with an added fourth-wall moment for personality and comedic timing. The shot focuses on body mechanics, weight, posing, acting choices and readable character performance.</p>
-        <div class="feature-tags"><span>Character Animation</span><span>Body Mechanics</span><span>Acting</span><span>Timing</span></div>
-      </div>
+      <div class="detail-copy"><p class="eyebrow">03 / PROP MODELING</p><h2>Ancient<br><em>Well</em></h2><p>A stylized medieval-inspired prop exploring layered wood construction, stonework, rope details, roof shingles and pulley mechanics. Multiple views show the asset from different angles.</p><div class="tag-list"><span>Modeling</span><span>Sculpting</span><span>Prop Design</span><span>Presentation</span></div></div>
     </section>
 
-    <section class="projects-directory section" id="projects">
-      <div class="section-head">
-        <div><span class="index">02</span><h2>Projects</h2></div>
-        <span class="mono">Browse by discipline</span>
-      </div>
-
-      <div class="project-category reveal" id="modelling">
-        <div class="category-title"><span>01</span><h3>Modelling</h3></div>
-        <a class="category-project" href="#ancient-well">
-          <img src="assets/Ancient_Well.png" alt="Ancient Well modeling project">
-          <div><strong>Ancient Well</strong><span>Prop Modeling · Sculpting · Presentation</span></div>
-          <b>↗</b>
-        </a>
-      </div>
-
-      <div class="project-category reveal" id="environment-modelling">
-        <div class="category-title"><span>02</span><h3>Environment Modelling</h3></div>
-        <a class="category-project" href="#ancient-temple">
-          <img src="assets/Ancient%20Temple.jpg" alt="Ancient Temple environment modeling project">
-          <div><strong>Ancient Temple</strong><span>Architecture · Environment Art · Lighting</span></div>
-          <b>↗</b>
-        </a>
-      </div>
-
-      <div class="project-category reveal" id="animation">
-        <div class="category-title"><span>03</span><h3>Animation</h3></div>
-        <a class="category-project category-video" href="#fight-sequence">
-          <video autoplay muted loop playsinline preload="metadata">
-            <source src="assets/Shah_Parth_Fight_Sequence.mp4" type="video/mp4">
-          </video>
-          <div><strong>Fight Sequence</strong><span>Body Mechanics · Acting · Timing</span></div>
-          <b>↗</b>
-        </a>
-      </div>
-
-      <div class="project-category reveal" id="character-animation">
-        <div class="category-title"><span>04</span><h3>Character Animation</h3></div>
-        <a class="category-project category-video" href="#fight-sequence">
-          <video autoplay muted loop playsinline preload="metadata">
-            <source src="assets/Shah_Parth_Fight_Sequence.mp4" type="video/mp4">
-          </video>
-          <div><strong>Fight Sequence</strong><span>Character Performance · Posing · Acting</span></div>
-          <b>↗</b>
-        </a>
-      </div>
-
-      <div class="project-category reveal" id="motion-graphics">
-        <div class="category-title"><span>05</span><h3>Motion Graphics</h3></div>
-        <a class="category-project category-placeholder" href="https://parth__shah.artstation.com/projects" target="_blank" rel="noreferrer">
-          <div class="placeholder-mark">MG</div>
-          <div><strong>Motion Graphics Archive</strong><span>Design · Animation · Compositing</span></div>
-          <b>↗</b>
-        </a>
-      </div>
+    <section class="project-detail fight-detail section-shell reveal" id="fight">
+      <div class="detail-media"><video controls playsinline preload="metadata"><source src="assets/Projects/Aang/Shah_Parth_Fight_Sequence.mp4" type="video/mp4">Your browser does not support video playback.</video></div>
+      <div class="detail-copy"><p class="eyebrow">04 / CHARACTER ANIMATION</p><h2>Fight<br><em>Sequence</em></h2><p>A character performance centered on recovering after a heavy punch, with a fourth-wall moment that adds personality and comedic timing. The sequence focuses on weight, posing, body mechanics and readable acting choices.</p><div class="tag-list"><span>Character Animation</span><span>Body Mechanics</span><span>Acting</span><span>Timing</span></div></div>
     </section>
 
-    <section class="about section" id="about">
-      <div class="section-head"><div><span class="index">03</span><h2>About</h2></div></div>
-      <div class="about-grid">
-        <p class="about-lead">I’m Parth Shah, a 3D Generalist and Motion Designer creating digital worlds through a mix of technical craft and visual storytelling.</p>
-        <div class="about-copy">
-          <p>My work spans 3D modeling, environment art, animation, texturing, lighting, rendering and compositing. I enjoy moving between the details of an asset and the bigger picture of a complete visual sequence.</p>
-          <p>Currently completing my Master’s in 3D Animation at DePaul University, I’m looking for opportunities across games, animation, motion design and creative technology.</p>
-          <p><a class="header-link" href="Parth_Shah_Resume_3D.pdf" target="_blank" rel="noreferrer">View Resume ↗</a></p>
-        </div>
-      </div>
-      <div class="skills">
-        <span>Maya</span><span>Blender</span><span>ZBrush</span><span>Substance Painter</span><span>Unreal Engine</span><span>Arnold</span><span>Redshift</span><span>After Effects</span><span>Premiere Pro</span>
-      </div>
+    <section class="project-detail f1-detail section-shell reveal" id="f1">
+      <div class="detail-media f1-detail-media"><model-viewer src="assets/Projects/F1%20Car/F1_Car.glb" alt="Formula 1 car modeled and rigged in Maya" camera-controls auto-rotate rotation-per-second="10deg" shadow-intensity="1" exposure="1.15" environment-image="neutral"><div slot="progress-bar" class="model-progress"></div></model-viewer></div>
+      <div class="detail-copy"><p class="eyebrow">05 / VEHICLE STUDY · WORK IN PROGRESS</p><h2>Formula<br><em>One</em></h2><p>A work-in-progress Formula 1 car modeled and rigged in Maya. The current focus is refining the model, developing materials and building a clean presentation for the vehicle.</p><div class="tag-list"><span>Maya</span><span>Vehicle Modeling</span><span>Rigging</span><span>WIP</span></div></div>
     </section>
 
-    <section class="contact section" id="contact">
-      <div class="section-head"><div><span class="index">04</span><h2>Let’s Work</h2></div></div>
-      <div class="contact-content">
-        <p>Have a project, role, or collaboration in mind?</p>
-        <a class="email-link" href="mailto:shahparth1003@gmail.com">shahparth1003@gmail.com ↗</a>
-        <div class="socials">
-          <a href="https://parth__shah.artstation.com/projects" target="_blank" rel="noreferrer">ArtStation ↗</a>
-          <a href="https://www.linkedin.com/in/parth-shah-3d-animator" target="_blank" rel="noreferrer">LinkedIn ↗</a>
-          <a href="Parth_Shah_Resume_3D.pdf" target="_blank" rel="noreferrer">Resume ↗</a>
-        </div>
+    <section class="about-section section-shell" id="about">
+      <div class="section-heading"><div><p class="eyebrow">02 / THE ARTIST</p><h2>Craft meets<br><em>curiosity.</em></h2></div><p class="heading-note">A generalist mindset.<br>A detail-oriented process.</p></div>
+      <div class="about-content">
+        <p class="about-lead">I’m Parth Shah, a 3D artist and motion designer interested in building memorable visuals — from individual assets to complete worlds and animated moments.</p>
+        <div class="about-body"><p>My practice spans 3D modeling, environment art, character animation, texturing, lighting, rendering and compositing. I enjoy combining a strong visual idea with the technical craft needed to bring it to life.</p><p>I’m completing my Master’s in 3D Animation at DePaul University and exploring opportunities across games, animation, VFX, motion design and creative technology.</p><a class="text-link" href="https://parth__shah.artstation.com/projects" target="_blank" rel="noreferrer">EXPLORE MY ARTSTATION <span>↗</span></a></div>
       </div>
+      <div class="toolkit"><p class="eyebrow">TOOLS OF THE TRADE</p><div class="tool-list"><span>Maya</span><span>Blender</span><span>ZBrush</span><span>Substance Painter</span><span>Unreal Engine</span><span>Arnold</span><span>Redshift</span><span>After Effects</span><span>Premiere Pro</span><span>Photoshop</span><span>Illustrator</span></div></div>
+    </section>
+
+    <section class="contact-section" id="contact">
+      <div class="contact-top"><p class="eyebrow">03 / HAVE SOMETHING IN MIND?</p><span>LET’S MAKE IT REAL.</span></div>
+      <h2>Have a good<br><em>project?</em></h2>
+      <a class="contact-email" href="mailto:shahparth1003@gmail.com">Let’s talk <span>↗</span></a>
+      <div class="contact-bottom"><p>Open to conversations about roles, projects and collaborations.</p><div class="social-links"><a href="https://www.linkedin.com/in/parth-shah-3d-animator" target="_blank" rel="noreferrer">LINKEDIN ↗</a><a href="https://parth__shah.artstation.com/projects" target="_blank" rel="noreferrer">ARTSTATION ↗</a><a href="mailto:shahparth1003@gmail.com">EMAIL ↗</a></div></div>
     </section>
   </main>
 
-  <footer><span>© 2026 PARTH SHAH</span><span>3D GENERALIST · MOTION DESIGNER</span></footer>
+  <footer class="site-footer"><a class="wordmark" href="#top">PS<span>.</span></a><span>© 2026 PARTH SHAH</span><a href="#top">BACK TO TOP ↑</a></footer>
   <script src="script.js"></script>
-  <script src="clock-viewer.js"></script>
+  <script>
+    const menuButton = document.querySelector('.menu-toggle');
+    const navigation = document.querySelector('.main-nav');
+    menuButton?.addEventListener('click', () => {
+      const open = menuButton.getAttribute('aria-expanded') === 'true';
+      menuButton.setAttribute('aria-expanded', String(!open));
+      navigation.classList.toggle('is-open', !open);
+    });
+    navigation?.querySelectorAll('a').forEach(link => link.addEventListener('click', () => {
+      navigation.classList.remove('is-open');
+      menuButton?.setAttribute('aria-expanded', 'false');
+    }));
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.querySelectorAll('model-viewer[auto-rotate]').forEach(model => model.removeAttribute('auto-rotate'));
+    }
+  </script>
 </body>
 </html>
