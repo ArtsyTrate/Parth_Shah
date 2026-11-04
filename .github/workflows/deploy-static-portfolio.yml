@@ -27,7 +27,6 @@ jobs:
         run: |
           mkdir -p _site
           cp index.html style.css script.js tokens.css base.css _site/
-          cp Parth_Shah_Resume_3D.pdf _site/
           cp -R assets _site/assets
           touch _site/.nojekyll
       - name: Upload the Pages artifact
