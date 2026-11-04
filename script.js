@@ -1,78 +1,54 @@
-const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+document.documentElement.classList.add('js');
 
-const reveals = document.querySelectorAll('.reveal');
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-      observer.unobserve(entry.target);
+const menu = document.querySelector('.menu-panel');
+if (menu) {
+  menu.querySelectorAll('a[href^="#"]').forEach(link => {
+    link.addEventListener('click', () => { menu.open = false; });
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && menu.open) {
+      menu.open = false;
+      menu.querySelector('summary').focus();
     }
   });
-}, { threshold: 0.12 });
-reveals.forEach(el => observer.observe(el));
-
-// Stagger individual images/videos inside projects that contain multiple assets.
-// Any future gallery can opt in by using .asset-gallery or .media-gallery.
-const multiAssetGalleries = document.querySelectorAll('.well-gallery, .asset-gallery, .media-gallery');
-
-multiAssetGalleries.forEach(gallery => {
-  const assets = gallery.querySelectorAll(':scope > img, :scope > video, :scope > picture, :scope > figure');
-
-  assets.forEach((asset, index) => {
-    if (prefersReducedMotion) {
-      asset.style.opacity = '1';
-      asset.style.transform = 'none';
-      return;
-    }
-
-    asset.style.opacity = '0';
-    asset.style.transform = `translateY(${28 + (index % 2) * 10}px) scale(.975)`;
-    asset.style.filter = 'blur(5px) saturate(.92) contrast(1.04)';
-    asset.style.transition = 'opacity .8s cubic-bezier(.2,.7,.2,1), transform .9s cubic-bezier(.2,.7,.2,1), filter .8s ease';
-    asset.style.willChange = 'opacity, transform, filter';
+  document.addEventListener('click', event => {
+    if (menu.open && !menu.contains(event.target)) menu.open = false;
   });
+}
 
-  if (prefersReducedMotion) return;
-
-  const galleryObserver = new IntersectionObserver((entries, obs) => {
+const reveals = document.querySelectorAll('[data-reveal]');
+if (!reducedMotion && 'IntersectionObserver' in window) {
+  const revealObserver = new IntersectionObserver((entries, observer) => {
     entries.forEach(entry => {
       if (!entry.isIntersecting) return;
-
-      assets.forEach((asset, index) => {
-        window.setTimeout(() => {
-          asset.style.opacity = '1';
-          asset.style.transform = 'translateY(0) scale(1)';
-          asset.style.filter = 'blur(0) saturate(.92) contrast(1.04)';
-          asset.addEventListener('transitionend', () => {
-            asset.style.willChange = 'auto';
-          }, { once: true });
-        }, index * 140);
-      });
-
-      obs.unobserve(entry.target);
+      entry.target.classList.add('is-in');
+      observer.unobserve(entry.target);
     });
-  }, { threshold: 0.14, rootMargin: '0px 0px -6% 0px' });
+  }, { threshold: 0.12 });
+  reveals.forEach(element => revealObserver.observe(element));
+} else {
+  reveals.forEach(element => element.classList.add('is-in'));
+}
 
-  galleryObserver.observe(gallery);
-});
-
-document.querySelectorAll('img[data-b64-src]').forEach(img => {
-  fetch(img.dataset.b64Src)
-    .then(response => response.text())
-    .then(base64 => {
-      img.src = 'data:image/webp;base64,' + base64.replace(/\s/g, '');
+document.querySelectorAll('img[data-b64-src]').forEach(image => {
+  fetch(image.dataset.b64Src)
+    .then(response => {
+      if (!response.ok) throw new Error('Preview could not be loaded');
+      return response.text();
     })
-    .catch(() => {
-      img.style.display = 'none';
-    });
+    .then(base64 => { image.src = 'data:image/webp;base64,' + base64.replace(/\s/g, ''); })
+    .catch(() => { image.hidden = true; });
 });
 
 document.querySelectorAll('a[href^="#"]').forEach(link => {
-  link.addEventListener('click', e => {
-    const target = document.querySelector(link.getAttribute('href'));
-    if (target) {
-      e.preventDefault();
-      target.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth' });
-    }
+  link.addEventListener('click', event => {
+    const targetId = link.getAttribute('href');
+    if (!targetId || targetId === '#') return;
+    const target = document.getElementById(decodeURIComponent(targetId.slice(1)));
+    if (!target) return;
+    event.preventDefault();
+    target.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
+    history.replaceState(null, '', targetId);
   });
 });
